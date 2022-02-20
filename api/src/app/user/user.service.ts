@@ -4,6 +4,7 @@ import { UserInput } from "./user.schema";
 
 export default class UserService {
   private userModel: Model<UserInterface>;
+
   constructor() {
     this.userModel = User;
   }

@@ -1,5 +1,4 @@
 import { Query, Resolver, Mutation, Arg } from "type-graphql";
-import { UserInterface } from "../../models/user.model";
 import { User, UserInput } from "./user.schema";
 import UserService from "./user.service";
 
