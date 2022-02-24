@@ -3,7 +3,7 @@ import { Field, ObjectType, InputType } from "type-graphql";
 @ObjectType()
 export class User {
   @Field()
-  id: string;
+  _id: string;
 
   @Field()
   name: string;
@@ -25,4 +25,13 @@ export class UserInput implements Partial<User> {
 
   @Field()
   password: string;
+}
+
+@InputType()
+export class UserUpdateInfo implements Partial<User> {
+  @Field()
+  name: string;
+
+  @Field()
+  email: string;
 }

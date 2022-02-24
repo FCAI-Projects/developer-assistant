@@ -10,6 +10,7 @@ const UserSchema = new Schema<UserInterface>({
   name: {
     type: String,
     require: true,
+    unique: true,
   },
   password: {
     type: String,
