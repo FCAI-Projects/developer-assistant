@@ -3,11 +3,39 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
+type CustomRoles {
+  assignTask: Boolean!
+  createTask: Boolean!
+  deleteMember: Boolean!
+  deleteTask: Boolean!
+  editProject: Boolean!
+  editTask: Boolean!
+  id: String!
+  inviteToProject: Boolean!
+  name: String!
+  projectId: String!
+}
+
+input CustomRolesInput {
+  assignTask: Boolean!
+  createTask: Boolean!
+  deleteMember: Boolean!
+  deleteTask: Boolean!
+  editProject: Boolean!
+  editTask: Boolean!
+  inviteToProject: Boolean!
+  name: String!
+  projectId: String!
+}
+
 type Mutation {
+  addCusomRoles(CustomRoles: CustomRolesInput!): CustomRoles!
   addUser(userInput: UserInput!): User!
+  deleteCustomRoles(CustomRoles: CustomRolesInput!): CustomRoles!
 }
 
 type Query {
+  getCustomRoles: [CustomRoles!]
   getUsers: [User!]
 }
 
