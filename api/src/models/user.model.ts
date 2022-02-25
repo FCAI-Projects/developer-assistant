@@ -10,7 +10,6 @@ const UserSchema = new Schema<UserInterface>({
   name: {
     type: String,
     require: true,
-    unique: true,
   },
   password: {
     type: String,
@@ -19,6 +18,7 @@ const UserSchema = new Schema<UserInterface>({
   email: {
     type: String,
     require: true,
+    unique: true,
   },
 });
 
