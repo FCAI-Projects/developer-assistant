@@ -4,38 +4,38 @@
 # -----------------------------------------------
 
 type CustomRoles {
+  _id: String!
   assignTask: Boolean!
   createTask: Boolean!
   deleteMember: Boolean!
   deleteTask: Boolean!
   editProject: Boolean!
   editTask: Boolean!
-  id: String!
   inviteToProject: Boolean!
   name: String!
   projectId: String!
 }
 
 input CustomRolesInput {
-  assignTask: Boolean!
-  createTask: Boolean!
-  deleteMember: Boolean!
-  deleteTask: Boolean!
-  editProject: Boolean!
-  editTask: Boolean!
-  inviteToProject: Boolean!
+  assignTask: Boolean = false
+  createTask: Boolean = false
+  deleteMember: Boolean = false
+  deleteTask: Boolean = false
+  editProject: Boolean = false
+  editTask: Boolean = false
+  inviteToProject: Boolean = false
   name: String!
   projectId: String!
 }
 
 type Mutation {
-  addCusomRoles(CustomRoles: CustomRolesInput!): CustomRoles!
+  addCusomRoles(CustomRoles: CustomRolesInput!): CustomRoles
   addUser(userInput: UserInput!): User!
-  deleteCustomRoles(CustomRoles: CustomRolesInput!): CustomRoles!
+  deleteCustomRoles(customRoleId: String!): CustomRoles
 }
 
 type Query {
-  getCustomRoles: [CustomRoles!]
+  getAllCustomRoles(projectId: String!): [CustomRoles!]
   getUsers: [User!]
 }
 

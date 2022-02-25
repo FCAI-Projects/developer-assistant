@@ -9,19 +9,18 @@ export default class  CustomRolesService {
         this.customRolesModel = CustomRolse;
     }
 
-    async getCustomRoles() : Promise<any> {
-        return await this.customRolesModel.find();
+    async getAllCustomRoles(projectId: string) : Promise<any> {
+        return await this.customRolesModel.find({ projectId });
     }
 
     async createCustomRoles(customRoles: CustomRolesInput): Promise<any> {
         const newCustomRoles = new CustomRolse({
             ...customRoles,
         });
-
        return await newCustomRoles.save();
     }
 
-    async deleteCustomRoles(customRoles: CustomRolesInput): Promise<any> {
-        await CustomRolse.remove(customRoles);
+    async deleteCustomRoles(customRoleId: string): Promise<any> {
+        return await CustomRolse.findOneAndDelete({ _id: customRoleId });
     }
 }
