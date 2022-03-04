@@ -4,6 +4,7 @@ import { buildSchema } from "type-graphql";
 import "reflect-metadata";
 import { ApolloServer } from "apollo-server-express";
 import { UserResolver } from "./app/user/user.resolver";
+import { TaskResolver } from "./app/task/task.resolver";
 
 export default class App {
   public app: Application;
@@ -23,7 +24,7 @@ export default class App {
 
   private async initializeResolvers() {
     const schema = await buildSchema({
-      resolvers: [UserResolver],
+      resolvers: [UserResolver, TaskResolver],
       emitSchemaFile: true,
     });
     const server = new ApolloServer({

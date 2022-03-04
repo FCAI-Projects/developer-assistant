@@ -44,7 +44,7 @@ export class Task {
     @Field()
     assign: Assgin;
 
-    @Field()
+    @Field(() => [String])
     attachments: string[];
 
     @Field()
@@ -53,7 +53,7 @@ export class Task {
     @Field()
     Periority: Periority;
 
-    @Field()
+    @Field(() => [String])
     tags: string[];
 
     @Field()
