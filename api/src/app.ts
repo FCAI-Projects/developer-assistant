@@ -4,6 +4,7 @@ import { buildSchema } from "type-graphql";
 import "reflect-metadata";
 import { ApolloServer } from "apollo-server-express";
 import { UserResolver } from "./app/user/user.resolver";
+import { CustomRolesResolver } from "./app/customerRoles/customRoles.resolver";
 import { ProjectsMembersResolver } from "./app/projectsMembers/projectsMembers.resolver";
 
 export default class App {
@@ -24,7 +25,7 @@ export default class App {
 
   private async initializeResolvers() {
     const schema = await buildSchema({
-      resolvers: [UserResolver, ProjectsMembersResolver],
+      resolvers: [UserResolver, CustomRolesResolver, ProjectsMembersResolver],
       emitSchemaFile: true,
     });
     const server = new ApolloServer({
