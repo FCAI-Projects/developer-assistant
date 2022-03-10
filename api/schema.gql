@@ -29,6 +29,13 @@ input CustomRolesInput {
 }
 
 type Mutation {
+  addUser(userInput: UserInput!): User
+  deleteUser(userId: String!): User
+  editUser(userId: String!, userInput: UserUpdateInfo!): User
+}
+
+type Query {
+  getUser(userId: String!): User
   addCusomRoles(CustomRoles: CustomRolesInput!): CustomRoles
   addUser(userInput: UserInput!): User!
   deleteCustomRoles(customRoleId: String!): CustomRoles
@@ -64,8 +71,8 @@ type Query {
 }
 
 type User {
+  _id: String!
   email: String!
-  id: String!
   name: String!
   password: String!
 }
@@ -74,4 +81,9 @@ input UserInput {
   email: String!
   name: String!
   password: String!
+}
+
+input UserUpdateInfo {
+  email: String!
+  name: String!
 }
