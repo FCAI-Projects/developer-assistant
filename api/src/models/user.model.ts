@@ -18,6 +18,7 @@ const UserSchema = new Schema<UserInterface>({
   email: {
     type: String,
     require: true,
+    unique: true,
   },
 });
 
