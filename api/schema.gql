@@ -36,6 +36,30 @@ type Mutation {
 
 type Query {
   getAllCustomRoles(projectId: String!): [CustomRoles!]
+  createProjectRole(ProjectsMembers: ProjectsMembersInput!): ProjectsMembers
+  deleteProjectMembers(ProjectsMembersId: String!): ProjectsMembers
+}
+
+type ProjectsMembers {
+  _id: String!
+  badges: String!
+  customId: String!
+  projectId: String!
+  role: String!
+  userId: String!
+}
+
+input ProjectsMembersInput {
+  badges: String!
+  customId: String!
+  projectId: String!
+  role: String!
+  userId: String!
+}
+
+type Query {
+  getAllMembersOfProjects(projectId: String!): [ProjectsMembers!]
+  getAllMembersOfRole(role: String!): [ProjectsMembers!]
   getUsers: [User!]
 }
 
