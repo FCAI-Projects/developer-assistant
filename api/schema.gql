@@ -29,22 +29,31 @@ input CustomRolesInput {
 }
 
 type Mutation {
+  addCusomRoles(CustomRoles: CustomRolesInput!): [CustomRoles!]
   addUser(userInput: UserInput!): User
+  createProject(userInput: ProjectInput!): Project!
+  createProjectRole(ProjectsMembers: ProjectsMembersInput!): ProjectsMembers
+  deleteCustomRoles(customRoleId: String!): [CustomRoles!]
+  deleteProject(projectId: String!): Project
+  deleteProjectMembers(ProjectsMembersId: String!): ProjectsMembers
   deleteUser(userId: String!): User
   editUser(userId: String!, userInput: UserUpdateInfo!): User
+  UpdateProject(projectId: String!, projectUpdateData: ProjectUpdateData!): Project
 }
 
-type Query {
-  getUser(userId: String!): User
-  addCusomRoles(CustomRoles: CustomRolesInput!): CustomRoles
-  addUser(userInput: UserInput!): User!
-  deleteCustomRoles(customRoleId: String!): CustomRoles
+type Project {
+  _id: String!
+  budget: Float!
+  clientEmail: String!
+  describtion: String!
+  name: String!
 }
 
-type Query {
-  getAllCustomRoles(projectId: String!): [CustomRoles!]
-  createProjectRole(ProjectsMembers: ProjectsMembersInput!): ProjectsMembers
-  deleteProjectMembers(ProjectsMembersId: String!): ProjectsMembers
+input ProjectInput {
+  budget: Float!
+  clientEmail: String!
+  describtion: String!
+  name: String!
 }
 
 type ProjectsMembers {
@@ -64,9 +73,18 @@ input ProjectsMembersInput {
   userId: String!
 }
 
+input ProjectUpdateData {
+  budget: Float
+  describtion: String
+  name: String
+}
+
 type Query {
+  getAllCustomRoles(projectId: String!): [CustomRoles!]
   getAllMembersOfProjects(projectId: String!): [ProjectsMembers!]
   getAllMembersOfRole(role: String!): [ProjectsMembers!]
+  getprojects: [Project!]
+  getUser(projectId: String!): Project
   getUsers: [User!]
 }
 
@@ -84,6 +102,6 @@ input UserInput {
 }
 
 input UserUpdateInfo {
-  email: String!
-  name: String!
+  email: String
+  name: String
 }

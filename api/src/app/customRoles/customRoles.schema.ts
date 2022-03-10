@@ -3,7 +3,7 @@ import { Field, ObjectType, InputType } from "type-graphql";
 @ObjectType()
 export class CustomRoles {
   @Field()
-  _id: string;
+  id: string;
 
   @Field()
   name: string;
@@ -41,24 +41,24 @@ export class CustomRolesInput implements Partial<CustomRoles> {
   @Field()
   projectId: string;
 
-  @Field()
-  createTask: boolean = false;
+  @Field({ defaultValue: false })
+  createTask: boolean;
 
-  @Field()
-  deleteTask: boolean = false;
+  @Field({ defaultValue: false })
+  deleteTask: boolean;
 
-  @Field()
-  editTask: boolean = false;
+  @Field({ defaultValue: false })
+  editTask: boolean;
 
-  @Field()
-  assignTask: boolean = false;
+  @Field({ defaultValue: false })
+  assignTask: boolean;
 
-  @Field()
-  editProject: boolean = false;
+  @Field({ defaultValue: false })
+  editProject: boolean;
 
-  @Field()
-  inviteToProject: boolean = false;
+  @Field({ defaultValue: false })
+  inviteToProject: boolean;
 
-  @Field()
-  deleteMember: boolean = false;
+  @Field({ defaultValue: false })
+  deleteMember: boolean;
 }

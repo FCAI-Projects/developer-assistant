@@ -3,41 +3,44 @@ import { Field, ObjectType, InputType } from "type-graphql";
 @ObjectType()
 export class Project {
   @Field()
-  Pname: string;
+  _id: string;
 
   @Field()
-  Pbudget: number;
+  name: string;
 
   @Field()
-  ClientEmail: string;
+  budget: number;
 
   @Field()
-   Pdescribtion: string;
+  clientEmail: string;
+
+  @Field()
+  describtion: string;
 }
 
 @InputType()
 export class ProjectInput implements Partial<Project> {
   @Field()
-  Pname: string;
+  name: string;
 
   @Field()
-  ClientEmail: string;
-  
-  @Field()
-  Pbudget: number;
+  clientEmail: string;
 
   @Field()
-  Pdescribtion: string;
+  budget: number;
+
+  @Field()
+  describtion: string;
 }
 
-export class ProjectUpdateData implements Partial <Project>{
-  @Field()
-  Pname?: string ;
+@InputType()
+export class ProjectUpdateData implements Partial<Project> {
+  @Field({ nullable: true })
+  name: string;
 
-  @Field()
-  Pbudget?: number ;
+  @Field({ nullable: true })
+  budget: number;
 
-  @Field()
-  Pdescribtion?: string ;
-
+  @Field({ nullable: true })
+  describtion: string;
 }

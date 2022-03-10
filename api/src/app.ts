@@ -5,8 +5,9 @@ import "reflect-metadata";
 import { ApolloServer } from "apollo-server-express";
 import { UserResolver } from "./app/user/user.resolver";
 import { TaskResolver } from "./app/task/task.resolver";
-import { CustomRolesResolver } from "./app/customerRoles/customRoles.resolver";
-import { ProjectsMembersResolver } from "./app/projectsMembers/projectsMembers.resolver";
+import { CustomRolesResolver } from "./app/customRoles/customRoles.resolver";
+import { ProjectsMembersResolver } from "./app/projectMembers/projectMembers.resolver";
+import { ProjectResolver } from "./app/project/project.resolver";
 
 export default class App {
   public app: Application;
@@ -26,7 +27,7 @@ export default class App {
 
   private async initializeResolvers() {
     const schema = await buildSchema({
-      resolvers: [UserResolver, CustomRolesResolver, ProjectsMembersResolver, TaskResolver],
+      resolvers: [UserResolver, CustomRolesResolver, ProjectsMembersResolver, TaskResolver, ProjectResolver],
       emitSchemaFile: true,
     });
     const server = new ApolloServer({
