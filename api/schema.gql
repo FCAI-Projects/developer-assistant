@@ -3,6 +3,31 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
+type CustomRoles {
+  _id: String!
+  assignTask: Boolean!
+  createTask: Boolean!
+  deleteMember: Boolean!
+  deleteTask: Boolean!
+  editProject: Boolean!
+  editTask: Boolean!
+  inviteToProject: Boolean!
+  name: String!
+  projectId: String!
+}
+
+input CustomRolesInput {
+  assignTask: Boolean = false
+  createTask: Boolean = false
+  deleteMember: Boolean = false
+  deleteTask: Boolean = false
+  editProject: Boolean = false
+  editTask: Boolean = false
+  inviteToProject: Boolean = false
+  name: String!
+  projectId: String!
+}
+
 type Mutation {
   addUser(userInput: UserInput!): User
   deleteUser(userId: String!): User
@@ -11,6 +36,37 @@ type Mutation {
 
 type Query {
   getUser(userId: String!): User
+  addCusomRoles(CustomRoles: CustomRolesInput!): CustomRoles
+  addUser(userInput: UserInput!): User!
+  deleteCustomRoles(customRoleId: String!): CustomRoles
+}
+
+type Query {
+  getAllCustomRoles(projectId: String!): [CustomRoles!]
+  createProjectRole(ProjectsMembers: ProjectsMembersInput!): ProjectsMembers
+  deleteProjectMembers(ProjectsMembersId: String!): ProjectsMembers
+}
+
+type ProjectsMembers {
+  _id: String!
+  badges: String!
+  customId: String!
+  projectId: String!
+  role: String!
+  userId: String!
+}
+
+input ProjectsMembersInput {
+  badges: String!
+  customId: String!
+  projectId: String!
+  role: String!
+  userId: String!
+}
+
+type Query {
+  getAllMembersOfProjects(projectId: String!): [ProjectsMembers!]
+  getAllMembersOfRole(role: String!): [ProjectsMembers!]
   getUsers: [User!]
 }
 
