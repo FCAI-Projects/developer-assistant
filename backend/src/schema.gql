@@ -1,0 +1,197 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  _id: String!
+
+  """User name"""
+  name: String!
+
+  """User email"""
+  email: String!
+}
+
+type Project {
+  _id: String!
+
+  """Projact name"""
+  name: String!
+
+  """Client email"""
+  clientEmail: String!
+
+  """Project owner"""
+  owner: String!
+
+  """Project describtion"""
+  describtion: String!
+}
+
+type Member {
+  _id: String!
+
+  """Projact ID"""
+  projectId: String!
+
+  """User ID"""
+  userId: String!
+
+  """User role in project"""
+  role: String!
+
+  """Custom Role ID"""
+  customId: String
+
+  """User Badge"""
+  badges: String!
+}
+
+type Task {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type Role {
+  _id: String!
+
+  """Projact ID"""
+  projectId: String!
+
+  """User ID"""
+  createTask: Boolean!
+  deleteTask: Boolean!
+  editTask: Boolean!
+  assignTask: Boolean!
+  editProject: Boolean!
+  inviteToProject: Boolean!
+  deleteMember: Boolean!
+}
+
+type Query {
+  users: [User!]!
+  user(id: String!): User!
+  projects: [Project!]!
+  project(id: Int!): Project!
+  members: [Member!]!
+  member(id: Int!): Member!
+  tasks: [Task!]!
+  task(id: Int!): Task!
+  roles: [Role!]!
+  role(id: Int!): Role!
+}
+
+type Mutation {
+  createUser(createUserInput: CreateUserInput!): User!
+  deleteUser(id: String!): User!
+  updateUser(id: String!, user: UpdateUserInput!): User!
+  createProject(createProjectInput: CreateProjectInput!): Project!
+  updateProject(updateProjectInput: UpdateProjectInput!): Project!
+  removeProject(id: Int!): Project!
+  createMember(createMemberInput: CreateMemberInput!): Member!
+  updateMember(updateMemberInput: UpdateMemberInput!): Member!
+  removeMember(id: Int!): Member!
+  createTask(createTaskInput: CreateTaskInput!): Task!
+  updateTask(updateTaskInput: UpdateTaskInput!): Task!
+  removeTask(id: Int!): Task!
+  createRole(createRoleInput: CreateRoleInput!): Role!
+  updateRole(updateRoleInput: UpdateRoleInput!): Role!
+  removeRole(id: Int!): Role!
+}
+
+input CreateUserInput {
+  """name of the user"""
+  name: String!
+
+  """email of the user"""
+  email: String!
+}
+
+input UpdateUserInput {
+  """name of the user"""
+  name: String
+
+  """email of the user"""
+  email: String
+  _id: String!
+}
+
+input CreateProjectInput {
+  """project name"""
+  name: String!
+
+  """client email"""
+  clientEmail: String!
+
+  """owner of the project"""
+  owner: String!
+
+  """description of project"""
+  describtion: String!
+}
+
+input UpdateProjectInput {
+  """project name"""
+  name: String
+
+  """client email"""
+  clientEmail: String
+
+  """owner of the project"""
+  owner: String
+
+  """description of project"""
+  describtion: String
+  id: Int!
+}
+
+input CreateMemberInput {
+  projectId: String!
+  userId: String!
+  role: String!
+  customId: String
+  badges: String!
+}
+
+input UpdateMemberInput {
+  projectId: String
+  userId: String
+  role: String
+  customId: String
+  badges: String
+  id: Int!
+}
+
+input CreateTaskInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateTaskInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateRoleInput {
+  projectId: String!
+  createTask: String!
+  deleteTask: Boolean!
+  editTask: Boolean!
+  assignTask: Boolean!
+  editProject: Boolean!
+  inviteToProject: Boolean!
+  deleteMember: Boolean!
+}
+
+input UpdateRoleInput {
+  projectId: String
+  createTask: String
+  deleteTask: Boolean
+  editTask: Boolean
+  assignTask: Boolean
+  editProject: Boolean
+  inviteToProject: Boolean
+  deleteMember: Boolean
+  id: Int!
+}
