@@ -10,6 +10,8 @@ import { ProjectsModule } from './projects/projects.module';
 import { MembersModule } from './members/members.module';
 import { TasksModule } from './tasks/tasks.module';
 import { RolesModule } from './roles/roles.module';
+import { NotesModule } from './notes/notes.module';
+import { CommentsModule } from './comments/comments.module';
 
 @Module({
   imports: [
@@ -23,6 +25,8 @@ import { RolesModule } from './roles/roles.module';
     MembersModule,
     TasksModule,
     RolesModule,
+    NotesModule,
+    CommentsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
