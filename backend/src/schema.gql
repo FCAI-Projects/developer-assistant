@@ -68,6 +68,24 @@ type Role {
   deleteMember: Boolean!
 }
 
+type Note {
+  _id: String!
+
+  """Task Id"""
+  taskId: String!
+
+  """User Id"""
+  userId: String!
+
+  """Task Note"""
+  note: String!
+}
+
+type Comment {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
 type Query {
   users: [User!]!
   user(id: String!): User!
@@ -79,6 +97,11 @@ type Query {
   task(id: Int!): Task!
   roles: [Role!]!
   role(id: Int!): Role!
+  findById(id: String!): Note!
+  findByTaskId(taskId: String!): Note!
+  findByUserId(userId: String!): Note!
+  comments: [Comment!]!
+  comment(id: Int!): Comment!
 }
 
 type Mutation {
@@ -97,6 +120,12 @@ type Mutation {
   createRole(createRoleInput: CreateRoleInput!): Role!
   updateRole(updateRoleInput: UpdateRoleInput!): Role!
   removeRole(id: Int!): Role!
+  CreateTaskNote(createNoteInput: CreateNoteInput!): Note!
+  updateNote(updateNoteInput: UpdateNoteInput!): Note!
+  removeNote(id: String!): Note!
+  createComment(createCommentInput: CreateCommentInput!): Comment!
+  updateComment(updateCommentInput: UpdateCommentInput!): Comment!
+  removeComment(id: Int!): Comment!
 }
 
 input CreateUserInput {
@@ -193,5 +222,39 @@ input UpdateRoleInput {
   editProject: Boolean
   inviteToProject: Boolean
   deleteMember: Boolean
+  id: Int!
+}
+
+input CreateNoteInput {
+  """Task Id"""
+  taskId: String!
+
+  """User Id"""
+  userId: String!
+
+  """Task Note"""
+  note: String!
+}
+
+input UpdateNoteInput {
+  """Task Id"""
+  taskId: String
+
+  """User Id"""
+  userId: String
+
+  """Task Note"""
+  note: String
+  id: String!
+}
+
+input CreateCommentInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateCommentInput {
+  """Example field (placeholder)"""
+  exampleField: Int
   id: Int!
 }
