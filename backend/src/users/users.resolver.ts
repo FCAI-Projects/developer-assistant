@@ -10,7 +10,10 @@ import { UsersService } from './users.service';
 
 @Resolver((of) => User)
 export class UsersResolver {
-  constructor(private usersService: UsersService, private jwtService: JwtService) {}
+  constructor(
+    private usersService: UsersService,
+    private jwtService: JwtService,
+  ) {}
 
   @Query((returns) => [User])
   users(): Promise<User[]> {
@@ -71,7 +74,7 @@ export class UsersResolver {
     user.password = undefined;
     const token = this.createToken(user);
 
-    return {...user, token};
+    return { ...user, token };
   }
 
   @Mutation(() => User)
@@ -87,10 +90,9 @@ export class UsersResolver {
     return this.usersService.updateOne(id, user);
   }
 
-
   createToken(user: User): string {
     return this.jwtService.sign({
-      ...user
+      ...user,
     });
   }
 }
