@@ -8,19 +8,26 @@ import { UpdateNoteInput } from './dto/update-note.input';
 export class NotesResolver {
   constructor(private readonly notesService: NotesService) {}
 
-  @Mutation(() => Note)
+  @Mutation(() => Note, {name: 'CreateTaskNote'})
   createNote(@Args('createNoteInput') createNoteInput: CreateNoteInput) {
     return this.notesService.create(createNoteInput);
   }
 
-  @Query(() => [Note], { name: 'notes' })
-  findAll() {
-    return this.notesService.findAll();
+  @Query(() => Note)
+  findById(@Args('id', { type: () => String }) id: string) {
+    return this.notesService.findById(id);
   }
 
-  @Query(() => Note, { name: 'note' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.notesService.findOne(id);
+  // ! check this and test it ...
+  @Query(() => Note)
+  findByTaskId(@Args('taskId', { type: () => String }) taskId: string) {
+    return this.notesService.findByTaskId(taskId);
+  }
+
+  // ! check this and test it ...
+  @Query(() => Note)
+  findByUserId(@Args('userId', { type: () => String }) userId: string) {
+    return this.notesService.findByUserId(userId);
   }
 
   @Mutation(() => Note)
@@ -29,7 +36,7 @@ export class NotesResolver {
   }
 
   @Mutation(() => Note)
-  removeNote(@Args('id', { type: () => Int }) id: number) {
+  removeNote(@Args('id', { type: () => String }) id: string) {
     return this.notesService.remove(id);
   }
 }
