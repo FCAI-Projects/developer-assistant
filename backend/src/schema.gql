@@ -82,8 +82,16 @@ type Note {
 }
 
 type Comment {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  _id: String!
+
+  """Comment  ID"""
+  commntID: String!
+
+  """User ID"""
+  userID: String!
+
+  """Comment Content"""
+  note: String!
 }
 
 type Query {
@@ -101,7 +109,7 @@ type Query {
   findByTaskId(taskId: String!): Note!
   findByUserId(userId: String!): Note!
   comments: [Comment!]!
-  comment(id: Int!): Comment!
+  comment(id: String!): Comment!
 }
 
 type Mutation {
@@ -125,7 +133,7 @@ type Mutation {
   removeNote(id: String!): Note!
   createComment(createCommentInput: CreateCommentInput!): Comment!
   updateComment(updateCommentInput: UpdateCommentInput!): Comment!
-  removeComment(id: Int!): Comment!
+  removeComment(id: String!): Comment!
 }
 
 input CreateUserInput {
@@ -249,12 +257,24 @@ input UpdateNoteInput {
 }
 
 input CreateCommentInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  """Comment ID"""
+  commentId: String!
+
+  """User ID"""
+  userID: String!
+
+  """Comment Content"""
+  commentContent: String!
 }
 
 input UpdateCommentInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
+  """Comment ID"""
+  commentId: String
+
+  """User ID"""
+  userID: String
+
+  """Comment Content"""
+  commentContent: String
+  id: String!
 }
