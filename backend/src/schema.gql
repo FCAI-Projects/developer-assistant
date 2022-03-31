@@ -5,11 +5,17 @@
 type User {
   _id: String!
 
-  """User name"""
-  name: String!
+  """User first name"""
+  firstName: String!
+
+  """User last name"""
+  lastName: String!
 
   """User email"""
   email: String!
+
+  """User password"""
+  password: String
 }
 
 type Project {
@@ -114,6 +120,7 @@ type Query {
 
 type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
+  login(email: String!, password: String!): User!
   deleteUser(id: String!): User!
   updateUser(id: String!, user: UpdateUserInput!): User!
   createProject(createProjectInput: CreateProjectInput!): Project!
@@ -137,20 +144,42 @@ type Mutation {
 }
 
 input CreateUserInput {
-  """name of the user"""
-  name: String!
+  """id of the user"""
+  _id: String
+
+  """firstName of the user"""
+  firstName: String!
+
+  """lastName of the user"""
+  lastName: String!
 
   """email of the user"""
   email: String!
+
+  """password of the user"""
+  password: String!
+
+  """token of the user"""
+  token: String
 }
 
 input UpdateUserInput {
-  """name of the user"""
-  name: String
+  _id: String!
+
+  """firstName of the user"""
+  firstName: String
+
+  """lastName of the user"""
+  lastName: String
 
   """email of the user"""
   email: String
-  _id: String!
+
+  """password of the user"""
+  password: String
+
+  """token of the user"""
+  token: String
 }
 
 input CreateProjectInput {
