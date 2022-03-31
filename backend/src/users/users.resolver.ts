@@ -1,6 +1,7 @@
-import { Body, HttpException, HttpStatus } from '@nestjs/common';
+import { Body, HttpException, HttpStatus, Req, UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { JwtService } from '@nestjs/jwt';
+import { AuthGuard } from '@nestjs/passport';
 import { compareSync } from 'bcrypt';
 import { CreateUserInput } from './dto/create-user.dto';
 import { LoginUser } from './dto/login-user.dto';
@@ -8,18 +9,20 @@ import { UpdateUserInput } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
 
-@Resolver((of) => User)
+@Resolver(() => User)
 export class UsersResolver {
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
   ) {}
 
+  @UseGuards(AuthGuard('jwt'))
   @Query((returns) => [User])
   users(): Promise<User[]> {
     return this.usersService.findAll();
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Query((returns) => User)
   user(@Args('id') id: string): Promise<User> {
     return this.usersService.findOne(id);
@@ -50,7 +53,7 @@ export class UsersResolver {
   async login(
     @Args('email') email: string,
     @Args('password') password: string,
-  ): Promise<any> {
+  ): Promise<LoginUser> {
     const user = await this.usersService.findUserByEmail(email);
     if (!user) {
       throw new HttpException(
@@ -73,21 +76,23 @@ export class UsersResolver {
     }
     user.password = undefined;
     const token = this.createToken(user);
-
-    return { ...user, token };
+    return {...user, token};
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Mutation(() => User)
   deleteUser(@Args('id') id: string): Promise<User> {
     return this.usersService.deleteOne(id);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Mutation(() => User)
   updateUser(
-    @Args('id') id: string,
+    @Req() req: any,
     @Args('user') user: UpdateUserInput,
   ): Promise<User> {
-    return this.usersService.updateOne(id, user);
+    console.log(req.user);
+    return this.usersService.updateOne(req.user.id, user);
   }
 
   createToken(user: User): string {

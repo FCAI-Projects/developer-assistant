@@ -20,22 +20,19 @@ type User {
 
 type LoginUser {
   """id of the user"""
-  _id: String!
+  _id: String
 
   """firstName of the user"""
-  firstName: String!
+  firstName: String
 
   """lastName of the user"""
-  lastName: String!
+  lastName: String
 
   """email of the user"""
-  email: String!
-
-  """password of the user"""
-  password: String!
+  email: String
 
   """token of the user"""
-  token: String!
+  token: String
 }
 
 type Project {
@@ -142,7 +139,7 @@ type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
   login(email: String!, password: String!): LoginUser!
   deleteUser(id: String!): User!
-  updateUser(id: String!, user: UpdateUserInput!): User!
+  updateUser(user: UpdateUserInput!): User!
   createProject(createProjectInput: CreateProjectInput!): Project!
   updateProject(updateProjectInput: UpdateProjectInput!): Project!
   removeProject(id: Int!): Project!
