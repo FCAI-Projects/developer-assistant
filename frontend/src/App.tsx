@@ -1,20 +1,20 @@
 import { Routes, Route, Outlet } from "react-router-dom";
 import React from "react";
-import { ProjectCard } from "./components/ProjectCard";
+import { Home } from "./pages/Home";
+import { Login } from "./pages/Login";
+import { Register } from "./pages/Regsiter";
 
 export const App: React.FC = () => {
   return (
     <div>
       <Routes>
         <Route path="/">
-          <Route index />
-          <Route path="login" />
-          <Route path="register" />
+          <Route index element={<Home />} />
+          <Route path="login" element={<Login />} />
+          <Route path="register" element={<Register />} />
         </Route>
         <Route path="/app">
           <Route index />
-          <Route path="login" />
-          <Route path="register" />
         </Route>
       </Routes>
     </div>
