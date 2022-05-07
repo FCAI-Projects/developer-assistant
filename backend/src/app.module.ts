@@ -15,7 +15,9 @@ import { CommentsModule } from './comments/comments.module';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://localhost:27017/developer-assistant'),
+    MongooseModule.forRoot(
+      'mongodb+srv://gp:gp123456@cluster0.fyzf3.mongodb.net/developer-assistant?retryWrites=true&w=majority',
+    ),
     GraphQLModule.forRoot({
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
