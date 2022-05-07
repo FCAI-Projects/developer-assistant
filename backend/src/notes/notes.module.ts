@@ -13,6 +13,6 @@ import { Note, NoteSchema } from './entities/note.entity';
       },
     ]),
   ],
-  providers: [NotesResolver, NotesService]
+  providers: [NotesResolver, NotesService],
 })
 export class NotesModule {}

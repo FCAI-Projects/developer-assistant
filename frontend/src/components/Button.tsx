@@ -20,7 +20,7 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 const BaseButton: React.FC<ButtonProps> = ({ loading, className, label, children, ...other }) => {
   return (
     <button
-      className={`${className} mr-2 rounded-lg px-5 py-2.5 text-sm font-medium 
+      className={`${className} rounded-lg px-5 py-2.5 text-sm font-medium 
     ${loading ? "focus:ring-none disabled:opacity-70" : ""}`}
       disabled={loading}
       {...other}

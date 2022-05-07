@@ -5,9 +5,9 @@ export class CreateNoteInput {
   @Field(() => String, { description: 'Task Id' })
   taskId: string;
 
-  @Field(() => String, {description: 'User Id'})
+  @Field(() => String, { description: 'User Id' })
   userId: string;
 
-  @Field(() => String, {description: 'Task Note'})
+  @Field(() => String, { description: 'Task Note' })
   note: string;
 }

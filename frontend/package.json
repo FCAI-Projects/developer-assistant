@@ -3,7 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@apollo/client": "^3.5.10",
+    "@apollo/client": "^3.6.2",
+    "@graphql-codegen/typescript": "^2.4.10",
+    "@graphql-codegen/typescript-operations": "^2.3.7",
+    "@graphql-codegen/typescript-react-apollo": "^3.2.13",
     "@headlessui/react": "^1.5.0",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^12.1.4",
@@ -13,8 +16,7 @@
     "@types/react": "^17.0.44",
     "@types/react-dom": "^17.0.15",
     "axios": "^0.26.1",
-    "flowbite": "^1.4.1",
-    "graphql": "^16.3.0",
+    "graphql": "^16.4.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-hook-form": "^7.29.0",
@@ -52,6 +54,8 @@
     ]
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^2.6.2",
+    "@tailwindcss/forms": "^0.5.1",
     "@types/react-table": "^7.7.10",
     "autoprefixer": "^10.4.4",
     "postcss": "^8.4.12",

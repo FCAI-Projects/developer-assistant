@@ -32,13 +32,21 @@ export const Modal: React.FC<ModalProps> = ({ title, trigger, children }) => {
         leaveFrom="transform scale-100 opacity-100"
         leaveTo="transform scale-95 opacity-0"
       >
-        <Dialog onClose={handleClose} className=".shadow-xl fixed inset-0 z-10 overflow-y-auto">
+        <Dialog
+          onClose={handleClose}
+          className=".shadow-xl fixed inset-0 z-10 overflow-y-auto"
+        >
           <div className="flex min-h-screen items-center justify-center">
             <Dialog.Overlay className="fixed inset-0 bg-gray-600 opacity-40" />
             <div className="my-8 inline-block w-full max-w-md transform overflow-hidden rounded-lg bg-white p-6 text-left align-middle shadow-xl transition-all">
               <div className="flex items-center justify-between">
-                <Dialog.Title className="text-xl font-medium leading-6 text-gray-900">{title}</Dialog.Title>
-                <FaTimes className="cursor-pointer text-sm" onClick={handleClose} />
+                <Dialog.Title className="text-xl font-medium leading-6 text-gray-900">
+                  {title}
+                </Dialog.Title>
+                <FaTimes
+                  className="cursor-pointer text-sm"
+                  onClick={handleClose}
+                />
               </div>
               <div className="mt-3">{children(handleClose)}</div>
             </div>

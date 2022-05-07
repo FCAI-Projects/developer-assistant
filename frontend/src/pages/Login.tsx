@@ -1,29 +1,29 @@
 import React from "react";
-import { Input , Label } from "../components/Form";
+import { Link } from "react-router-dom";
 import { Button } from "../components/Button";
+import { Input, Label } from "../components/Form";
+
 export const Login: React.FC = () => {
-  return <div className="flex justify-center pt-52">
-   <form className=" box-border h-auto w-96 p-8 rounded-lg border-solid border-2 border-sky-500 margin" >
-     <div className="relative z-0 mb-6 w-full group">
-      <Label >E-mail</Label>
-       <Input itemType="email" placeholder="example@gmail.com"></Input>
-     </div>
-     <div className="relative z-0 mb-6 w-full group">
-      <Label>Password</Label>
-       <Input itemType="password" placeholder="***********"></Input>
-     </div>
-   
-  <div className="flex items-start mb-6">
-    <div className="flex items-center h-5">
-      <input id="remember" aria-describedby="remember" type="checkbox" className="w-4 h-4 bg-gray-50 rounded border border-gray-300 focus:ring-3 focus:ring-blue-300 " required></input>
+  return (
+    <div className="flex justify-center pt-52">
+      <form className="flex w-96 flex-col gap-4 rounded-lg border border-slate-300 p-8 shadow-sm">
+        <h3 className="text-center text-3xl font-medium">Login</h3>
+        <div className="w-full">
+          <Label htmlFor="email">E-mail</Label>
+          <Input type="email" id="email" name="email" placeholder="example@gmail.com" />
+        </div>
+        <div className="w-full">
+          <Label htmlFor="password">Password</Label>
+          <Input type="password" id="password" name="password" placeholder="***********" />
+        </div>
+        <p>
+          Don't have an account?{" "}
+          <Link className="text-blue-600 underline" to="/register">
+            Register
+          </Link>
+        </p>
+        <Button>Submit</Button>
+      </form>
     </div>
-    <div className="ml-3 text-sm">
-      <Label>Remmber me</Label>
-    </div>
-  </div>
- <Button>Submit</Button>
-</form>
-
-
-  </div>;
+  );
 };

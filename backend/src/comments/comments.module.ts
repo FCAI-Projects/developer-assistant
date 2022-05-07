@@ -13,6 +13,6 @@ import { Comment, CommentSchema } from './entities/comment.entity';
       },
     ]),
   ],
-  providers: [CommentsResolver, CommentsService]
+  providers: [CommentsResolver, CommentsService],
 })
 export class CommentsModule {}

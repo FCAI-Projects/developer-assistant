@@ -6,11 +6,11 @@ import { Slogen } from "../components/sections/Slogen";
 
 export const Home: React.FC = () => {
   return (
-    <>
-      <Navbar/>
+    <div>
+      <Navbar />
       <Slogen />
       <Contact />
       <Footer />
-    </>
+    </div>
   );
 };

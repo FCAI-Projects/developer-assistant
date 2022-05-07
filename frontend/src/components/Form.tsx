@@ -19,10 +19,10 @@ export const Label: React.FC<React.LabelHTMLAttributes<HTMLLabelElement>> = ({ c
 };
 
 // TODO: add succes and error states and icon to input
-export const Input: React.FC<React.HTMLAttributes<HTMLInputElement>> = ({ className, children, ...other }) => {
+export const Input: React.FC<React.InputHTMLAttributes<HTMLInputElement>> = ({ className, children, ...other }) => {
   return (
     <input
-      className={`${className} block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500`}
+      className={`${className} my-1 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-300 focus:ring-opacity-50`}
       {...other}
     >
       {children}
@@ -77,10 +77,14 @@ export const HelperText: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ cla
   );
 };
 
-export const Textarea: React.FC<React.HTMLAttributes<HTMLTextAreaElement>> = ({ className, children, ...other }) => {
+export const Textarea: React.FC<React.TextareaHTMLAttributes<HTMLTextAreaElement>> = ({
+  className,
+  children,
+  ...other
+}) => {
   return (
     <textarea
-      className={`${className} block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500`}
+      className={`${className} my-1 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-300 focus:ring-opacity-50`}
       {...other}
     >
       {children}
