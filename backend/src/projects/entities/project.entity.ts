@@ -1,12 +1,16 @@
-import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
 import { Schema as MongooseSchema } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Document } from 'mongoose';
+import { User } from 'src/users/entities/user.entity';
+
+export type ProjectDocument = Project & Document;
 
 @Schema()
 @ObjectType()
 export class Project {
-  @Field(() => String)
-  _id: MongooseSchema.Types.ObjectId;
+  @Field(() => ID, { description: 'Project ID' })
+  id: MongooseSchema.Types.ObjectId;
 
   @Prop()
   @Field(() => String, { description: 'Projact name' })
@@ -16,9 +20,9 @@ export class Project {
   @Field(() => String, { description: 'Client email' })
   clientEmail: string;
 
-  @Prop()
-  @Field(() => String, { description: 'Project owner' })
-  owner: string;
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'User' })
+  @Field(() => User, { description: 'Project owner' })
+  owner: MongooseSchema.Types.ObjectId;
 
   @Prop()
   @Field(() => String, { description: 'Project describtion' })

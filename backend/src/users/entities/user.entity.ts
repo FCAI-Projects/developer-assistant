@@ -1,30 +1,30 @@
-import { Field, Int, ObjectType, PartialType } from '@nestjs/graphql';
-import { Schema as MongooseSchema } from 'mongoose';
+import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Document, Schema as MongooseSchema } from 'mongoose';
+
+export type UserDocument = User & Document;
 
 @Schema()
 @ObjectType()
-export class User {
-  @Field(() => String)
-  _id: MongooseSchema.Types.ObjectId;
+export class User extends Document {
+  @Field(() => ID, { description: 'User ID' })
+  id: MongooseSchema.Types.ObjectId;
 
-  @Prop({required: true})
+  @Prop({ required: true })
   @Field(() => String, { description: 'User first name' })
-  firstName: string;
+  fname: string;
 
-  @Prop({required: true})
+  @Prop({ required: true })
   @Field(() => String, { description: 'User last name' })
-  lastName: string;
+  lname: string;
 
-  @Prop({required: true, unique: true})
+  @Prop({ required: true, unique: true })
   @Field(() => String, { description: 'User email' })
   email: string;
 
-  @Prop({required: true})
+  @Prop({ required: true })
   @Field(() => String, { description: 'User password', nullable: true })
   password: string;
 }
-
-
 
 export const UserSchema = SchemaFactory.createForClass(User);

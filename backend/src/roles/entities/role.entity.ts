@@ -1,15 +1,21 @@
-import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
 import { Schema as MongooseSchema } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Document } from 'mongoose';
+import { User } from 'src/users/entities/user.entity';
+import { Project } from 'src/projects/entities/project.entity';
 
+export type RoleDocument = Role & Document;
+
+@Schema()
 @ObjectType()
 export class Role {
-  @Field(() => String)
-  _id: MongooseSchema.Types.ObjectId;
+  @Field(() => ID, { description: 'Role ID' })
+  id: MongooseSchema.Types.ObjectId;
 
-  @Prop()
-  @Field(() => String, { description: 'Projact ID' })
-  projectId: string;
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Project' })
+  @Field(() => Project, { description: 'Projact ID' })
+  project: MongooseSchema.Types.ObjectId;
 
   @Prop()
   @Field(() => Boolean, { description: 'User ID' })

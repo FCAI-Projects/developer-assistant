@@ -1,6 +1,6 @@
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 import { NotesService } from './notes.service';
-import { Note } from './entities/note.entity';
+import { Note, NoteDocument } from './entities/note.entity';
 import { CreateNoteInput } from './dto/create-note.input';
 import { UpdateNoteInput } from './dto/update-note.input';
 
@@ -8,35 +8,35 @@ import { UpdateNoteInput } from './dto/update-note.input';
 export class NotesResolver {
   constructor(private readonly notesService: NotesService) {}
 
-  @Mutation(() => Note, {name: 'CreateTaskNote'})
-  createNote(@Args('createNoteInput') createNoteInput: CreateNoteInput) {
+  @Mutation(() => Note)
+  async createNote(
+    @Args('createNoteInput') createNoteInput: CreateNoteInput,
+  ): Promise<NoteDocument> {
     return this.notesService.create(createNoteInput);
   }
 
-  @Query(() => Note)
-  findById(@Args('id', { type: () => String }) id: string) {
+  @Query(() => Note, { name: 'note' })
+  async findById(@Args('id') id: string): Promise<NoteDocument> {
     return this.notesService.findById(id);
   }
 
-  // ! check this and test it ...
   @Query(() => Note)
-  findByTaskId(@Args('taskId', { type: () => String }) taskId: string) {
-    return this.notesService.findByTaskId(taskId);
-  }
-
-  // ! check this and test it ...
-  @Query(() => Note)
-  findByUserId(@Args('userId', { type: () => String }) userId: string) {
-    return this.notesService.findByUserId(userId);
+  async filterNotes(
+    @Args('filter') filter: CreateNoteInput,
+  ): Promise<NoteDocument[]> {
+    return this.notesService.findByTaskId(filter);
   }
 
   @Mutation(() => Note)
-  updateNote(@Args('updateNoteInput') updateNoteInput: UpdateNoteInput) {
-    return this.notesService.update(updateNoteInput.id, updateNoteInput);
+  async updateNote(
+    @Args('id') id: string,
+    @Args('updateNoteInput') updateNoteInput: UpdateNoteInput,
+  ): Promise<NoteDocument> {
+    return this.notesService.update(id, updateNoteInput);
   }
 
   @Mutation(() => Note)
-  removeNote(@Args('id', { type: () => String }) id: string) {
+  async removeNote(@Args('id') id: string): Promise<NoteDocument> {
     return this.notesService.remove(id);
   }
 }

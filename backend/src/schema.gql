@@ -3,13 +3,14 @@
 # ------------------------------------------------------
 
 type User {
-  _id: String!
+  """User ID"""
+  id: ID!
 
   """User first name"""
-  firstName: String!
+  fname: String!
 
   """User last name"""
-  lastName: String!
+  lname: String!
 
   """User email"""
   email: String!
@@ -18,25 +19,14 @@ type User {
   password: String
 }
 
-type LoginUser {
-  """id of the user"""
-  _id: String
-
-  """firstName of the user"""
-  firstName: String
-
-  """lastName of the user"""
-  lastName: String
-
-  """email of the user"""
-  email: String
-
-  """token of the user"""
-  token: String
+type UserResponse {
+  """Token of the user"""
+  token: String!
 }
 
 type Project {
-  _id: String!
+  """Project ID"""
+  id: ID!
 
   """Projact name"""
   name: String!
@@ -45,41 +35,18 @@ type Project {
   clientEmail: String!
 
   """Project owner"""
-  owner: String!
+  owner: User!
 
   """Project describtion"""
   describtion: String!
 }
 
-type Member {
-  _id: String!
-
-  """Projact ID"""
-  projectId: String!
-
-  """User ID"""
-  userId: String!
-
-  """User role in project"""
-  role: String!
-
-  """Custom Role ID"""
-  customId: String
-
-  """User Badge"""
-  badges: String!
-}
-
-type Task {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
-
 type Role {
-  _id: String!
+  """Role ID"""
+  id: ID!
 
   """Projact ID"""
-  projectId: String!
+  project: Project!
 
   """User ID"""
   createTask: Boolean!
@@ -91,9 +58,123 @@ type Role {
   deleteMember: Boolean!
 }
 
-type Note {
-  _id: String!
+type Member {
+  """Member ID"""
+  id: ID!
 
+  """Projact ID"""
+  project: Project!
+
+  """User ID"""
+  user: User!
+
+  """User role in project"""
+  role: String!
+
+  """Custom Role"""
+  customRole: Role
+
+  """User Badge"""
+  badges: String!
+}
+
+type Task {
+  """Task ID"""
+  id: ID!
+
+  """Task Project ID"""
+  project: Project!
+
+  """Task name"""
+  name: String!
+
+  """Task description"""
+  description: String!
+
+  """Task assigned to"""
+  assign: User!
+
+  """Task attachments"""
+  attachments: [String!]!
+
+  """Task status"""
+  status: String!
+
+  """Task periority"""
+  periority: String!
+
+  """Task tags"""
+  tags: [String!]!
+
+  """Task started at"""
+  startedAt: DateTime!
+
+  """Task finished at"""
+  finishedAt: DateTime!
+
+  """Task deadline"""
+  deadline: DateTime!
+
+  """Task docs"""
+  docs: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Note {
+  """Note ID"""
+  id: ID!
+
+  """Task Id"""
+  task: Task!
+
+  """User Id"""
+  user: User!
+
+  """Task Note"""
+  note: String!
+}
+
+type Comment {
+  """Comment ID"""
+  id: ID!
+
+  """User ID"""
+  user: User!
+
+  """Comment Content"""
+  note: String!
+}
+
+type Query {
+  users: [User!]!
+  user(id: String!): User!
+  projects: [Project!]!
+  project(id: String!): Project!
+  filterMembers(filter: UpdateMemberInput!): [Member!]!
+  member(id: String!): Member!
+  tasks: [Task!]!
+  task(id: String!): Task!
+  roles: [Role!]!
+  role(id: String!): Role!
+  note(id: String!): Note!
+  filterNotes(filter: CreateNoteInput!): Note!
+  comments: [Comment!]!
+  comment(id: String!): Comment!
+}
+
+input UpdateMemberInput {
+  projectId: String
+  userId: String
+  role: String
+  customId: String
+  badges: String
+}
+
+input CreateNoteInput {
   """Task Id"""
   taskId: String!
 
@@ -104,87 +185,56 @@ type Note {
   note: String!
 }
 
-type Comment {
-  _id: String!
-
-  """Comment  ID"""
-  commntID: String!
-
-  """User ID"""
-  userID: String!
-
-  """Comment Content"""
-  note: String!
-}
-
-type Query {
-  users: [User!]!
-  user(id: String!): User!
-  projects: [Project!]!
-  project(id: Int!): Project!
-  members: [Member!]!
-  member(id: Int!): Member!
-  tasks: [Task!]!
-  task(id: Int!): Task!
-  roles: [Role!]!
-  role(id: Int!): Role!
-  findById(id: String!): Note!
-  findByTaskId(taskId: String!): Note!
-  findByUserId(userId: String!): Note!
-  comments: [Comment!]!
-  comment(id: String!): Comment!
-}
-
 type Mutation {
-  createUser(createUserInput: CreateUserInput!): User!
-  login(email: String!, password: String!): LoginUser!
+  createUser(createUserInput: CreateUserInput!): UserResponse!
+  login(email: String!, password: String!): UserResponse!
   deleteUser(id: String!): User!
   updateUser(user: UpdateUserInput!): User!
   createProject(createProjectInput: CreateProjectInput!): Project!
-  updateProject(updateProjectInput: UpdateProjectInput!): Project!
-  removeProject(id: Int!): Project!
-  createMember(createMemberInput: CreateMemberInput!): Member!
-  updateMember(updateMemberInput: UpdateMemberInput!): Member!
-  removeMember(id: Int!): Member!
+  updateProject(id: String!, updateProjectInput: UpdateProjectInput!): Project!
+  removeProject(id: String!): Project!
+  addMember(createMemberInput: CreateMemberInput!): Member!
+  updateMember(id: String!, updateMemberInput: UpdateMemberInput!): Member!
+  removeMember(id: String!): Member!
   createTask(createTaskInput: CreateTaskInput!): Task!
-  updateTask(updateTaskInput: UpdateTaskInput!): Task!
-  removeTask(id: Int!): Task!
+  updateTask(id: String!, updateTaskInput: UpdateTaskInput!): Task!
+  removeTask(id: String!): Task!
   createRole(createRoleInput: CreateRoleInput!): Role!
-  updateRole(updateRoleInput: UpdateRoleInput!): Role!
-  removeRole(id: Int!): Role!
-  CreateTaskNote(createNoteInput: CreateNoteInput!): Note!
-  updateNote(updateNoteInput: UpdateNoteInput!): Note!
+  updateRole(id: String!, updateRoleInput: UpdateRoleInput!): Role!
+  removeRole(id: String!): Role!
+  createNote(createNoteInput: CreateNoteInput!): Note!
+  updateNote(id: String!, updateNoteInput: UpdateNoteInput!): Note!
   removeNote(id: String!): Note!
   createComment(createCommentInput: CreateCommentInput!): Comment!
-  updateComment(updateCommentInput: UpdateCommentInput!): Comment!
+  updateComment(id: String!, updateCommentInput: UpdateCommentInput!): Comment!
   removeComment(id: String!): Comment!
 }
 
 input CreateUserInput {
-  """firstName of the user"""
-  firstName: String
+  """First Name of the user"""
+  fname: String!
 
-  """lastName of the user"""
-  lastName: String
+  """Last Name of the user"""
+  lname: String!
 
-  """email of the user"""
-  email: String
+  """Email of the user"""
+  email: String!
 
-  """password of the user"""
-  password: String
+  """Password of the user"""
+  password: String!
 }
 
 input UpdateUserInput {
-  """firstName of the user"""
-  firstName: String
+  """First Name of the user"""
+  fname: String
 
-  """lastName of the user"""
-  lastName: String
+  """Last Name of the user"""
+  lname: String
 
-  """email of the user"""
+  """Email of the user"""
   email: String
 
-  """password of the user"""
+  """Password of the user"""
   password: String
 }
 
@@ -194,9 +244,6 @@ input CreateProjectInput {
 
   """client email"""
   clientEmail: String!
-
-  """owner of the project"""
-  owner: String!
 
   """description of project"""
   describtion: String!
@@ -209,12 +256,8 @@ input UpdateProjectInput {
   """client email"""
   clientEmail: String
 
-  """owner of the project"""
-  owner: String
-
   """description of project"""
   describtion: String
-  id: Int!
 }
 
 input CreateMemberInput {
@@ -225,24 +268,80 @@ input CreateMemberInput {
   badges: String!
 }
 
-input UpdateMemberInput {
-  projectId: String
-  userId: String
-  role: String
-  customId: String
-  badges: String
-  id: Int!
-}
-
 input CreateTaskInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  """Task Project ID"""
+  projectId: String!
+
+  """Task name"""
+  name: String!
+
+  """Task description"""
+  description: String!
+
+  """Task assigned to"""
+  assign: String
+
+  """Task attachments"""
+  attachments: [String!]
+
+  """Task status"""
+  status: String
+
+  """Task periority"""
+  periority: String
+
+  """Task tags"""
+  tags: [String!]
+
+  """Task started at"""
+  startedAt: DateTime
+
+  """Task finished at"""
+  finishedAt: DateTime
+
+  """Task deadline"""
+  deadline: DateTime
+
+  """Task docs"""
+  docs: String
 }
 
 input UpdateTaskInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
+  """Task Project ID"""
+  projectId: String
+
+  """Task name"""
+  name: String
+
+  """Task description"""
+  description: String
+
+  """Task assigned to"""
+  assign: String
+
+  """Task attachments"""
+  attachments: [String!]
+
+  """Task status"""
+  status: String
+
+  """Task periority"""
+  periority: String
+
+  """Task tags"""
+  tags: [String!]
+
+  """Task started at"""
+  startedAt: DateTime
+
+  """Task finished at"""
+  finishedAt: DateTime
+
+  """Task deadline"""
+  deadline: DateTime
+
+  """Task docs"""
+  docs: String
 }
 
 input CreateRoleInput {
@@ -265,18 +364,6 @@ input UpdateRoleInput {
   editProject: Boolean
   inviteToProject: Boolean
   deleteMember: Boolean
-  id: Int!
-}
-
-input CreateNoteInput {
-  """Task Id"""
-  taskId: String!
-
-  """User Id"""
-  userId: String!
-
-  """Task Note"""
-  note: String!
 }
 
 input UpdateNoteInput {
@@ -288,7 +375,6 @@ input UpdateNoteInput {
 
   """Task Note"""
   note: String
-  id: String!
 }
 
 input CreateCommentInput {
@@ -311,5 +397,4 @@ input UpdateCommentInput {
 
   """Comment Content"""
   commentContent: String
-  id: String!
 }

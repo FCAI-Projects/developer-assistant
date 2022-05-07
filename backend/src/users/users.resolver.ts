@@ -1,12 +1,18 @@
-import { Body, HttpException, HttpStatus, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  HttpException,
+  HttpStatus,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { JwtService } from '@nestjs/jwt';
-import { AuthGuard } from '@nestjs/passport';
 import { compareSync } from 'bcrypt';
+import { JwtAuthGuard } from 'src/auth/jwt.guard';
 import { CreateUserInput } from './dto/create-user.dto';
-import { LoginUser } from './dto/login-user.dto';
+import { UserResponse } from './dto/user-response.dto';
 import { UpdateUserInput } from './dto/update-user.dto';
-import { User } from './entities/user.entity';
+import { User, UserDocument } from './entities/user.entity';
 import { UsersService } from './users.service';
 
 @Resolver(() => User)
@@ -16,22 +22,22 @@ export class UsersResolver {
     private jwtService: JwtService,
   ) {}
 
-  @UseGuards(AuthGuard('jwt'))
-  @Query((returns) => [User])
-  users(): Promise<User[]> {
+  @Query((returns) => [User], { name: 'users' })
+  @UseGuards(JwtAuthGuard)
+  findAll(): Promise<UserDocument[]> {
     return this.usersService.findAll();
   }
 
-  @UseGuards(AuthGuard('jwt'))
-  @Query((returns) => User)
-  user(@Args('id') id: string): Promise<User> {
+  @Query((returns) => User, { name: 'user' })
+  @UseGuards(JwtAuthGuard)
+  findById(@Args('id') id: string): Promise<UserDocument> {
     return this.usersService.findOne(id);
   }
 
-  @Mutation(() => User)
+  @Mutation(() => UserResponse)
   async createUser(
     @Args('createUserInput') createUserInput: CreateUserInput,
-  ): Promise<User> {
+  ): Promise<UserResponse> {
     const existUser = await this.usersService.findUserByEmail(
       createUserInput.email,
     );
@@ -45,15 +51,15 @@ export class UsersResolver {
       );
     }
     const user = await this.usersService.createUser(createUserInput);
-    user.password = undefined;
-    return user;
+    const token = this.createToken(user);
+    return { token };
   }
 
-  @Mutation(() => LoginUser)
+  @Mutation(() => UserResponse)
   async login(
     @Args('email') email: string,
     @Args('password') password: string,
-  ): Promise<LoginUser> {
+  ): Promise<UserResponse> {
     const user = await this.usersService.findUserByEmail(email);
     if (!user) {
       throw new HttpException(
@@ -74,30 +80,33 @@ export class UsersResolver {
         HttpStatus.UNAUTHORIZED,
       );
     }
-    user.password = undefined;
     const token = this.createToken(user);
-    return {...user, token};
+    return { token };
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @Mutation(() => User)
-  deleteUser(@Args('id') id: string): Promise<User> {
+  @UseGuards(JwtAuthGuard)
+  deleteUser(@Args('id') id: string): Promise<UserDocument> {
     return this.usersService.deleteOne(id);
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @Mutation(() => User)
+  @UseGuards(JwtAuthGuard)
   updateUser(
     @Req() req: any,
     @Args('user') user: UpdateUserInput,
-  ): Promise<User> {
-    console.log(req.user);
+  ): Promise<UserDocument> {
     return this.usersService.updateOne(req.user.id, user);
   }
 
-  createToken(user: User): string {
+  private createToken(user: UserDocument): string {
     return this.jwtService.sign({
-      ...user,
+      ...user.toObject({
+        transform: (_, ret) => {
+          delete ret.password;
+          return ret;
+        },
+      }),
     });
   }
 }

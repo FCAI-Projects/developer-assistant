@@ -1,35 +1,45 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int, Context } from '@nestjs/graphql';
 import { ProjectsService } from './projects.service';
-import { Project } from './entities/project.entity';
+import { Project, ProjectDocument } from './entities/project.entity';
 import { CreateProjectInput } from './dto/create-project.input';
 import { UpdateProjectInput } from './dto/update-project.input';
+import { Req, UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/jwt.guard';
 
 @Resolver(() => Project)
 export class ProjectsResolver {
   constructor(private readonly projectsService: ProjectsService) {}
 
   @Mutation(() => Project)
-  createProject(@Args('createProjectInput') createProjectInput: CreateProjectInput) {
-    return this.projectsService.create(createProjectInput);
+  @UseGuards(JwtAuthGuard)
+  async createProject(
+    @Context('req') context: any,
+    @Args('createProjectInput') createProjectInput: CreateProjectInput,
+  ): Promise<ProjectDocument> {
+    return this.projectsService.create(createProjectInput, context.user._id);
   }
 
   @Query(() => [Project], { name: 'projects' })
-  findAll() {
-    return this.projectsService.findAll();
+  @UseGuards(JwtAuthGuard)
+  async findAll(@Context('req') context: any): Promise<ProjectDocument[]> {
+    return this.projectsService.findMyPorjects(context.user._id);
   }
 
   @Query(() => Project, { name: 'project' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
+  async findById(@Args('id') id: string): Promise<ProjectDocument> {
     return this.projectsService.findOne(id);
   }
 
   @Mutation(() => Project)
-  updateProject(@Args('updateProjectInput') updateProjectInput: UpdateProjectInput) {
-    return this.projectsService.update(updateProjectInput.id, updateProjectInput);
+  async updateProject(
+    @Args('id') id: string,
+    @Args('updateProjectInput') updateProjectInput: UpdateProjectInput,
+  ): Promise<ProjectDocument> {
+    return this.projectsService.update(id, updateProjectInput);
   }
 
   @Mutation(() => Project)
-  removeProject(@Args('id', { type: () => Int }) id: number) {
+  removeProject(@Args('id') id: string) {
     return this.projectsService.remove(id);
   }
 }
