@@ -1,9 +1,29 @@
-import React from "react";
+import { useMutation } from "@apollo/client";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "../components/Button";
 import { Input, Label } from "../components/Form";
+import { CreateUserDocument } from "../generated/graphql";
 
 export const Register: React.FC = () => {
+  const [user, setUser] = React.useState({
+    fname: "",
+    lname: "",
+    email: "",
+    password: "",
+  });
+  const [addUser, { loading, data }] = useMutation(CreateUserDocument);
+
+  const handleRegister = async () => {
+    await addUser({
+      variables: {
+        createUserInput: {
+          ...user,
+        },
+      },
+    });
+  };
+
   return (
     <div className="flex justify-center pt-52">
       <form className="flex w-96 flex-col gap-4 rounded-lg border border-slate-300 p-8 shadow-sm">
