@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "../components/Button";
 import { Input, Label } from "../components/forms";
-import { CreateUserDocument } from "../generated/graphql";
+import { CreateUserDocument } from "../graphql/generated/graphql";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { FaExclamationCircle } from "react-icons/fa";

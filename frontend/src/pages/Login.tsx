@@ -6,13 +6,13 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useMutation } from "@apollo/client";
 import { FaExclamationCircle } from "react-icons/fa";
-import { LoginDocument } from "../generated/graphql";
+import { LoginDocument } from "../graphql/generated/graphql";
 
 // TODO: store the jwt token in local storage
 // TODO: redirect to the app page
 
 export const Login: React.FC = () => {
-  const [addUser, { loading, data, error }] = useMutation(LoginDocument);
+  const [loginUser, { loading, data, error }] = useMutation(LoginDocument);
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -32,7 +32,7 @@ export const Login: React.FC = () => {
   });
 
   const handleLoginUser = async (values: any) => {
-    await addUser({
+    await loginUser({
       variables: {
         ...values,
       },
