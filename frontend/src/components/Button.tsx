@@ -20,13 +20,14 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 const BaseButton: React.FC<ButtonProps> = ({ loading, className, label, children, ...other }) => {
   return (
     <button
-      className={`${className} rounded-lg px-5 py-2.5 text-sm font-medium 
-    ${loading ? "focus:ring-none disabled:opacity-70" : ""}`}
+      className={`${className} disabled:focus:ring-none rounded-lg px-5 py-2.5 text-sm 
+      font-medium disabled:cursor-not-allowed disabled:opacity-70 disabled:hover:bg-none
+      `}
       disabled={loading}
       {...other}
     >
       {loading ? (
-        <span className="flex items-center gap-2">
+        <span className="flex items-center justify-center gap-2">
           <ImSpinner8 className="animate-spin" /> Loading
         </span>
       ) : children ? (

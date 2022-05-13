@@ -8,7 +8,10 @@ export const Toolbar: React.FC = () => {
       <div>
         <Breadcrumb list={[{ name: "Home", link: "/" }]} />
       </div>
-      <div>
+      <div className="flex items-center gap-2">
+        <Button lightBlue className="px-3 py-2 text-xs">
+          Create Project
+        </Button>
         <Button lightRed className="px-3 py-2 text-xs">
           Logout
         </Button>

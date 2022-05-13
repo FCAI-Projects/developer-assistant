@@ -1,6 +1,6 @@
 import React from "react";
 import { Button } from "../Button";
-import { Input, Label, Textarea } from "../Form";
+import { Input, Label, Textarea } from "../forms";
 
 export const Contact: React.FC = () => {
   return (
