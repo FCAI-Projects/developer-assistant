@@ -7,6 +7,11 @@ import { Projects } from "./pages/Projects";
 import { Breadcrumb } from "./components/Breadcrumb";
 import { Toolbar } from "./components/Toolbar";
 import { Statusbar } from "./components/Statusbar";
+import { Project } from "./pages/Project";
+import { ProjectSettings } from "./pages/Project/Settings";
+import { ProjectRoles } from "./pages/Project/Roles";
+import { ProjectMembers } from "./pages/Project/Members";
+import { Settings } from "./pages/Settings";
 
 export const App: React.FC = () => {
   return (
@@ -19,6 +24,17 @@ export const App: React.FC = () => {
         </Route>
         <Route path="/app" element={<AppLayout />}>
           <Route index element={<Projects />} />
+          <Route path="settings" element={<Settings />} />
+
+          <Route path="project/:id" element={<ProjectLayout />}>
+            <Route index element={<Project />} />
+
+            <Route path="settings">
+              <Route index element={<ProjectSettings />} />
+              <Route path="roles" element={<ProjectRoles />} />
+              <Route path="members" element={<ProjectMembers />} />
+            </Route>
+          </Route>
         </Route>
       </Routes>
     </div>
@@ -33,6 +49,14 @@ const AppLayout: React.FC = () => {
         <Outlet />
       </div>
       <Statusbar />
+    </>
+  );
+};
+
+const ProjectLayout: React.FC = () => {
+  return (
+    <>
+      <Outlet />
     </>
   );
 };
