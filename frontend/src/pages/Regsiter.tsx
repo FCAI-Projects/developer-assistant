@@ -7,12 +7,12 @@ import { CreateUserDocument } from "../graphql/generated/graphql";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { FaExclamationCircle } from "react-icons/fa";
-
-// TODO: store the jwt token in local storage
-// TODO: redirect to the app page
+import { authState } from "../recoil";
+import { useSetRecoilState } from "recoil";
 
 export const Register: React.FC = () => {
   const [addUser, { loading, data, error }] = useMutation(CreateUserDocument);
+  const setToken = useSetRecoilState(authState);
   const formik = useFormik({
     initialValues: {
       fname: "",
@@ -47,7 +47,8 @@ export const Register: React.FC = () => {
 
   useEffect(() => {
     if (data) {
-      console.log(data);
+      localStorage.setItem("token", data.login.token);
+      setToken(data.login.token);
     }
   }, [data]);
 

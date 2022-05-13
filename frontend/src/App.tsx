@@ -1,5 +1,5 @@
-import { Routes, Route } from "react-router-dom";
-import React from "react";
+import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
+import React, { useEffect } from "react";
 import { Home } from "./pages/Home";
 import { Login } from "./pages/Login";
 import { Register } from "./pages/Regsiter";
@@ -11,8 +11,23 @@ import { ProjectMembers } from "./pages/Project/Members";
 import { Settings } from "./pages/Settings";
 import { ProjectLayout } from "./layouts/ProjectLayout";
 import { AppLayout } from "./layouts/AppLayout";
+import { useRecoilValue } from "recoil";
+import { authState } from "./recoil";
 
 export const App: React.FC = () => {
+  const authToken = useRecoilValue(authState);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    console.log(authState);
+
+    if (authToken) {
+      navigate("/app");
+    } else {
+      navigate("/login");
+    }
+  }, [authToken]);
+
   return (
     <div>
       <Routes>
