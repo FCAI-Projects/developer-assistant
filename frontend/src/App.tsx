@@ -21,11 +21,11 @@ export const App: React.FC = () => {
   useEffect(() => {
     console.log(authState);
 
-    if (authToken) {
-      navigate("/app");
-    } else {
-      navigate("/login");
-    }
+    // if (authToken) {
+    //   navigate("/app");
+    // } else {
+    //   navigate("/login");
+    // }
   }, [authToken]);
 
   return (
