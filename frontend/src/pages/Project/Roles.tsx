@@ -1,16 +1,14 @@
 import React from "react";
 import { FaEdit, FaPlus, FaTrash } from "react-icons/fa";
 import { Button } from "../../components/Button";
+import { NewRoleModel } from "../../components/modals/NewRoleModel";
 
 export const ProjectRoles: React.FC = () => {
   return (
     <div>
       <header className="mb-3 flex items-center justify-between">
         <h2 className="text-2xl font-bold">Project Roles</h2>
-        <Button lightBlue className="flex items-center gap-2 px-3 py-2 text-xs">
-          <FaPlus />
-          Create New
-        </Button>
+        <NewRoleModel />
       </header>
       <div className="relative flex items-center gap-3 border-b border-slate-100 py-5">
         <div>

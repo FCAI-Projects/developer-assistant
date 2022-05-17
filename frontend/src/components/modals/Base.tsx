@@ -24,7 +24,7 @@ export const Modal: React.FC<ModalProps> = ({ title, isOpen, handleClose, childr
       <Dialog onClose={handleClose} className=".shadow-xl fixed inset-0 z-10 overflow-y-auto">
         <div className="flex min-h-screen items-center justify-center">
           <Dialog.Overlay className="fixed inset-0 bg-gray-600 opacity-40" />
-          <div className="my-8 inline-block w-full max-w-md transform overflow-hidden rounded-lg bg-white p-6 text-left align-middle shadow-xl transition-all">
+          <div className="my-8 inline-block w-full max-w-md transform rounded-lg bg-white p-6 text-left align-middle shadow-xl transition-all">
             <div className="flex items-center justify-between">
               <Dialog.Title className="text-xl font-medium leading-6 text-gray-900">{title}</Dialog.Title>
               <FaTimes className="cursor-pointer text-sm" onClick={handleClose} />

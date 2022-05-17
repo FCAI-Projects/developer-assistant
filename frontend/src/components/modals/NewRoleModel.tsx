@@ -6,22 +6,20 @@ import * as Yup from "yup";
 import { Modal } from "./Base";
 import { useMutation } from "@apollo/client";
 import { LoginDocument } from "../../graphql/generated/graphql";
-import { CustomSelect, Input, Label } from "../forms";
+import { Input, Label, ToggleSwitch } from "../forms";
 import { FaPlus, FaUserPlus } from "react-icons/fa";
 
 // TODO: Use the right query to save to database
 
-export const InviteMemberModal: React.FC = () => {
+export const NewRoleModel: React.FC = () => {
   const [addProject, { loading, data, error }] = useMutation(LoginDocument);
   const [isOpen, toggleModal] = useToggleModal();
   const formik = useFormik({
     initialValues: {
-      member: "",
-      role: "",
+      name: "",
     },
     validationSchema: Yup.object({
-      member: Yup.string().required("Required"),
-      role: Yup.string().required("Required"),
+      name: Yup.string().required("Required"),
     }),
     onSubmit: async (values) => {
       try {
@@ -34,50 +32,48 @@ export const InviteMemberModal: React.FC = () => {
   return (
     <>
       <Button lightBlue className="flex items-center gap-2 px-3 py-2 text-xs" onClick={toggleModal}>
-        <FaUserPlus /> Invite Member
+        <FaPlus /> Create New
       </Button>
-      <Modal title="Create New Project" isOpen={isOpen} handleClose={toggleModal}>
+      <Modal title="Create New Role" isOpen={isOpen} handleClose={toggleModal}>
         <div className="my-5">
           <form className="flex flex-col gap-4">
             <div className="w-full">
-              <Label htmlFor="member">Member</Label>
-              <CustomSelect
-                options={[
-                  { id: "1", name: "Ezzdin Atef" },
-                  { id: "2", name: "Eslam Mohamed" },
-                  { id: "3", name: "7ema" },
-                  { id: "4", name: "Mahmoud Sobhy" },
-                ]}
-                value={{ id: "3", name: "7ema" }}
-                onChange={(e) => {
-                  console.log(e);
-                }}
-                label="name"
-                id="id"
+              <Label htmlFor="name">Role Name</Label>
+              <Input
+                type="text"
+                id="name"
+                placeholder="Role Name"
+                {...formik.getFieldProps("name")}
+                error={formik.touched.name ? formik.errors.name : ""}
               />
             </div>
+            <h3>Permissions</h3>
             <div className="w-full">
-              <Label htmlFor="role">Role</Label>
-              <CustomSelect
-                options={[
-                  { id: "1", name: "Member" },
-                  { id: "2", name: "Admin" },
-                  { id: "3", name: "Editor" },
-                  { id: "4", name: "Custom Role" },
-                ]}
-                value={{ id: "1", name: "Member" }}
-                onChange={(e) => {
-                  console.log(e);
-                }}
-                label="name"
-                id="id"
-              />
+              <ToggleSwitch id="createTask">Create Tasks</ToggleSwitch>
+            </div>
+            <div className="w-full">
+              <ToggleSwitch id="deleteTask">Delete Tasks</ToggleSwitch>
+            </div>
+            <div className="w-full">
+              <ToggleSwitch id="editTask">Edit Tasks</ToggleSwitch>
+            </div>
+            <div className="w-full">
+              <ToggleSwitch id="assignTask">Assign Members to Tasks</ToggleSwitch>
+            </div>
+            <div className="w-full">
+              <ToggleSwitch id="editProject">Edit Project</ToggleSwitch>
+            </div>
+            <div className="w-full">
+              <ToggleSwitch id="inviteToProject">Invite To Project</ToggleSwitch>
+            </div>
+            <div className="w-full">
+              <ToggleSwitch id="deleteMember">Delete Members</ToggleSwitch>
             </div>
           </form>
         </div>
         <div className="flex flex-row-reverse gap-3">
           <Button type="submit" green onClick={() => formik.handleSubmit()} loading={loading}>
-            Invite
+            Create
           </Button>
           <Button type="submit" lightRed onClick={toggleModal}>
             Cancel
