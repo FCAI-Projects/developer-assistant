@@ -128,7 +128,7 @@ export const Project: React.FC = () => {
         {/* All Lists ...*/}
         {Cards.lists.map( list => (
           <div 
-            className="w-60 h-fit bg-gray-200 rounded-2xl p-3 mr-6"
+            className="w-72 h-fit bg-gray-200 rounded-2xl p-3 mr-6"
             key={list.listId}>
             <Droppable droppableId={list.listId}>
             {(provided) => (
@@ -166,7 +166,7 @@ export const Project: React.FC = () => {
         </div>
         ))}
       </DragDropContext>
-      <div className="w-60 flex flex-row items-center bg-gray-200 text-cyan-800 font-bold rounded-xl px-4 py-2 ">
+      <div className="w-72 flex flex-row items-center bg-gray-200 text-cyan-800 font-bold rounded-xl px-4 py-2 ">
         <BsPlusLg className=" mr-2" />
         Add List
       </div>
