@@ -27,7 +27,7 @@ export const NewProjectModal: React.FC = () => {
     }),
     onSubmit: async (values) => {
       try {
-        addProject({
+        await addProject({
           variables: {
             createProjectInput: {
               name: values.name,
@@ -36,6 +36,7 @@ export const NewProjectModal: React.FC = () => {
             },
           },
         });
+        toggleModal();
       } catch (error) {
         console.log(error);
       }
