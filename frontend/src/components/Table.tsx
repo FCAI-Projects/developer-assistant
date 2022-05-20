@@ -2,7 +2,7 @@ import React from "react";
 import { useTable } from "react-table";
 
 interface columnsInterface {
-  Header: string;
+  header: string;
   accessor: string;
 }
 
@@ -13,21 +13,17 @@ export interface TableProps extends React.TableHTMLAttributes<HTMLElement> {
 }
 
 export const Table: React.FC<TableProps> = ({ className, data, columns }) => {
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    useTable({ columns, data });
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({ columns, data });
 
   return (
     <div className="relative overflow-x-auto">
-      <table
-        className={`${className} w-full text-left text-sm text-gray-500 dark:text-gray-400`}
-        {...getTableProps()}
-      >
-        <thead className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
+      <table className={`${className} w-full text-left text-sm text-gray-500`} {...getTableProps()}>
+        <thead className="border-b bg-slate-700 px-1 text-xs uppercase text-white">
           {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((column) => (
                 <th {...column.getHeaderProps()} className="px-6 py-3">
-                  {column.render("Header")}
+                  {column.render("header")}
                 </th>
               ))}
             </tr>
@@ -37,10 +33,7 @@ export const Table: React.FC<TableProps> = ({ className, data, columns }) => {
           {rows.map((row) => {
             prepareRow(row);
             return (
-              <tr
-                {...row.getRowProps()}
-                className="border-b bg-white dark:border-gray-700 dark:bg-gray-800"
-              >
+              <tr {...row.getRowProps()} className="border-b bg-white">
                 {row.cells.map((cell) => {
                   return (
                     <td {...cell.getCellProps()} className="px-6 py-4">

@@ -5,6 +5,7 @@ import * as Yup from "yup";
 import { useMutation } from "@apollo/client";
 import { LoginDocument } from "../../graphql/generated/graphql";
 import { useFormik } from "formik";
+import { UpdatePassword } from "../../components/modals/UpdatePasswordModal";
 
 export const ProjectSettings: React.FC = () => {
   const [editProject, { loading, data, error }] = useMutation(LoginDocument);

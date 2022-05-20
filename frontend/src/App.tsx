@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
+import { Routes, Route, Navigate, useNavigate, Outlet } from "react-router-dom";
 import React, { useEffect } from "react";
 import { Home } from "./pages/Home";
 import { Login } from "./pages/Login";
@@ -13,39 +13,42 @@ import { ProjectLayout } from "./layouts/ProjectLayout";
 import { AppLayout } from "./layouts/AppLayout";
 import { useRecoilValue } from "recoil";
 import { authState } from "./recoil";
-import { Chat } from "./pages/Project/Chat";
+import { Chat } from "./pages/Chat";
+import { Calendar } from "./pages/Calendar";
 
 export const App: React.FC = () => {
   const authToken = useRecoilValue(authState);
-  const navigate = useNavigate();
 
-  useEffect(() => {
-    console.log(authState);
+  const RedirectToLogin: React.FC = () => {
+    if (!authToken) return <Navigate to="/login" />;
+    return <Outlet />;
+  };
 
-    // if (authToken) {
-    //   navigate("/app");
-    // } else {
-    //   navigate("/login");
-    // }
-  }, [authToken]);
+  const RedirectToApp: React.FC = () => {
+    if (authToken) return <Navigate to="/app" />;
+    return <Outlet />;
+  };
 
   return (
-    <div>
+    <div className="min-h-screen bg-slate-50">
       <Routes>
         <Route path="/">
           <Route index element={<Home />} />
-          <Route path="login" element={<Login />} />
-          <Route path="register" element={<Register />} />
+          <Route element={<RedirectToApp />}>
+            <Route path="login" element={<Login />} />
+            <Route path="register" element={<Register />} />
+          </Route>
         </Route>
-        <Route path="/app">
+        <Route path="/app" element={<RedirectToLogin />}>
           <Route element={<AppLayout />}>
             <Route index element={<Projects />} />
             <Route path="settings" element={<Settings />} />
+            <Route path="chat" element={<Chat />} />
+            <Route path="calendar" element={<Calendar />} />
           </Route>
 
           <Route path="project/:id" element={<ProjectLayout />}>
             <Route index element={<Project />} />
-            <Route path="chat" element={<Chat />} />
 
             <Route path="settings">
               <Route index element={<ProjectConfig />} />

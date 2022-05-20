@@ -1,6 +1,8 @@
 import React from "react";
 import { FaCogs, FaDoorOpen } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { useSetRecoilState } from "recoil";
+import { authState } from "../recoil";
 import { Breadcrumb } from "./Breadcrumb";
 import { Button } from "./Button";
 import { InviteMemberModal } from "./modals/InviteMemberModal";
@@ -22,6 +24,12 @@ export const Toolbar: React.FC<IProps> = ({
   projectSettings,
   logoutButton,
 }) => {
+  const setToken = useSetRecoilState(authState);
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setToken(null);
+  };
+
   return (
     <div className="flex items-center justify-between border-b p-2.5">
       <div>
@@ -32,14 +40,14 @@ export const Toolbar: React.FC<IProps> = ({
         {projectSettings && (
           <Link to="settings">
             <Button lightBlue className="flex items-center gap-2 px-3 py-2 text-xs">
-              <FaCogs /> Settings
+              <FaCogs /> Project Settings
             </Button>
           </Link>
         )}
         {newTaskModal && <NewTaskModal />}
         {inviteMemberModal && <InviteMemberModal />}
         {logoutButton && (
-          <Button lightRed className="flex items-center gap-2 px-3 py-2 text-xs">
+          <Button lightRed className="flex items-center gap-2 px-3 py-2 text-xs" onClick={handleLogout}>
             <FaDoorOpen /> Logout
           </Button>
         )}

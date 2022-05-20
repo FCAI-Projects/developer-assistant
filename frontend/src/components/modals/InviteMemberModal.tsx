@@ -20,7 +20,7 @@ export const InviteMemberModal: React.FC = () => {
       role: "",
     },
     validationSchema: Yup.object({
-      member: Yup.string().required("Required"),
+      member: Yup.string().email().required("Required"),
       role: Yup.string().required("Required"),
     }),
     onSubmit: async (values) => {
@@ -40,21 +40,8 @@ export const InviteMemberModal: React.FC = () => {
         <div className="my-5">
           <form className="flex flex-col gap-4">
             <div className="w-full">
-              <Label htmlFor="member">Member</Label>
-              <CustomSelect
-                options={[
-                  { id: "1", name: "Ezzdin Atef" },
-                  { id: "2", name: "Eslam Mohamed" },
-                  { id: "3", name: "7ema" },
-                  { id: "4", name: "Mahmoud Sobhy" },
-                ]}
-                value={{ id: "3", name: "7ema" }}
-                onChange={(e) => {
-                  console.log(e);
-                }}
-                label="name"
-                id="id"
-              />
+              <Label htmlFor="member">Member Email</Label>
+              <Input id="member" type="email" placeholder="Member Email" {...formik.getFieldProps("member")} />
             </div>
             <div className="w-full">
               <Label htmlFor="role">Role</Label>

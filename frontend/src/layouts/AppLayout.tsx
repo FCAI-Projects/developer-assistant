@@ -6,7 +6,7 @@ import { Toolbar } from "../components/Toolbar";
 export const AppLayout: React.FC = () => {
   return (
     <>
-      <div className="mx-5">
+      <div className="mx-5 pb-12">
         <Toolbar logoutButton={true} newProjectModal={true} />
         <Outlet />
       </div>

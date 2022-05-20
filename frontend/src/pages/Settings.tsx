@@ -4,6 +4,7 @@ import { FaExclamationCircle } from "react-icons/fa";
 import * as Yup from "yup";
 import { Button } from "../components/Button";
 import { Input, Label } from "../components/forms";
+import { UpdatePassword } from "../components/modals/UpdatePasswordModal";
 
 export const Settings: React.FC = () => {
   const formik = useFormik({
@@ -68,8 +69,9 @@ export const Settings: React.FC = () => {
                 error={formik.touched.email ? formik.errors.email : ""}
               />
             </div>
-            <div className="flex flex-row-reverse">
+            <div className="flex flex-row-reverse gap-5">
               <Button type="submit">Save Changes</Button>
+              <UpdatePassword />
             </div>
           </div>
         </div>

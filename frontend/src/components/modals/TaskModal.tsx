@@ -14,7 +14,7 @@ export const TaskModal: React.FC<ModalProps> = ({ title, children }) => {
   return (
     <>
       <Button className="flex items-center gap-2 px-3 py-2 text-xs" onClick={toggleModal}>
-        Open
+        Don't click it
       </Button>
       <Transition
         show={isOpen}
@@ -34,6 +34,7 @@ export const TaskModal: React.FC<ModalProps> = ({ title, children }) => {
                 <Dialog.Title className="text-xl font-medium leading-6 text-gray-900">{title}</Dialog.Title>
                 <FaTimes className="cursor-pointer text-sm" onClick={toggleModal} />
               </div>
+              <div>F***!! Didn't I said don't click it!!!!!!</div>
             </div>
           </div>
         </Dialog>

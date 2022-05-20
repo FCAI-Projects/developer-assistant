@@ -10,7 +10,7 @@ export const ProjectRoles: React.FC = () => {
         <h2 className="text-2xl font-bold">Project Roles</h2>
         <NewRoleModel />
       </header>
-      <div className="relative flex items-center gap-3 border-b border-slate-100 py-5">
+      <div className="relative flex items-center gap-3 border-b border-slate-200 py-5">
         <div>
           <h4 className="text-xl font-medium">Custom Role</h4>
         </div>
@@ -24,7 +24,7 @@ export const ProjectRoles: React.FC = () => {
         </div>
       </div>
       {/** */}
-      <div className="relative flex items-center gap-3 border-b border-slate-100 py-5">
+      <div className="relative flex items-center gap-3 border-b border-slate-200 py-5">
         <div>
           <h4 className="text-xl font-medium">Custom Role</h4>
         </div>

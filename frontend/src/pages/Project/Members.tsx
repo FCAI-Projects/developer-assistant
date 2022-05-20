@@ -10,7 +10,7 @@ export const ProjectMembers: React.FC = () => {
         <h2 className="text-2xl font-bold">Project Members</h2>
         <InviteMemberModal />
       </header>
-      <div className="relative flex items-center gap-3 border-b border-slate-100 py-5">
+      <div className="relative flex items-center gap-3 border-b border-slate-200 py-5">
         <div>
           <img
             className="h-16 w-16 rounded-full object-cover"
@@ -32,7 +32,7 @@ export const ProjectMembers: React.FC = () => {
         </div>
       </div>
       {/** */}
-      <div className="relative flex items-center gap-3 border-b border-slate-100 py-5">
+      <div className="relative flex items-center gap-3 border-b border-slate-200 py-5">
         <div>
           <img
             className="h-16 w-16 rounded-full object-cover"

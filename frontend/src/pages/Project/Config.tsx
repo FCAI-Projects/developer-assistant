@@ -3,9 +3,10 @@ import { Tab } from "@headlessui/react";
 import { ProjectSettings } from "./Settings";
 import { ProjectMembers } from "./Members";
 import { ProjectRoles } from "./Roles";
+import { ProjectExpenses } from "./Expenses";
 
 export const ProjectConfig: React.FC = () => {
-  const tabs = useMemo(() => ["Settings", "Members", "Roles"], []);
+  const tabs = useMemo(() => ["Settings", "Members", "Roles", "Expenses"], []);
 
   return (
     <div className="container mx-auto">
@@ -35,6 +36,9 @@ export const ProjectConfig: React.FC = () => {
             </Tab.Panel>
             <Tab.Panel>
               <ProjectRoles />
+            </Tab.Panel>
+            <Tab.Panel>
+              <ProjectExpenses />
             </Tab.Panel>
           </Tab.Panels>
         </div>
