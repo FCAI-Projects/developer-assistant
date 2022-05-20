@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { BsPlusLg } from "react-icons/bs";
+import { ListView } from "../../components/listsView/ListView";
 
 export interface board {
   boardId: string;
@@ -77,10 +78,28 @@ export const Project: React.FC = () => {
           },
         ],
       },
+      {
+        listId: "list-2",
+        listName: "List 3",
+        tasks: [
+          {
+            taskId: "task-5",
+            taskName: "Sobhy Task 5",
+            taskDescription: "Description",
+            taskOwner: "Sobhy",
+          },
+          {
+            taskId: "task-6",
+            taskName: "Ezz Task 7",
+            taskDescription: "Description",
+            taskOwner: "Ezz",
+          },
+        ],
+      },
     ],
   }
 
-  const [Cards] = useState(cards);
+  const [Cards, setCards] = useState(cards);
 
   const sort = (state: board, payload : sortAction) => {
     // same list
@@ -106,12 +125,23 @@ export const Project: React.FC = () => {
   };
 
   const onDragEnd = (result: any) => {
-    const { destination, source, draggableId } = result;
+    const { destination, source, draggableId, type } = result;
 
-    if (!destination) {
+    if (!destination) return;
+
+    // Move list
+    if (type === "COLUMN") {
+      // Prevent update if nothing has changed
+      if (source.index !== destination.index) {
+        const newLists = Array.from(Cards.lists);
+        const [removedList] = newLists.splice(source.index, 1);
+        newLists.splice(destination.index, 0, removedList);
+        setCards({ ...Cards, lists: newLists });
+      }
       return;
     }
 
+    // Move card
     sort(
       Cards,{
       droppableIdStart: source.droppableId,
@@ -120,51 +150,24 @@ export const Project: React.FC = () => {
       droppableIndexEnd: destination.index,
       draggableId,
     })
+
+    console.log(Cards.lists)
   };
 
   return (
-    <div className="flex flex-row items-start mt-6">
+    <div className="flex flex-row items-start my-6 mb-20">
       <DragDropContext onDragEnd={onDragEnd}>
-        {/* All Lists ...*/}
-        {Cards.lists.map( list => (
-          <div 
-            className="w-72 h-fit bg-gray-200 rounded-2xl p-3 mr-6"
-            key={list.listId}>
-            <Droppable droppableId={list.listId}>
-            {(provided) => (
-              <div
-                {...provided.droppableProps} 
-                ref={provided.innerRef} >
-                <div className="text-cyan-800 font-bold text-lg ml-2">{list.listName}</div>
-                {/* All tasks in list ...*/}
-                {list.tasks.map((task, index) => (
-                  // task ...
-                  <div key={task.taskId} >
-                    <Draggable draggableId={task.taskId} index={index}>
-                      {provided => (
-                        <div 
-                          className="bg-white rounded-xl p-3 my-3"
-                          ref={provided.innerRef} 
-                          {...provided.draggableProps} 
-                          {...provided.dragHandleProps} >
-                          
-                          <div className="font-bold">{task.taskName}</div>
-                          <div className="text-gray-bold">{task.taskDescription}</div>
-                        </div>
-                      )}
-                    </Draggable>
-                  </div>
-                ))}
-                {provided.placeholder}
-                <div className="flex flex-row items-center bg-gray-200 text-cyan-800 font-bold rounded-md px-2 py-1 ">
-                  <BsPlusLg className=" mr-2" />
-                  Add Task
-                </div>
-              </div>
-            )}
-          </Droppable>
-        </div>
-        ))}
+        <Droppable droppableId="board" direction="horizontal" type="COLUMN">
+          {provided => (
+            <div ref={provided.innerRef} className="flex flex-row items-start">
+              {Cards.lists.map((list, index) => {
+                return <ListView list={list} index={index} key={list.listId} />
+              })}
+
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
       </DragDropContext>
       <div className="w-72 flex flex-row items-center bg-gray-200 text-cyan-800 font-bold rounded-xl px-4 py-2 ">
         <BsPlusLg className=" mr-2" />
