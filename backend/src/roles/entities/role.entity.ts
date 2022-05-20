@@ -7,7 +7,7 @@ import { Project } from 'src/projects/entities/project.entity';
 
 export type RoleDocument = Role & Document;
 
-@Schema()
+@Schema({ timestamps: true })
 @ObjectType()
 export class Role {
   @Field(() => ID, { description: 'Role ID' })

@@ -4,7 +4,7 @@ import { Document, Schema as MongooseSchema } from 'mongoose';
 
 export type UserDocument = User & Document;
 
-@Schema()
+@Schema({ timestamps: true })
 @ObjectType()
 export class User extends Document {
   @Field(() => ID, { description: 'User ID' })

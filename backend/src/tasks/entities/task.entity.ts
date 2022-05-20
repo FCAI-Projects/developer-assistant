@@ -6,7 +6,7 @@ import { User } from 'src/users/entities/user.entity';
 
 export type TaskDocument = Task & Document;
 
-@Schema()
+@Schema({ timestamps: true })
 @ObjectType()
 export class Task extends Document {
   @Field(() => ID, { description: 'Task ID' })

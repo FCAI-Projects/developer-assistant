@@ -6,7 +6,7 @@ import { User } from 'src/users/entities/user.entity';
 
 export type ProjectDocument = Project & Document;
 
-@Schema()
+@Schema({ timestamps: true })
 @ObjectType()
 export class Project {
   @Field(() => ID, { description: 'Project ID' })

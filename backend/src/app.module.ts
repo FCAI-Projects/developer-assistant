@@ -12,6 +12,8 @@ import { TasksModule } from './tasks/tasks.module';
 import { RolesModule } from './roles/roles.module';
 import { NotesModule } from './notes/notes.module';
 import { CommentsModule } from './comments/comments.module';
+import { GroupsModule } from './groups/groups.module';
+import { MessagesModule } from './messages/messages.module';
 
 @Module({
   imports: [
@@ -29,6 +31,8 @@ import { CommentsModule } from './comments/comments.module';
     RolesModule,
     NotesModule,
     CommentsModule,
+    GroupsModule,
+    MessagesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

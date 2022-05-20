@@ -5,14 +5,14 @@ import { Button } from "../Button";
 import * as Yup from "yup";
 import { Modal } from "./Base";
 import { useMutation } from "@apollo/client";
-import { LoginDocument } from "../../graphql/generated/graphql";
+import { CreateProjectDocument } from "../../graphql/generated/graphql";
 import { Input, Label } from "../forms";
 import { FaPlus } from "react-icons/fa";
 
 // TODO: Use the right query to save to database
 
 export const NewProjectModal: React.FC = () => {
-  const [addProject, { loading, data, error }] = useMutation(LoginDocument);
+  const [addProject, { loading, data, error }] = useMutation(CreateProjectDocument);
   const [isOpen, toggleModal] = useToggleModal();
   const formik = useFormik({
     initialValues: {
@@ -27,6 +27,15 @@ export const NewProjectModal: React.FC = () => {
     }),
     onSubmit: async (values) => {
       try {
+        addProject({
+          variables: {
+            createProjectInput: {
+              name: values.name,
+              clientEmail: values.clientEmail,
+              describtion: values.description,
+            },
+          },
+        });
       } catch (error) {
         console.log(error);
       }

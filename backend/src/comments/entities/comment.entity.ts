@@ -6,7 +6,7 @@ import { User } from 'src/users/entities/user.entity';
 
 export type CommentDocument = Comment & Document;
 
-@Schema()
+@Schema({ timestamps: true })
 @ObjectType()
 export class Comment {
   @Field(() => ID, { description: 'Comment ID' })

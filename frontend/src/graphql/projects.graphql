@@ -1,0 +1,13 @@
+mutation CreateProject($createProjectInput: CreateProjectInput!) {
+  createProject(createProjectInput: $createProjectInput) {
+    id
+  }
+}
+
+query Projects {
+  projects {
+    id
+    name
+    describtion
+  }
+}

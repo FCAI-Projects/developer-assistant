@@ -1,5 +1,6 @@
 import React from "react";
 import { FaCommentDots } from "react-icons/fa";
+import { Link } from "react-router-dom";
 import { TaskModal } from "./modals/TaskModal";
 
 export const Statusbar: React.FC = () => {
@@ -10,7 +11,9 @@ export const Statusbar: React.FC = () => {
         <TaskModal />
       </div>
       <div className="flex items-center">
-        <FaCommentDots className="cursor-pointer text-xl text-slate-600" />
+        <Link to="chat">
+          <FaCommentDots className="cursor-pointer text-xl text-slate-600" />
+        </Link>
       </div>
     </div>
   );

@@ -13,6 +13,7 @@ import { ProjectLayout } from "./layouts/ProjectLayout";
 import { AppLayout } from "./layouts/AppLayout";
 import { useRecoilValue } from "recoil";
 import { authState } from "./recoil";
+import { Chat } from "./pages/Project/Chat";
 
 export const App: React.FC = () => {
   const authToken = useRecoilValue(authState);
@@ -44,6 +45,7 @@ export const App: React.FC = () => {
 
           <Route path="project/:id" element={<ProjectLayout />}>
             <Route index element={<Project />} />
+            <Route path="chat" element={<Chat />} />
 
             <Route path="settings">
               <Route index element={<ProjectConfig />} />

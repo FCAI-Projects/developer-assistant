@@ -7,7 +7,7 @@ import { Role } from 'src/roles/entities/role.entity';
 
 export type MemberDocument = Member & Document;
 
-@Schema()
+@Schema({ timestamps: true })
 @ObjectType()
 export class Member {
   @Field(() => ID, { description: 'Member ID' })

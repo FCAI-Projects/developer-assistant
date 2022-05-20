@@ -149,6 +149,23 @@ type Comment {
   note: String!
 }
 
+type Group {
+  """Group ID"""
+  ID: ID!
+
+  """Group Project"""
+  project: String!
+
+  """Group Name"""
+  name: String!
+
+  """Group Members"""
+  members: String!
+
+  """Group Admin"""
+  admin: String!
+}
+
 type Query {
   users: [User!]!
   user(id: String!): User!
@@ -164,6 +181,8 @@ type Query {
   filterNotes(filter: CreateNoteInput!): Note!
   comments: [Comment!]!
   comment(id: String!): Comment!
+  groups: [Group!]!
+  group(id: String!): Group!
 }
 
 input UpdateMemberInput {
@@ -208,6 +227,10 @@ type Mutation {
   createComment(createCommentInput: CreateCommentInput!): Comment!
   updateComment(id: String!, updateCommentInput: UpdateCommentInput!): Comment!
   removeComment(id: String!): Comment!
+  createGroup(createGroupInput: CreateGroupInput!): Group!
+  inviteToGroup(groupId: String!, memberId: String!): Group!
+  updateGroup(updateGroupInput: UpdateGroupInput!): Group!
+  removeGroup(id: String!): Group!
 }
 
 input CreateUserInput {
@@ -397,4 +420,27 @@ input UpdateCommentInput {
 
   """Comment Content"""
   commentContent: String
+}
+
+input CreateGroupInput {
+  """Group Project"""
+  project: String!
+
+  """Group Name"""
+  name: String!
+
+  """Group Members"""
+  members: [String!]!
+}
+
+input UpdateGroupInput {
+  """Group Project"""
+  project: String
+
+  """Group Name"""
+  name: String
+
+  """Group Members"""
+  members: [String!]
+  id: String!
 }

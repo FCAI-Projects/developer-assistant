@@ -7,7 +7,7 @@ import { User } from 'src/users/entities/user.entity';
 
 export type NoteDocument = Note & Document;
 
-@Schema()
+@Schema({ timestamps: true })
 @ObjectType()
 export class Note {
   @Field(() => ID, { description: 'Note ID' })
