@@ -293,7 +293,7 @@ input CreateMemberInput {
 
 input CreateTaskInput {
   """Task Project ID"""
-  projectId: String!
+  project: String!
 
   """Task name"""
   name: String!
@@ -331,7 +331,7 @@ input CreateTaskInput {
 
 input UpdateTaskInput {
   """Task Project ID"""
-  projectId: String
+  project: String
 
   """Task name"""
   name: String
