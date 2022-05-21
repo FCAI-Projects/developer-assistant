@@ -5,14 +5,14 @@ import { Button } from "../Button";
 import * as Yup from "yup";
 import { Modal } from "./Base";
 import { useMutation } from "@apollo/client";
-import { LoginDocument } from "../../graphql/generated/graphql";
+import { CreateTaskDocument } from "../../graphql/generated/graphql";
 import { Input, Label } from "../forms";
 import { FaPlus } from "react-icons/fa";
 
 // TODO: Use the right query to save to database
 
 export const NewTaskModal: React.FC = () => {
-  const [addProject, { loading, data, error }] = useMutation(LoginDocument);
+  const [addTask, { loading, data, error }] = useMutation(CreateTaskDocument);
   const [isOpen, toggleModal] = useToggleModal();
   const formik = useFormik({
     initialValues: {
@@ -25,6 +25,16 @@ export const NewTaskModal: React.FC = () => {
     }),
     onSubmit: async (values) => {
       try {
+        addTask({
+          variables: {
+            createTaskInput: {
+              name: values.name,
+              description: values.description,
+              project: "62881f1c471b20f1a0c846fe",
+            },
+          },
+        });
+        toggleModal();
       } catch (error) {
         console.log(error);
       }
@@ -61,7 +71,7 @@ export const NewTaskModal: React.FC = () => {
           </form>
         </div>
         <div className="flex flex-row-reverse gap-3">
-          <Button type="submit" blue onClick={() => formik.handleSubmit()} loading={loading}>
+          <Button type="submit" onClick={() => formik.handleSubmit()} loading={loading}>
             Add
           </Button>
           <Button type="submit" lightRed onClick={toggleModal}>
