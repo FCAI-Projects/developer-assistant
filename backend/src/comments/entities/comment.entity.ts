@@ -12,13 +12,17 @@ export class Comment {
   @Field(() => ID, { description: 'Comment ID' })
   id: MongooseSchema.Types.ObjectId;
 
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Comment' })
+  @Field(() => String, { description: 'Relay to comment' })
+  replayTo: MongooseSchema.Types.ObjectId;
+
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'User' })
   @Field(() => User, { description: 'User ID' })
   user: MongooseSchema.Types.ObjectId;
 
   @Prop()
   @Field(() => String, { description: 'Comment Content' })
-  note: String;
+  content: String;
 }
 
 export const CommentSchema = SchemaFactory.createForClass(Comment);

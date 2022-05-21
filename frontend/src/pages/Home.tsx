@@ -6,7 +6,7 @@ import { Slogen } from "../components/sections/Slogen";
 
 export const Home: React.FC = () => {
   return (
-    <div>
+    <div className="min-h-screen bg-white">
       <Navbar />
       <Slogen />
       <Contact />

@@ -8,7 +8,7 @@ export type GroupDocument = Group & Document;
 @ObjectType()
 export class Group {
   @Field(() => ID, { description: 'Group ID' })
-  ID: MongooseSchema.Types.ObjectId;
+  id: MongooseSchema.Types.ObjectId;
 
   @Prop({ required: true, type: MongooseSchema.Types.ObjectId, ref: 'Project' })
   @Field(() => String, { description: 'Group Project' })
@@ -19,7 +19,6 @@ export class Group {
   name: string;
 
   @Prop({
-    required: true,
     type: [MongooseSchema.Types.ObjectId],
     ref: 'User',
   })

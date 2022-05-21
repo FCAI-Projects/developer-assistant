@@ -11,8 +11,11 @@ export class GroupsService {
     @InjectModel(Group.name) private groupModel: Model<GroupDocument>,
   ) {}
 
-  async create(createGroupInput: CreateGroupInput): Promise<GroupDocument> {
-    const createdGroup = new this.groupModel(createGroupInput);
+  async create(
+    createGroupInput: CreateGroupInput,
+    admin: string,
+  ): Promise<GroupDocument> {
+    const createdGroup = new this.groupModel({ ...createGroupInput, admin });
     return await createdGroup.save();
   }
 

@@ -8,6 +8,6 @@ export class CreateGroupInput {
   @Field(() => String, { description: 'Group Name' })
   name: String;
 
-  @Field(() => [String], { description: 'Group Members' })
-  members: Array<String>;
+  @Field(() => [String], { description: 'Group Members', nullable: true })
+  members?: Array<String>;
 }
