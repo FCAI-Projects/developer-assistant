@@ -83,7 +83,7 @@ export const NewProjectModal: React.FC = () => {
           </form>
         </div>
         <div className="flex flex-row-reverse gap-3">
-          <Button type="submit" blue onClick={() => formik.handleSubmit()} loading={loading}>
+          <Button type="submit"  onClick={() => formik.handleSubmit()} loading={loading}>
             Create
           </Button>
           <Button type="submit" lightRed onClick={toggleModal}>
