@@ -1,1 +1,5 @@
-export class CreateMessageDto {}
+export class CreateMessageDto {
+  group: string;
+
+  message: string;
+}

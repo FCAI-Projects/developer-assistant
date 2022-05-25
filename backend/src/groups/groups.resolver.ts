@@ -1,18 +1,22 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int, Context } from '@nestjs/graphql';
 import { GroupsService } from './groups.service';
 import { Group } from './entities/group.entity';
 import { CreateGroupInput } from './dto/create-group.input';
 import { UpdateGroupInput } from './dto/update-group.input';
+import { Req, UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/jwt.guard';
 
 @Resolver(() => Group)
 export class GroupsResolver {
   constructor(private readonly groupsService: GroupsService) {}
 
   @Mutation(() => Group)
+  @UseGuards(JwtAuthGuard)
   async createGroup(
     @Args('createGroupInput') createGroupInput: CreateGroupInput,
+    @Context('req') context: any,
   ) {
-    return await this.groupsService.create(createGroupInput);
+    return await this.groupsService.create(createGroupInput, context.user._id);
   }
 
   @Mutation(() => Group)

@@ -1,10 +1,16 @@
 import React from "react";
-import { FaAngleRight, FaVideo } from "react-icons/fa";
+import { FaAngleRight, FaPlus, FaVideo } from "react-icons/fa";
+import { Button } from "../components/Button";
 
 export const Chat: React.FC = () => {
   return (
     <div className="container mx-auto">
-      <h3 className="my-5 text-2xl font-medium">Chat (5)</h3>
+      <header className="my-5 flex items-center justify-between text-2xl">
+        <h3 className="font-medium">Chat (5)</h3>
+        <Button blue className="flex items-center gap-2">
+          <FaPlus /> Create Group
+        </Button>
+      </header>
       <div className="flex overflow-hidden rounded-lg  bg-slate-200">
         <div className="w-2/12 border-r border-slate-300">
           <ul>

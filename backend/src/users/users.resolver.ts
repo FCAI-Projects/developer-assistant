@@ -64,10 +64,10 @@ export class UsersResolver {
     if (!user) {
       throw new HttpException(
         {
-          statusCode: HttpStatus.FORBIDDEN,
-          message: 'User not found',
+          statusCode: HttpStatus.UNAUTHORIZED,
+          message: 'Invalid email or password',
         },
-        HttpStatus.FORBIDDEN,
+        HttpStatus.UNAUTHORIZED,
       );
     }
 
@@ -75,7 +75,7 @@ export class UsersResolver {
       throw new HttpException(
         {
           statusCode: HttpStatus.UNAUTHORIZED,
-          message: 'Invalid password',
+          message: 'Invalid email or password',
         },
         HttpStatus.UNAUTHORIZED,
       );

@@ -142,16 +142,19 @@ type Comment {
   """Comment ID"""
   id: ID!
 
+  """Relay to comment"""
+  replayTo: String!
+
   """User ID"""
   user: User!
 
   """Comment Content"""
-  note: String!
+  content: String!
 }
 
 type Group {
   """Group ID"""
-  ID: ID!
+  id: ID!
 
   """Group Project"""
   project: String!
@@ -402,24 +405,24 @@ input UpdateNoteInput {
 
 input CreateCommentInput {
   """Comment ID"""
-  commentId: String!
+  replayTo: String
 
   """User ID"""
-  userID: String!
+  user: String!
 
   """Comment Content"""
-  commentContent: String!
+  content: String!
 }
 
 input UpdateCommentInput {
   """Comment ID"""
-  commentId: String
+  replayTo: String
 
   """User ID"""
-  userID: String
+  user: String
 
   """Comment Content"""
-  commentContent: String
+  content: String
 }
 
 input CreateGroupInput {
@@ -430,7 +433,7 @@ input CreateGroupInput {
   name: String!
 
   """Group Members"""
-  members: [String!]!
+  members: [String!]
 }
 
 input UpdateGroupInput {
