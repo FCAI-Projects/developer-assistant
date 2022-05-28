@@ -11,3 +11,15 @@ query Projects {
     describtion
   }
 }
+mutation updateProject($updateProjectId: String!, $updateProjectInput: UpdateProjectInput!) {
+  updateProject(id: $updateProjectId, updateProjectInput: $updateProjectInput) {
+    name
+    clientEmail
+    describtion
+  }
+}
+query Project($projectId: String!) {
+  project(id: $projectId) {
+    id
+  }
+}
