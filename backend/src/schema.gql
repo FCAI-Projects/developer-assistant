@@ -45,10 +45,11 @@ type Role {
   """Role ID"""
   id: ID!
 
-  """Projact ID"""
+  """Project ID"""
   project: Project!
 
-  """User ID"""
+  """Role Name"""
+  roleName: String!
   createTask: Boolean!
   deleteTask: Boolean!
   editTask: Boolean!
@@ -178,7 +179,7 @@ type Query {
   member(id: String!): Member!
   tasks: [Task!]!
   task(id: String!): Task!
-  roles: [Role!]!
+  roles(project: String!): [Role!]!
   role(id: String!): Role!
   note(id: String!): Note!
   filterNotes(filter: CreateNoteInput!): Note!
@@ -371,8 +372,9 @@ input UpdateTaskInput {
 }
 
 input CreateRoleInput {
-  projectId: String!
-  createTask: String!
+  roleName: String!
+  project: String!
+  createTask: Boolean!
   deleteTask: Boolean!
   editTask: Boolean!
   assignTask: Boolean!
@@ -382,8 +384,9 @@ input CreateRoleInput {
 }
 
 input UpdateRoleInput {
-  projectId: String
-  createTask: String
+  roleName: String
+  project: String
+  createTask: Boolean
   deleteTask: Boolean
   editTask: Boolean
   assignTask: Boolean

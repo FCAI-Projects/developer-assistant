@@ -1,0 +1,19 @@
+mutation CreateRole($createRoleInput: CreateRoleInput!) {
+  createRole(createRoleInput: $createRoleInput) {
+    id
+  }
+}
+
+query Roles($project: String!) {
+  roles(project: $project) {
+    roleName
+    createTask
+    deleteTask
+    editTask
+    assignTask
+    editProject
+    inviteToProject
+    deleteMember
+    id
+  }
+}

@@ -150,8 +150,6 @@ export const Project: React.FC = () => {
       droppableIndexEnd: destination.index,
       draggableId,
     })
-
-    console.log(Cards.lists)
   };
 
   return (
