@@ -4,6 +4,12 @@ mutation CreateRole($createRoleInput: CreateRoleInput!) {
   }
 }
 
+mutation RemoveRole($removeRoleId: String!) {
+  removeRole(id: $removeRoleId) {
+    id
+  }
+}
+
 query Roles($project: String!) {
   roles(project: $project) {
     roleName

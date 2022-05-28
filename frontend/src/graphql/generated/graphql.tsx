@@ -603,6 +603,13 @@ export type CreateRoleMutationVariables = Exact<{
 
 export type CreateRoleMutation = { __typename?: 'Mutation', createRole: { __typename?: 'Role', id: string } };
 
+export type RemoveRoleMutationVariables = Exact<{
+  removeRoleId: Scalars['String'];
+}>;
+
+
+export type RemoveRoleMutation = { __typename?: 'Mutation', removeRole: { __typename?: 'Role', id: string } };
+
 export type RolesQueryVariables = Exact<{
   project: Scalars['String'];
 }>;
@@ -735,6 +742,39 @@ export function useCreateRoleMutation(baseOptions?: Apollo.MutationHookOptions<C
 export type CreateRoleMutationHookResult = ReturnType<typeof useCreateRoleMutation>;
 export type CreateRoleMutationResult = Apollo.MutationResult<CreateRoleMutation>;
 export type CreateRoleMutationOptions = Apollo.BaseMutationOptions<CreateRoleMutation, CreateRoleMutationVariables>;
+export const RemoveRoleDocument = gql`
+    mutation RemoveRole($removeRoleId: String!) {
+  removeRole(id: $removeRoleId) {
+    id
+  }
+}
+    `;
+export type RemoveRoleMutationFn = Apollo.MutationFunction<RemoveRoleMutation, RemoveRoleMutationVariables>;
+
+/**
+ * __useRemoveRoleMutation__
+ *
+ * To run a mutation, you first call `useRemoveRoleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveRoleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeRoleMutation, { data, loading, error }] = useRemoveRoleMutation({
+ *   variables: {
+ *      removeRoleId: // value for 'removeRoleId'
+ *   },
+ * });
+ */
+export function useRemoveRoleMutation(baseOptions?: Apollo.MutationHookOptions<RemoveRoleMutation, RemoveRoleMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RemoveRoleMutation, RemoveRoleMutationVariables>(RemoveRoleDocument, options);
+      }
+export type RemoveRoleMutationHookResult = ReturnType<typeof useRemoveRoleMutation>;
+export type RemoveRoleMutationResult = Apollo.MutationResult<RemoveRoleMutation>;
+export type RemoveRoleMutationOptions = Apollo.BaseMutationOptions<RemoveRoleMutation, RemoveRoleMutationVariables>;
 export const RolesDocument = gql`
     query Roles($project: String!) {
   roles(project: $project) {

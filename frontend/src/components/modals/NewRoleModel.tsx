@@ -14,7 +14,7 @@ import { useParams } from "react-router-dom";
 
 export const NewRoleModel: React.FC = () => {
   const ProjectId = useParams();
-  const [addRole, { loading, data, error }] = useMutation(CreateRoleDocument, {
+  const [addRole, { loading, data, error, reset }] = useMutation(CreateRoleDocument, {
     refetchQueries: [{ query: RolesDocument, variables: { project: ProjectId.id } }],
   });
   const [isOpen, toggleModal] = useToggleModal();

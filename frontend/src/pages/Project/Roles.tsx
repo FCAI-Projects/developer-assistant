@@ -1,13 +1,18 @@
-import React, { useEffect, useState } from "react";
+import { useMutation } from "@apollo/client";
+import React from "react";
 import { FaEdit, FaPlus, FaTrash } from "react-icons/fa";
 import { useParams } from "react-router-dom";
 import { Button } from "../../components/Button";
 import { NewRoleModel } from "../../components/modals/NewRoleModel";
-import { RolesDocument, useRolesQuery } from "../../graphql/generated/graphql";
+import { RemoveRoleDocument, RolesDocument, useRolesQuery } from "../../graphql/generated/graphql";
 
 export const ProjectRoles: React.FC = () => {
   const projectId = useParams();
-  const { data, error, loading } = useRolesQuery({variables: {project: projectId.id as string}});
+  const { data, error } = useRolesQuery({variables: {project: projectId.id as string}});
+  
+  const [deleteRole, { loading }] = useMutation(RemoveRoleDocument, {
+    refetchQueries: [{ query: RolesDocument, variables: { project: projectId.id } }],
+  });
 
   return (
     <div>
@@ -25,12 +30,23 @@ export const ProjectRoles: React.FC = () => {
               <Button lightYellow className="px-3 py-3 text-xs">
                 <FaEdit />
               </Button>
-              <Button lightRed className="px-3 py-3 text-xs">
+              <Button 
+                lightRed 
+                className="px-3 py-3 text-xs"
+                onClick={() => {
+                  deleteRole({ 
+                    variables: { 
+                      removeRoleId: role.id 
+                    } 
+                  });
+                }}
+                disabled={loading}
+              >
                 <FaTrash />
               </Button>
             </div>
           </div>
-        );
+        )
       })}
     </div>
   );
