@@ -10,14 +10,12 @@ import { Input, Label, ToggleSwitch } from "../forms";
 import { FaPlus } from "react-icons/fa";
 import { useParams } from "react-router-dom";
 
-// TODO: Use the right query to save to database
-
 export const NewRoleModel: React.FC = () => {
   const ProjectId = useParams();
-  const [addRole, { loading, data, error, reset }] = useMutation(CreateRoleDocument, {
+  const [isOpen, toggleModal] = useToggleModal();
+  const [addRole, { loading }] = useMutation(CreateRoleDocument, {
     refetchQueries: [{ query: RolesDocument, variables: { project: ProjectId.id } }],
   });
-  const [isOpen, toggleModal] = useToggleModal();
   const formik = useFormik({
     initialValues: {
       name: "",

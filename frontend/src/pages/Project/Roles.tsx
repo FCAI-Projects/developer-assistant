@@ -1,14 +1,15 @@
 import { useMutation } from "@apollo/client";
 import React from "react";
-import { FaEdit, FaPlus, FaTrash } from "react-icons/fa";
+import { FaTrash } from "react-icons/fa";
 import { useParams } from "react-router-dom";
 import { Button } from "../../components/Button";
 import { NewRoleModel } from "../../components/modals/NewRoleModel";
+import { UpdateRoleModel } from "../../components/modals/UpdateRoleModel";
 import { RemoveRoleDocument, RolesDocument, useRolesQuery } from "../../graphql/generated/graphql";
 
 export const ProjectRoles: React.FC = () => {
   const projectId = useParams();
-  const { data, error } = useRolesQuery({variables: {project: projectId.id as string}});
+  const { data } = useRolesQuery({variables: {project: projectId.id as string}});
   
   const [deleteRole, { loading }] = useMutation(RemoveRoleDocument, {
     refetchQueries: [{ query: RolesDocument, variables: { project: projectId.id } }],
@@ -27,9 +28,17 @@ export const ProjectRoles: React.FC = () => {
               <h4 className="text-xl font-medium">{role.roleName}</h4>
             </div>
             <div className="absolute right-0 flex gap-2">
-              <Button lightYellow className="px-3 py-3 text-xs">
-                <FaEdit />
-              </Button>
+              <UpdateRoleModel 
+                id={role.id}
+                name={role.roleName}
+                createTask={role.createTask}
+                deleteTask={role.deleteTask}
+                editTask={role.editTask}
+                assignTask={role.assignTask}
+                editProject={role.editProject}
+                inviteToProject={role.inviteToProject}
+                deleteMember={role.deleteMember}
+              />
               <Button 
                 lightRed 
                 className="px-3 py-3 text-xs"
