@@ -5,14 +5,16 @@ import { Button } from "../Button";
 import * as Yup from "yup";
 import { Modal } from "./Base";
 import { useMutation } from "@apollo/client";
-import { CreateProjectDocument } from "../../graphql/generated/graphql";
+import { CreateProjectDocument, ProjectsDocument } from "../../graphql/generated/graphql";
 import { Input, Label } from "../forms";
 import { FaPlus } from "react-icons/fa";
 
 // TODO: Use the right query to save to database
 
 export const NewProjectModal: React.FC = () => {
-  const [addProject, { loading, data, error }] = useMutation(CreateProjectDocument);
+  const [addProject, { loading, data, error }] = useMutation(CreateProjectDocument, {
+    refetchQueries: [{query: ProjectsDocument}],
+  });
   const [isOpen, toggleModal] = useToggleModal();
   const formik = useFormik({
     initialValues: {

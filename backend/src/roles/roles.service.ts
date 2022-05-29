@@ -17,8 +17,8 @@ export class RolesService {
     return createdRole.save();
   }
 
-  async findAll(): Promise<RoleDocument[]> {
-    return this.roleModel.find();
+  async findAll(project): Promise<RoleDocument[]> {
+    return this.roleModel.find({project});
   }
 
   async findOne(id: string): Promise<RoleDocument> {

@@ -1,0 +1,31 @@
+query Roles($project: String!) {
+  roles(project: $project) {
+    roleName
+    createTask
+    deleteTask
+    editTask
+    assignTask
+    editProject
+    inviteToProject
+    deleteMember
+    id
+  }
+}
+
+mutation CreateRole($createRoleInput: CreateRoleInput!) {
+  createRole(createRoleInput: $createRoleInput) {
+    id
+  }
+}
+
+mutation RemoveRole($removeRoleId: String!) {
+  removeRole(id: $removeRoleId) {
+    id
+  }
+}
+
+mutation UpdateRole($updateRoleId: String!, $updateRoleInput: UpdateRoleInput!) {
+  updateRole(id: $updateRoleId, updateRoleInput: $updateRoleInput) {
+    id
+  }
+}

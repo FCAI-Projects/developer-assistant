@@ -78,7 +78,7 @@ export const ProjectSettings: React.FC = () => {
         </form>
       </div>
       <div className="mt-5 flex flex-row-reverse gap-3">
-        <Button type="submit" blue onClick={() => formik.handleSubmit()} loading={loading}>
+        <Button type="submit" onClick={() => formik.handleSubmit()} loading={loading}>
           Save Changes
         </Button>
       </div>
