@@ -17,8 +17,8 @@ export class TasksService {
     return task.save();
   }
 
-  async findAll(): Promise<TaskDocument[]> {
-    return this.taskModel.find().populate('assign');
+  async findAll(project: string): Promise<TaskDocument[]> {
+    return this.taskModel.find({ project }).populate('assign');
   }
 
   async filter(filter: CreateTaskInput): Promise<TaskDocument[]> {

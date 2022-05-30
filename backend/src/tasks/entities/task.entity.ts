@@ -1,6 +1,7 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Schema as MongooseSchema } from 'mongoose';
+import { ProjectStatus } from 'src/project-status/entities/project-status.entity';
 import { Project } from 'src/projects/entities/project.entity';
 import { User } from 'src/users/entities/user.entity';
 
@@ -32,9 +33,9 @@ export class Task extends Document {
   @Field(() => [String], { description: 'Task attachments' })
   attachments: Array<string>;
 
-  @Prop({ enum: ['todo', 'inprogress', 'done'] })
-  @Field(() => String, { description: 'Task status' })
-  status: string;
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'ProjectStatus' })
+  @Field(() => ProjectStatus, { description: 'Task status' })
+  status: MongooseSchema.Types.ObjectId;
 
   @Prop({ enum: ['low', 'medium', 'high'] })
   @Field(() => String, { description: 'Task periority' })

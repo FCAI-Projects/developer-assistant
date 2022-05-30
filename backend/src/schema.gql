@@ -79,6 +79,20 @@ type Member {
   badges: String!
 }
 
+type ProjectStatus {
+  """Status ID"""
+  id: ID!
+
+  """Status Project ID"""
+  project: Project!
+
+  """Status name"""
+  name: String!
+
+  """Status Color"""
+  color: String!
+}
+
 type Task {
   """Task ID"""
   id: ID!
@@ -99,7 +113,7 @@ type Task {
   attachments: [String!]!
 
   """Task status"""
-  status: String!
+  status: ProjectStatus!
 
   """Task periority"""
   periority: String!
@@ -177,7 +191,7 @@ type Query {
   project(id: String!): Project!
   filterMembers(filter: UpdateMemberInput!): [Member!]!
   member(id: String!): Member!
-  tasks: [Task!]!
+  tasks(project: String!): [Task!]!
   task(id: String!): Task!
   roles(project: String!): [Role!]!
   role(id: String!): Role!
@@ -187,6 +201,7 @@ type Query {
   comment(id: String!): Comment!
   groups: [Group!]!
   group(id: String!): Group!
+  projectStatus(id: String!): ProjectStatus!
 }
 
 input UpdateMemberInput {
@@ -235,6 +250,9 @@ type Mutation {
   inviteToGroup(groupId: String!, memberId: String!): Group!
   updateGroup(updateGroupInput: UpdateGroupInput!): Group!
   removeGroup(id: String!): Group!
+  createProjectStatus(createProjectStatusInput: CreateProjectStatusInput!): ProjectStatus!
+  updateProjectStatus(updateProjectStatusInput: UpdateProjectStatusInput!): ProjectStatus!
+  removeProjectStatus(id: String!): ProjectStatus!
 }
 
 input CreateUserInput {
@@ -448,5 +466,28 @@ input UpdateGroupInput {
 
   """Group Members"""
   members: [String!]
+  id: String!
+}
+
+input CreateProjectStatusInput {
+  """Status Project ID"""
+  project: String!
+
+  """Status name"""
+  name: String!
+
+  """Status Color"""
+  color: String!
+}
+
+input UpdateProjectStatusInput {
+  """Status Project ID"""
+  project: String
+
+  """Status name"""
+  name: String
+
+  """Status Color"""
+  color: String
   id: String!
 }

@@ -16,8 +16,8 @@ export class TasksResolver {
   }
 
   @Query(() => [Task], { name: 'tasks' })
-  findAll(): Promise<TaskDocument[]> {
-    return this.tasksService.findAll();
+  findAll(@Args('project') project: string): Promise<TaskDocument[]> {
+    return this.tasksService.findAll(project);
   }
 
   @Query(() => Task, { name: 'task' })
