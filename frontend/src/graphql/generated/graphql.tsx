@@ -601,7 +601,7 @@ export type ProjectQueryVariables = Exact<{
 }>;
 
 
-export type ProjectQuery = { __typename?: 'Query', project: { __typename?: 'Project', id: string } };
+export type ProjectQuery = { __typename?: 'Query', project: { __typename?: 'Project', id: string, name: string, describtion: string, clientEmail: string } };
 
 export type CreateTaskMutationVariables = Exact<{
   createTaskInput: CreateTaskInput;
@@ -735,6 +735,9 @@ export const ProjectDocument = gql`
     query Project($projectId: String!) {
   project(id: $projectId) {
     id
+    name
+    describtion
+    clientEmail
   }
 }
     `;
