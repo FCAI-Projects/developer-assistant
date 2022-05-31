@@ -14,7 +14,7 @@ import { NotesModule } from './notes/notes.module';
 import { CommentsModule } from './comments/comments.module';
 import { GroupsModule } from './groups/groups.module';
 import { MessagesModule } from './messages/messages.module';
-import { ProjectStatusModule } from './project-status/project-status.module';
+import { ProjectListsModule } from './project-lists/project-lists.module';
 
 @Module({
   imports: [
@@ -34,7 +34,7 @@ import { ProjectStatusModule } from './project-status/project-status.module';
     CommentsModule,
     GroupsModule,
     MessagesModule,
-    ProjectStatusModule,
+    ProjectListsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

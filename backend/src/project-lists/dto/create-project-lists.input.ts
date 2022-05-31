@@ -1,9 +1,8 @@
 import { InputType, Field, ID, ObjectType } from '@nestjs/graphql';
 import { Schema as MongooseSchema } from 'mongoose';
 
-
 @InputType()
-export class CreateProjectStatusInput {
+export class CreateProjectListsInput {
   @Field(() => String, { description: 'Status Project ID' })
   project: string;
 

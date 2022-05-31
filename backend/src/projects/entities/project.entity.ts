@@ -3,7 +3,6 @@ import { Schema as MongooseSchema } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import { User } from 'src/users/entities/user.entity';
-import { ProjectStatus } from 'src/project-status/entities/project-status.entity';
 
 export type ProjectDocument = Project & Document;
 
@@ -28,10 +27,6 @@ export class Project {
   @Prop()
   @Field(() => String, { description: 'Project describtion' })
   describtion: string;
-
-  @Prop({ required: true, type: [MongooseSchema.Types.ObjectId], ref: 'project-status' })
-  @Field(() => ProjectStatus, { description: 'Status ID' })
-  status: Array<MongooseSchema.Types.ObjectId>;
 }
 
 export const ProjectSchema = SchemaFactory.createForClass(Project);

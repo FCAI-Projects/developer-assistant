@@ -1,4 +1,4 @@
-query ProjectStatus($project: String!) {
+query ProjectLists($project: String!) {
   projectStatus(project: $project) {
     id
     name

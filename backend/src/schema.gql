@@ -24,69 +24,6 @@ type UserResponse {
   token: String!
 }
 
-type Task {
-  """Task ID"""
-  id: ID!
-
-  """Task Project ID"""
-  project: Project!
-
-  """Task name"""
-  name: String!
-
-  """Task description"""
-  description: String!
-
-  """Task assigned to"""
-  assign: User!
-
-  """Task attachments"""
-  attachments: [String!]!
-
-  """Task status"""
-  status: ProjectStatus!
-
-  """Task periority"""
-  periority: String!
-
-  """Task tags"""
-  tags: [String!]!
-
-  """Task started at"""
-  startedAt: DateTime!
-
-  """Task finished at"""
-  finishedAt: DateTime!
-
-  """Task deadline"""
-  deadline: DateTime!
-
-  """Task docs"""
-  docs: String!
-}
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
-
-type ProjectStatus {
-  """Status ID"""
-  id: ID!
-
-  """Status Project ID"""
-  project: Project!
-
-  """Status name"""
-  name: String!
-
-  """Status Tasks ID"""
-  tasks: Task!
-
-  """Status Color"""
-  color: String!
-}
-
 type Project {
   """Project ID"""
   id: ID!
@@ -102,9 +39,6 @@ type Project {
 
   """Project describtion"""
   describtion: String!
-
-  """Status ID"""
-  status: ProjectStatus!
 }
 
 type Role {
@@ -143,6 +77,69 @@ type Member {
 
   """User Badge"""
   badges: String!
+}
+
+type Task {
+  """Task ID"""
+  id: ID!
+
+  """Task Project ID"""
+  project: Project!
+
+  """Task name"""
+  name: String!
+
+  """Task description"""
+  description: String!
+
+  """Task assigned to"""
+  assign: User!
+
+  """Task attachments"""
+  attachments: [String!]!
+
+  """Task status"""
+  status: String!
+
+  """Task periority"""
+  periority: String!
+
+  """Task tags"""
+  tags: [String!]!
+
+  """Task started at"""
+  startedAt: DateTime!
+
+  """Task finished at"""
+  finishedAt: DateTime!
+
+  """Task deadline"""
+  deadline: DateTime!
+
+  """Task docs"""
+  docs: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type ProjectLists {
+  """List ID"""
+  id: ID!
+
+  """List Project ID"""
+  project: Project!
+
+  """Status name"""
+  name: String!
+
+  """Status Tasks ID"""
+  tasks: [Task!]!
+
+  """Status Color"""
+  color: String!
 }
 
 type Note {
@@ -198,7 +195,10 @@ type Query {
   filterMembers(filter: UpdateMemberInput!): [Member!]!
   member(id: String!): Member!
   tasks(project: String!): [Task!]!
+  unlistedTasks(project: String!): [Task!]!
   task(id: String!): Task!
+  projectLists(project: String!): [ProjectLists!]!
+  projectListsById(id: String!): ProjectLists!
   roles(project: String!): [Role!]!
   role(id: String!): Role!
   note(id: String!): Note!
@@ -207,8 +207,6 @@ type Query {
   comment(id: String!): Comment!
   groups: [Group!]!
   group(id: String!): Group!
-  projectStatus(project: String!): [ProjectStatus!]!
-  projectStatusById(id: String!): ProjectStatus!
 }
 
 input UpdateMemberInput {
@@ -244,6 +242,9 @@ type Mutation {
   createTask(createTaskInput: CreateTaskInput!): Task!
   updateTask(id: String!, updateTaskInput: UpdateTaskInput!): Task!
   removeTask(id: String!): Task!
+  createProjectLists(createProjectListsInput: CreateProjectListsInput!): ProjectLists!
+  updateProjectLists(updateProjectListsInput: UpdateProjectListsInput!): ProjectLists!
+  removeProjectLists(id: String!): ProjectLists!
   createRole(createRoleInput: CreateRoleInput!): Role!
   updateRole(id: String!, updateRoleInput: UpdateRoleInput!): Role!
   removeRole(id: String!): Role!
@@ -257,9 +258,6 @@ type Mutation {
   inviteToGroup(groupId: String!, memberId: String!): Group!
   updateGroup(updateGroupInput: UpdateGroupInput!): Group!
   removeGroup(id: String!): Group!
-  createProjectStatus(createProjectStatusInput: CreateProjectStatusInput!): ProjectStatus!
-  updateProjectStatus(updateProjectStatusInput: UpdateProjectStatusInput!): ProjectStatus!
-  removeProjectStatus(id: String!): ProjectStatus!
 }
 
 input CreateUserInput {
@@ -299,9 +297,6 @@ input CreateProjectInput {
 
   """description of project"""
   describtion: String!
-
-  """Status ID"""
-  tasks: [String!]!
 }
 
 input UpdateProjectInput {
@@ -313,9 +308,6 @@ input UpdateProjectInput {
 
   """description of project"""
   describtion: String
-
-  """Status ID"""
-  tasks: [String!]
 }
 
 input CreateMemberInput {
@@ -402,6 +394,35 @@ input UpdateTaskInput {
   docs: String
 }
 
+input CreateProjectListsInput {
+  """Status Project ID"""
+  project: String!
+
+  """Status name"""
+  name: String!
+
+  """Status tasks ID"""
+  tasks: [String!]!
+
+  """Status Color"""
+  color: String!
+}
+
+input UpdateProjectListsInput {
+  """Status Project ID"""
+  project: String
+
+  """Status name"""
+  name: String
+
+  """Status tasks ID"""
+  tasks: [String!]
+
+  """Status Color"""
+  color: String
+  id: String!
+}
+
 input CreateRoleInput {
   roleName: String!
   project: String!
@@ -479,34 +500,5 @@ input UpdateGroupInput {
 
   """Group Members"""
   members: [String!]
-  id: String!
-}
-
-input CreateProjectStatusInput {
-  """Status Project ID"""
-  project: String!
-
-  """Status name"""
-  name: String!
-
-  """Status tasks ID"""
-  tasks: [String!]!
-
-  """Status Color"""
-  color: String!
-}
-
-input UpdateProjectStatusInput {
-  """Status Project ID"""
-  project: String
-
-  """Status name"""
-  name: String
-
-  """Status tasks ID"""
-  tasks: [String!]
-
-  """Status Color"""
-  color: String
   id: String!
 }
