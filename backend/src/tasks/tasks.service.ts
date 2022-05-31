@@ -18,11 +18,11 @@ export class TasksService {
   }
 
   async findAll(project: string): Promise<TaskDocument[]> {
-    return this.taskModel.find({ project }).populate('assign');
+    return this.taskModel.find({ project }).populate('assign').populate('status').populate('project');
   }
 
   async filter(filter: CreateTaskInput): Promise<TaskDocument[]> {
-    return this.taskModel.find(filter).populate('assign');
+    return this.taskModel.find(filter).populate('assign').populate('status').populate('project');
   }
 
   async findOne(id: string): Promise<TaskDocument> {

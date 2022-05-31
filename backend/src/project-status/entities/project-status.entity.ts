@@ -2,6 +2,8 @@ import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Schema as MongooseSchema } from 'mongoose';
 import { Project } from 'src/projects/entities/project.entity';
+import { Task } from 'src/tasks/entities/task.entity';
+
 
 export type ProjectStatusDocument = ProjectStatus & Document;
 
@@ -18,6 +20,10 @@ export class ProjectStatus extends Document {
   @Prop({ required: true })
   @Field(() => String, { description: 'Status name' })
   name: string;
+
+  @Prop({ required: true, type: [MongooseSchema.Types.ObjectId], ref: 'tasks' })
+  @Field(() => Task, { description: 'Status Tasks ID' })
+  tasks: Array<MongooseSchema.Types.ObjectId>;
 
   @Prop()
   @Field(() => String, { description: 'Status Color' })

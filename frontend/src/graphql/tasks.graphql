@@ -1,3 +1,30 @@
+query ProjectStatus($project: String!) {
+  projectStatus(project: $project) {
+    id
+    name
+    index
+    color
+  }
+}
+
+query Tasks($project: String!) {
+  tasks(project: $project) {
+    id
+    name
+    index
+    description
+    status {
+      id
+      name
+      color
+    }
+    project {
+      name
+      id
+    }
+  }
+}
+
 mutation CreateTask($createTaskInput: CreateTaskInput!) {
   createTask(createTaskInput: $createTaskInput) {
     id

@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { BsPlusLg } from "react-icons/bs";
+import { useParams } from "react-router-dom";
 import { ListView } from "../../components/listsView/ListView";
 
 export interface board {
-  boardId: string;
-  boardName: string;
   lists: list[];
 }
 
@@ -31,10 +30,11 @@ type sortAction = {
 };
 
 export const Project: React.FC = () => {
+  const projectId = useParams();
+  
+
   const cards: board = 
   {
-    boardId: "board-0",
-    boardName: "First board",
     lists: [
       {
         listId: "list-0",
@@ -51,48 +51,6 @@ export const Project: React.FC = () => {
             taskName: "Task 2",
             taskDescription: "Description",
             taskOwner: "Anton",
-          },
-          {
-            taskId: "task-2",
-            taskName: "Task 3",
-            taskDescription: "Description",
-            taskOwner: "Anton",
-          },
-        ],
-      },
-      {
-        listId: "list-1",
-        listName: "List 2",
-        tasks: [
-          {
-            taskId: "task-3",
-            taskName: "Task 1",
-            taskDescription: "Description",
-            taskOwner: "Anton",
-          },
-          {
-            taskId: "task-4",
-            taskName: "Task 2",
-            taskDescription: "Description",
-            taskOwner: "Anton",
-          },
-        ],
-      },
-      {
-        listId: "list-2",
-        listName: "List 3",
-        tasks: [
-          {
-            taskId: "task-5",
-            taskName: "Sobhy Task 5",
-            taskDescription: "Description",
-            taskOwner: "Sobhy",
-          },
-          {
-            taskId: "task-6",
-            taskName: "Ezz Task 7",
-            taskDescription: "Description",
-            taskOwner: "Ezz",
           },
         ],
       },

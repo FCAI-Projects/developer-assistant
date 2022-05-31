@@ -24,75 +24,6 @@ type UserResponse {
   token: String!
 }
 
-type Project {
-  """Project ID"""
-  id: ID!
-
-  """Projact name"""
-  name: String!
-
-  """Client email"""
-  clientEmail: String!
-
-  """Project owner"""
-  owner: User!
-
-  """Project describtion"""
-  describtion: String!
-}
-
-type Role {
-  """Role ID"""
-  id: ID!
-
-  """Project ID"""
-  project: Project!
-
-  """Role Name"""
-  roleName: String!
-  createTask: Boolean!
-  deleteTask: Boolean!
-  editTask: Boolean!
-  assignTask: Boolean!
-  editProject: Boolean!
-  inviteToProject: Boolean!
-  deleteMember: Boolean!
-}
-
-type Member {
-  """Member ID"""
-  id: ID!
-
-  """Projact ID"""
-  project: Project!
-
-  """User ID"""
-  user: User!
-
-  """User role in project"""
-  role: String!
-
-  """Custom Role"""
-  customRole: Role
-
-  """User Badge"""
-  badges: String!
-}
-
-type ProjectStatus {
-  """Status ID"""
-  id: ID!
-
-  """Status Project ID"""
-  project: Project!
-
-  """Status name"""
-  name: String!
-
-  """Status Color"""
-  color: String!
-}
-
 type Task {
   """Task ID"""
   id: ID!
@@ -138,6 +69,81 @@ type Task {
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
+
+type ProjectStatus {
+  """Status ID"""
+  id: ID!
+
+  """Status Project ID"""
+  project: Project!
+
+  """Status name"""
+  name: String!
+
+  """Status Tasks ID"""
+  tasks: Task!
+
+  """Status Color"""
+  color: String!
+}
+
+type Project {
+  """Project ID"""
+  id: ID!
+
+  """Projact name"""
+  name: String!
+
+  """Client email"""
+  clientEmail: String!
+
+  """Project owner"""
+  owner: User!
+
+  """Project describtion"""
+  describtion: String!
+
+  """Status ID"""
+  status: ProjectStatus!
+}
+
+type Role {
+  """Role ID"""
+  id: ID!
+
+  """Project ID"""
+  project: Project!
+
+  """Role Name"""
+  roleName: String!
+  createTask: Boolean!
+  deleteTask: Boolean!
+  editTask: Boolean!
+  assignTask: Boolean!
+  editProject: Boolean!
+  inviteToProject: Boolean!
+  deleteMember: Boolean!
+}
+
+type Member {
+  """Member ID"""
+  id: ID!
+
+  """Projact ID"""
+  project: Project!
+
+  """User ID"""
+  user: User!
+
+  """User role in project"""
+  role: String!
+
+  """Custom Role"""
+  customRole: Role
+
+  """User Badge"""
+  badges: String!
+}
 
 type Note {
   """Note ID"""
@@ -201,7 +207,8 @@ type Query {
   comment(id: String!): Comment!
   groups: [Group!]!
   group(id: String!): Group!
-  projectStatus(id: String!): ProjectStatus!
+  projectStatus(project: String!): [ProjectStatus!]!
+  projectStatusById(id: String!): ProjectStatus!
 }
 
 input UpdateMemberInput {
@@ -292,6 +299,9 @@ input CreateProjectInput {
 
   """description of project"""
   describtion: String!
+
+  """Status ID"""
+  tasks: [String!]!
 }
 
 input UpdateProjectInput {
@@ -303,6 +313,9 @@ input UpdateProjectInput {
 
   """description of project"""
   describtion: String
+
+  """Status ID"""
+  tasks: [String!]
 }
 
 input CreateMemberInput {
@@ -476,6 +489,9 @@ input CreateProjectStatusInput {
   """Status name"""
   name: String!
 
+  """Status tasks ID"""
+  tasks: [String!]!
+
   """Status Color"""
   color: String!
 }
@@ -486,6 +502,9 @@ input UpdateProjectStatusInput {
 
   """Status name"""
   name: String
+
+  """Status tasks ID"""
+  tasks: [String!]
 
   """Status Color"""
   color: String
