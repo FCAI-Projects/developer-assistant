@@ -10,4 +10,7 @@ export class CreateProjectInput {
 
   @Field(() => String, { description: 'description of project' })
   describtion: string;
+
+  @Field(() => [String], { description: 'Status ID' })
+  tasks: Array<string>;
 }
