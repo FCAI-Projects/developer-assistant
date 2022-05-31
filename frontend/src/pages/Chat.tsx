@@ -1,8 +1,30 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FaAngleRight, FaPlus, FaVideo } from "react-icons/fa";
 import { Button } from "../components/Button";
+import socketIOClient from "socket.io-client";
+import axios from "axios";
 
 export const Chat: React.FC = () => {
+  const [message, setMessages] = useState("");
+  const [response, setResponse] = useState([]);
+
+  const sendMessage = async () => {
+    const data = {
+      message: message,
+      user: "user",
+    };
+    await axios.post("http://localhost:5000/api/chat", data);
+    setMessages("");
+  };
+
+  useEffect(() => {
+    const socket = socketIOClient(axios.defaults.baseURL || "");
+
+    socket.on("findAllMessages", (data) => {
+      setResponse(data);
+    });
+  }, []);
+
   return (
     <div className="container mx-auto">
       <header className="my-5 flex items-center justify-between text-2xl">
@@ -67,7 +89,10 @@ export const Chat: React.FC = () => {
               id="message"
               className="min-h-0 w-full resize-none rounded-lg border-none p-3 pr-20 focus:ring-0"
               placeholder="Type your message here..."
-            ></textarea>
+              onChange={(e) => setMessages(e.target.value)}
+            >
+              {message}
+            </textarea>
             <button className="absolute right-5 top-1/2 h-10 w-10 -translate-y-1/2 rounded-full bg-slate-600 px-3 py-2 text-xl text-white">
               <FaAngleRight />
             </button>
