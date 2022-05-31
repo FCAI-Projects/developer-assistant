@@ -21,7 +21,7 @@ export class ProjectStatusResolver {
     return this.projectStatusService.findAll(project);
   }
 
-  @Query(() => ProjectStatus, { name: 'projectStatus' })
+  @Query(() => ProjectStatus, { name: 'projectStatusById' })
   findOne(@Args('id', { type: () => String }) id: string) {
     return this.projectStatusService.findOne(id);
   }

@@ -23,7 +23,7 @@ export class ProjectStatusService {
   }
 
   async findAll(project: string): Promise<ProjectStatusDocument[]> {
-    return await this.taskModel.find({ project });
+    return await this.taskModel.find({ project }).populate('tasks');
   }
 
   async findOne(id: string): Promise<ProjectStatusDocument> {
