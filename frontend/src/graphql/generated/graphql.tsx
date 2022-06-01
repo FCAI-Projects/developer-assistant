@@ -699,6 +699,8 @@ export type RolesQueryVariables = Exact<{
 }>;
 
 
+export type ProjectQuery = { __typename?: 'Query', project: { __typename?: 'Project', id: string, name: string, describtion: string, clientEmail: string } };
+
 export type RolesQuery = { __typename?: 'Query', roles: Array<{ __typename?: 'Role', roleName: string, createTask: boolean, deleteTask: boolean, editTask: boolean, assignTask: boolean, editProject: boolean, inviteToProject: boolean, deleteMember: boolean, id: string }> };
 
 export type CreateRoleMutationVariables = Exact<{
@@ -722,6 +724,7 @@ export type UpdateRoleMutationVariables = Exact<{
 
 
 export type UpdateRoleMutation = { __typename?: 'Mutation', updateRole: { __typename?: 'Role', id: string } };
+
 
 export type CreateTaskMutationVariables = Exact<{
   createTaskInput: CreateTaskInput;
@@ -946,6 +949,9 @@ export const RolesDocument = gql`
     inviteToProject
     deleteMember
     id
+    name
+    describtion
+    clientEmail
   }
 }
     `;

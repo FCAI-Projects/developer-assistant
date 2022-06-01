@@ -25,3 +25,13 @@ mutation updateProject($updateProjectId: String!, $updateProjectInput: UpdatePro
     describtion
   }
 }
+
+query Project($projectId: String!) {
+  project(id: $projectId) {
+    id
+    name
+    describtion
+    clientEmail
+  }
+}
+
