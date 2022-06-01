@@ -3,32 +3,25 @@ import { Button } from "../../components/Button";
 import { Input, Label } from "../../components/forms";
 import * as Yup from "yup";
 import { useMutation } from "@apollo/client";
-
-import {  UpdateProjectDocument, useProjectQuery, useProjectsQuery } from "../../graphql/generated/graphql";
-import { Formik, useFormik } from "formik";
-import { useParams } from "react-router-dom";
 import { Project } from ".";
-
-
-export const ProjectSettings: React.FC = () => {
-  const ProjectID = useParams ()
-  const [UpdateProject, { loading, error }] = useMutation(UpdateProjectDocument);
-  const { data } = useProjectQuery({variables: {projectId: ProjectID.id as string}});
-
-import { UpdateProjectDocument } from "../../graphql/generated/graphql";
+import { UpdateProjectDocument, useProjectByIdQuery } from "../../graphql/generated/graphql";
 import { useFormik } from "formik";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import { Loader } from "../../components/Loader";
 
 export const ProjectSettings: React.FC = () => {
   const [updateProject, { loading, data, error }] = useMutation(UpdateProjectDocument);
   const { id } = useParams();
+  const { data: project, loading: projectLoading } = useProjectByIdQuery({
+    variables: { projectId: id as string },
+  });
 
   const formik = useFormik({
     initialValues: {
-      name: data?.project.name,  
-      clientEmail:data?.project.clientEmail , 
-      description: data?.project.describtion,
+      name: project?.project.name,
+      clientEmail: project?.project.clientEmail,
+      description: project?.project.describtion,
     },
     validationSchema: Yup.object({
       name: Yup.string().required("Required"),
@@ -36,22 +29,9 @@ export const ProjectSettings: React.FC = () => {
       description: Yup.string().max(255, "Must be 255 characters or less").required("Required"),
     }),
     enableReinitialize: true,
-    onSubmit: async (Values) => {
+    onSubmit: async (values) => {
       try {
-
-        UpdateProject ({
-          variables : {
-              updateProjectId: ProjectID,
-                  updateProjectInput: {
-                        name: Values.name,
-                        clientEmail: Values.clientEmail,
-                        describtion : Values.description
-                    }
-            }
-          })
-            
-
-        updateProject({
+        await updateProject({
           variables: {
             updateProjectId: id,
             updateProjectInput: {
@@ -63,14 +43,21 @@ export const ProjectSettings: React.FC = () => {
         });
 
         toast.success("Project updated successfully");
-
       } catch (error) {
         console.log(error);
+        toast.error("An error occured");
       }
     },
-    
   });
- 
+
+  if (projectLoading) {
+    return (
+      <div className="flex items-center justify-center py-10">
+        <Loader />
+      </div>
+    );
+  }
+
   return (
     <>
       <div>
@@ -81,12 +68,9 @@ export const ProjectSettings: React.FC = () => {
             <Input
               type="text"
               id="name"
-
-              {...formik.getFieldProps("name") }
-
+              {...formik.getFieldProps("name")}
               placeholder=""
               {...formik.getFieldProps("name")}
-
               error={formik.touched.name ? formik.errors.name : ""}
             />
           </div>
