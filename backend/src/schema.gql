@@ -41,7 +41,7 @@ type Project {
   describtion: String!
 
   """Project Budget"""
-  budget: String!
+  budget: Float!
 }
 
 type Role {
@@ -302,7 +302,7 @@ input CreateProjectInput {
   describtion: String!
 
   """project budget"""
-  budget: String
+  budget: Float
 }
 
 input UpdateProjectInput {
@@ -316,7 +316,7 @@ input UpdateProjectInput {
   describtion: String
 
   """project budget"""
-  budget: String
+  budget: Float
 }
 
 input CreateMemberInput {

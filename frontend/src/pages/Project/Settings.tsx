@@ -22,7 +22,7 @@ export const ProjectSettings: React.FC = () => {
       name: project?.project.name,
       clientEmail: project?.project.clientEmail,
       description: project?.project.describtion,
-      budget: 0,
+      budget: project?.project.budget,
     },
     validationSchema: Yup.object({
       name: Yup.string().required("Required"),
@@ -40,6 +40,7 @@ export const ProjectSettings: React.FC = () => {
               name: values.name,
               clientEmail: values.clientEmail,
               describtion: values.description,
+              budget: values.budget ,
             },
           },
         });

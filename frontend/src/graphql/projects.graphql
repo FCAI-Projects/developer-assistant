@@ -23,6 +23,7 @@ mutation updateProject($updateProjectId: String!, $updateProjectInput: UpdatePro
     name
     clientEmail
     describtion
+    budget
   }
 }
 
@@ -32,5 +33,6 @@ query ProjectById($projectId: String!) {
     name
     describtion
     clientEmail
+    budget
   }
 }

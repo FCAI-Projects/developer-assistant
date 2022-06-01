@@ -65,6 +65,8 @@ export type CreateNoteInput = {
 };
 
 export type CreateProjectInput = {
+  /** project budget */
+  budget?: InputMaybe<Scalars['String']>;
   /** client email */
   clientEmail: Scalars['String'];
   /** description of project */
@@ -364,6 +366,8 @@ export type Note = {
 
 export type Project = {
   __typename?: 'Project';
+  /** Project Budget */
+  budget: Scalars['String'];
   /** Client email */
   clientEmail: Scalars['String'];
   /** Project describtion */
@@ -572,6 +576,8 @@ export type UpdateNoteInput = {
 };
 
 export type UpdateProjectInput = {
+  /** project budget */
+  budget?: InputMaybe<Scalars['String']>;
   /** client email */
   clientEmail?: InputMaybe<Scalars['String']>;
   /** description of project */
@@ -692,14 +698,14 @@ export type UpdateProjectMutationVariables = Exact<{
 }>;
 
 
-export type UpdateProjectMutation = { __typename?: 'Mutation', updateProject: { __typename?: 'Project', name: string, clientEmail: string, describtion: string } };
+export type UpdateProjectMutation = { __typename?: 'Mutation', updateProject: { __typename?: 'Project', name: string, clientEmail: string, describtion: string, budget: string } };
 
 export type ProjectByIdQueryVariables = Exact<{
   projectId: Scalars['String'];
 }>;
 
 
-export type ProjectByIdQuery = { __typename?: 'Query', project: { __typename?: 'Project', id: string, name: string, describtion: string, clientEmail: string } };
+export type ProjectByIdQuery = { __typename?: 'Query', project: { __typename?: 'Project', id: string, name: string, describtion: string, clientEmail: string, budget: string } };
 
 export type RolesQueryVariables = Exact<{
   project: Scalars['String'];
@@ -911,6 +917,7 @@ export const UpdateProjectDocument = gql`
     name
     clientEmail
     describtion
+    budget
   }
 }
     `;
@@ -948,6 +955,7 @@ export const ProjectByIdDocument = gql`
     name
     describtion
     clientEmail
+    budget
   }
 }
     `;
