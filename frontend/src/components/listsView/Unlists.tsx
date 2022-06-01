@@ -1,32 +1,32 @@
 import React from "react";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 import { BsPlusLg } from "react-icons/bs";
-import { list } from "../../pages/Project";
+import { list, task } from "../../pages/Project";
 import { Card } from "./Card";
 
 interface ListProps {
-  list: list;
+  list: task[];
   index: any;
 }
   
-export const ListView: React.FC<ListProps> = ({ list, index }) => {
+export const Unlists: React.FC<any> = ({ list, index }) => {
 
     return(
       <div>
-        <Draggable draggableId={list.id} index={index}>
+        <Draggable draggableId="-1" index={index}>
           {provided => (
             <div
               ref={provided.innerRef}
               {...provided.draggableProps}
               {...provided.dragHandleProps} 
               className="w-72 h-fit bg-gray-200 rounded-2xl p-3 mr-6" >
-              <Droppable droppableId={list.id}>
+              <Droppable droppableId="-1">
                 {provided => (
                   <div
                     ref={provided.innerRef}
                     {...provided.droppableProps}>
-                    <div className="text-cyan-800 font-bold text-lg ml-2">{list.name}</div>
-                    {list.tasks && list.tasks.map((task, index) => (
+                    <div className="text-cyan-800 font-bold text-lg ml-2">Unlist Tasks</div>
+                    {list && list.map((task: task, index: any) => (
                       <Card 
                         key={task.id} 
                         task={task} 

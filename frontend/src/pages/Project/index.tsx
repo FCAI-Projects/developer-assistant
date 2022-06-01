@@ -1,24 +1,23 @@
-import React, { useState } from "react";
+import { useMutation } from "@apollo/client";
+import React from "react";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { BsPlusLg } from "react-icons/bs";
 import { useParams } from "react-router-dom";
 import { ListView } from "../../components/listsView/ListView";
-
-export interface board {
-  lists: list[];
-}
+import { Unlists } from "../../components/listsView/Unlists";
+import { ProjectListsDocument, UpdateProjectListsDocument, useProjectListsQuery, useUnlistedTasksQuery } from "../../graphql/generated/graphql";
 
 export interface list {
-  listId: string;
-  listName: string;
+  id: string;
+  name: string;
+  color: string;
   tasks: task[];
 }
 
 export interface task {
-  taskId: string;
-  taskName: string;
-  taskDescription: string;
-  taskOwner: string;
+  id: string;
+  name: string;
+  description: string;
 }
 
 type sortAction = {
@@ -31,77 +30,65 @@ type sortAction = {
 
 export const Project: React.FC = () => {
   const projectId = useParams();
-  
+  const UnlistsTasks = useUnlistedTasksQuery({variables: {project: projectId.id as string}});
+  const Lists = useProjectListsQuery({variables: {project: projectId.id as string}});
+  const [updateTasks, { loading }] = useMutation(UpdateProjectListsDocument, {
+    refetchQueries: [{ query: ProjectListsDocument, variables: { project: projectId.id } }]
+  });
 
-  const cards: board = 
-  {
-    lists: [
-      {
-        listId: "list-0",
-        listName: "List 1",
-        tasks: [
-          {
-            taskId: "task-0",
-            taskName: "Task 1",
-            taskDescription: "Description",
-            taskOwner: "Anton",
-          },
-          {
-            taskId: "task-1",
-            taskName: "Task 2",
-            taskDescription: "Description",
-            taskOwner: "Anton",
-          },
-        ],
-      },
-    ],
-  }
-
-  const [Cards, setCards] = useState(cards);
-
-  const sort = (state: board, payload : sortAction) => {
+  const sort = (state: any, payload : sortAction) => {
     // same list
     if (payload.droppableIdStart === payload.droppableIdEnd) {
-      const list: any = state.lists.find(
-        list => payload.droppableIdStart === list.listId
-      );
-      const card = list.tasks.splice(payload.droppableIndexStart, 1);
-      list?.tasks.splice(payload.droppableIndexEnd, 0, ...card);
+      const data = state;
+      const list = data.find( (list : any) => payload.droppableIdStart === list.id );
+      const tasks = [...list.tasks];
+      const card = tasks.splice(payload.droppableIndexStart, 1);
+      tasks.splice(payload.droppableIndexEnd, 0, ...card);
+      const tasksId: any[] = [];
+      tasks.map(task => tasksId.push(task.id));
+      updateTasks({
+        variables: {
+          updateProjectListsInput: {
+            id: list.id,
+            tasks: tasksId,
+          }
+        }
+      })
     }
 
     // other list
-    if (payload.droppableIdStart !== payload.droppableIdEnd) {
-      const listStart: any = state.lists.find(
-        list => payload.droppableIdStart === list.listId
-      );
-      const card = listStart.tasks.splice(payload.droppableIndexStart, 1);
-      const listEnd: any = state.lists.find(
-        list => payload.droppableIdEnd === list.listId
-      );
-      listEnd.tasks.splice(payload.droppableIndexEnd, 0, ...card);
-    }
+  //   if (payload.droppableIdStart !== payload.droppableIdEnd) {
+  //     const listStart: any = state.lists.find(
+  //       list => payload.droppableIdStart === list.listId
+  //     );
+  //     const card = listStart.tasks.splice(payload.droppableIndexStart, 1);
+  //     const listEnd: any = state.lists.find(
+  //       list => payload.droppableIdEnd === list.listId
+  //     );
+  //     listEnd.tasks.splice(payload.droppableIndexEnd, 0, ...card);
+  //   }
   };
 
   const onDragEnd = (result: any) => {
-    const { destination, source, draggableId, type } = result;
+     const { destination, source, draggableId } = result;
 
-    if (!destination) return;
+     if (!destination) return;
 
     // Move list
-    if (type === "COLUMN") {
+  //   if (type === "COLUMN") {
       // Prevent update if nothing has changed
-      if (source.index !== destination.index) {
-        const newLists = Array.from(Cards.lists);
-        const [removedList] = newLists.splice(source.index, 1);
-        newLists.splice(destination.index, 0, removedList);
-        setCards({ ...Cards, lists: newLists });
-      }
-      return;
-    }
+  //     if (source.index !== destination.index) {
+  //       const newLists = Array.from(Cards.lists);
+  //       const [removedList] = newLists.splice(source.index, 1);
+  //       newLists.splice(destination.index, 0, removedList);
+  //       setCards({ ...Cards, lists: newLists });
+  //     }
+  //     return;
+  //   }
 
     // Move card
     sort(
-      Cards,{
+      Lists.data?.projectLists,{
       droppableIdStart: source.droppableId,
       droppableIdEnd: destination.droppableId,
       droppableIndexStart: source.index,
@@ -111,13 +98,14 @@ export const Project: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-row items-start my-6 mb-20">
+    <div className="flex flex-row items-start mt-6 h-[80vh] overflow-x-scroll overflow-y-h  ">
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="board" direction="horizontal" type="COLUMN">
           {provided => (
             <div ref={provided.innerRef} className="flex flex-row items-start">
-              {Cards.lists.map((list, index) => {
-                return <ListView list={list} index={index} key={list.listId} />
+              <Unlists list={UnlistsTasks.data?.unlistedTasks} index={-1}/>
+              {Lists.data && Lists.data?.projectLists.map((list, index) => {
+                return <ListView list={list} index={index} key={list.id} />
               })}
 
               {provided.placeholder}

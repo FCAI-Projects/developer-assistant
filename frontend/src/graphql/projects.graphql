@@ -4,10 +4,24 @@ query Project($projectId: String!) {
   }
 }
 
-query ProjectLists($projectId: String!) {
-  project(id: $projectId) {
+query ProjectLists($project: String!) {
+  projectLists(project: $project) {
+    id
     name
-    status
+    tasks {
+      id
+      name
+      description
+    }
+    color
+  }
+}
+
+query UnlistedTasks($project: String!) {
+  unlistedTasks(project: $project) {
+    id
+    name
+    description
   }
 }
 
