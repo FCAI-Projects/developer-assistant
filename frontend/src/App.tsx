@@ -15,6 +15,7 @@ import { useRecoilValue } from "recoil";
 import { authState } from "./recoil";
 import { Chat } from "./pages/Chat";
 import { Calendar } from "./pages/Calendar";
+import { Task } from "./pages/Project/Task";
 
 export const App: React.FC = () => {
   const authToken = useRecoilValue(authState);
@@ -49,6 +50,8 @@ export const App: React.FC = () => {
 
           <Route path="project/:id" element={<ProjectLayout />}>
             <Route index element={<Project />} />
+
+            <Route path="task/:taskId" element={<Task />} />
 
             <Route path="settings">
               <Route index element={<ProjectConfig />} />

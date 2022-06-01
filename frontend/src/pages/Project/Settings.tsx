@@ -3,6 +3,7 @@ import { Button } from "../../components/Button";
 import { Input, Label } from "../../components/forms";
 import * as Yup from "yup";
 import { useMutation } from "@apollo/client";
+
 import {  UpdateProjectDocument, useProjectQuery, useProjectsQuery } from "../../graphql/generated/graphql";
 import { Formik, useFormik } from "formik";
 import { useParams } from "react-router-dom";
@@ -13,6 +14,16 @@ export const ProjectSettings: React.FC = () => {
   const ProjectID = useParams ()
   const [UpdateProject, { loading, error }] = useMutation(UpdateProjectDocument);
   const { data } = useProjectQuery({variables: {projectId: ProjectID.id as string}});
+
+import { UpdateProjectDocument } from "../../graphql/generated/graphql";
+import { useFormik } from "formik";
+import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+
+export const ProjectSettings: React.FC = () => {
+  const [updateProject, { loading, data, error }] = useMutation(UpdateProjectDocument);
+  const { id } = useParams();
+
   const formik = useFormik({
     initialValues: {
       name: data?.project.name,  
@@ -27,6 +38,7 @@ export const ProjectSettings: React.FC = () => {
     enableReinitialize: true,
     onSubmit: async (Values) => {
       try {
+
         UpdateProject ({
           variables : {
               updateProjectId: ProjectID,
@@ -38,6 +50,20 @@ export const ProjectSettings: React.FC = () => {
             }
           })
             
+
+        updateProject({
+          variables: {
+            updateProjectId: id,
+            updateProjectInput: {
+              name: values.name,
+              clientEmail: values.clientEmail,
+              describtion: values.description,
+            },
+          },
+        });
+
+        toast.success("Project updated successfully");
+
       } catch (error) {
         console.log(error);
       }
@@ -55,7 +81,12 @@ export const ProjectSettings: React.FC = () => {
             <Input
               type="text"
               id="name"
+
               {...formik.getFieldProps("name") }
+
+              placeholder=""
+              {...formik.getFieldProps("name")}
+
               error={formik.touched.name ? formik.errors.name : ""}
             />
           </div>

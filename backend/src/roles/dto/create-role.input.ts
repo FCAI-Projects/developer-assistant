@@ -3,9 +3,12 @@ import { InputType, Int, Field } from '@nestjs/graphql';
 @InputType()
 export class CreateRoleInput {
   @Field(() => String)
-  projectId: string;
+  roleName: string;
 
   @Field(() => String)
+  project: string;
+
+  @Field(() => Boolean)
   createTask: boolean;
 
   @Field(() => Boolean)

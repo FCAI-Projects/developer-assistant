@@ -5,24 +5,61 @@ import { Button } from "../Button";
 import * as Yup from "yup";
 import { Modal } from "./Base";
 import { useMutation } from "@apollo/client";
-import { LoginDocument } from "../../graphql/generated/graphql";
+import { CreateRoleDocument, RolesDocument } from "../../graphql/generated/graphql";
 import { Input, Label, ToggleSwitch } from "../forms";
-import { FaPlus, FaUserPlus } from "react-icons/fa";
-
-// TODO: Use the right query to save to database
+import { FaPlus } from "react-icons/fa";
+import { useParams } from "react-router-dom";
 
 export const NewRoleModel: React.FC = () => {
-  const [addProject, { loading, data, error }] = useMutation(LoginDocument);
+  const ProjectId = useParams();
   const [isOpen, toggleModal] = useToggleModal();
+  const [addRole, { loading }] = useMutation(CreateRoleDocument, {
+    refetchQueries: [{ query: RolesDocument, variables: { project: ProjectId.id } }],
+  });
   const formik = useFormik({
     initialValues: {
       name: "",
+      createTask: false,
+      deleteTask: false,
+      editTask: false,
+      assignTask: false,
+      editProject: false,
+      inviteToProject: false,
+      deleteMember: false
     },
     validationSchema: Yup.object({
       name: Yup.string().required("Required"),
     }),
-    onSubmit: async (values) => {
+    onSubmit: async (values, formikApi) => {
       try {
+        addRole({
+          variables: {
+            createRoleInput: {
+              roleName: values.name,
+              project: ProjectId.id,
+              createTask: values.createTask,
+              deleteTask: values.deleteTask,
+              editTask: values.editTask,
+              assignTask: values.assignTask,
+              editProject: values.editProject,
+              inviteToProject: values.inviteToProject,
+              deleteMember: values.deleteMember
+            }
+          },
+        })
+        formikApi.resetForm({
+          values:{
+            name: "",
+            createTask: false,
+            deleteTask: false,
+            editTask: false,
+            assignTask: false,
+            editProject: false,
+            inviteToProject: false,
+            deleteMember: false
+          }
+        })
+        toggleModal();
       } catch (error) {
         console.log(error);
       }
@@ -49,25 +86,39 @@ export const NewRoleModel: React.FC = () => {
             </div>
             <h3>Permissions</h3>
             <div className="w-full">
-              <ToggleSwitch id="createTask">Create Tasks</ToggleSwitch>
+              <ToggleSwitch id="createTask" {...formik.getFieldProps("createTask")}>
+                Create Tasks
+              </ToggleSwitch>
             </div>
             <div className="w-full">
-              <ToggleSwitch id="deleteTask">Delete Tasks</ToggleSwitch>
+              <ToggleSwitch id="deleteTask" {...formik.getFieldProps("deleteTask")}>
+                Delete Tasks
+              </ToggleSwitch>
             </div>
             <div className="w-full">
-              <ToggleSwitch id="editTask">Edit Tasks</ToggleSwitch>
+              <ToggleSwitch id="editTask" {...formik.getFieldProps("editTask")}>
+                Edit Tasks
+              </ToggleSwitch>
             </div>
             <div className="w-full">
-              <ToggleSwitch id="assignTask">Assign Members to Tasks</ToggleSwitch>
+              <ToggleSwitch id="assignTask" {...formik.getFieldProps("assignTask")}>
+                Assign Members to Tasks
+              </ToggleSwitch>
             </div>
             <div className="w-full">
-              <ToggleSwitch id="editProject">Edit Project</ToggleSwitch>
+              <ToggleSwitch id="editProject" {...formik.getFieldProps("editProject")}>
+                Edit Project
+              </ToggleSwitch>
             </div>
             <div className="w-full">
-              <ToggleSwitch id="inviteToProject">Invite To Project</ToggleSwitch>
+              <ToggleSwitch id="inviteToProject" {...formik.getFieldProps("inviteToProject")}>
+                Invite To Project
+              </ToggleSwitch>
             </div>
             <div className="w-full">
-              <ToggleSwitch id="deleteMember">Delete Members</ToggleSwitch>
+              <ToggleSwitch id="deleteMember" {...formik.getFieldProps("deleteMember")}>
+                Delete Members
+              </ToggleSwitch>
             </div>
           </form>
         </div>

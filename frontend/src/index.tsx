@@ -6,6 +6,8 @@ import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 import { ApolloClient, ApolloProvider, createHttpLink, InMemoryCache } from "@apollo/client";
 import { RecoilRoot, useRecoilSnapshot } from "recoil";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { setContext } from "@apollo/client/link/context";
 
 const httpLink = createHttpLink({
@@ -35,6 +37,7 @@ ReactDOM.render(
       <ApolloProvider client={client}>
         <BrowserRouter>
           <App />
+          <ToastContainer />
         </BrowserRouter>
       </ApolloProvider>
     </RecoilRoot>

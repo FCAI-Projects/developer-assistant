@@ -3,6 +3,7 @@ import { TasksService } from './tasks.service';
 import { TasksResolver } from './tasks.resolver';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Task, TaskSchema } from './entities/task.entity';
+import { ProjectListsModule } from 'src/project-lists/project-lists.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { Task, TaskSchema } from './entities/task.entity';
         schema: TaskSchema,
       },
     ]),
+    ProjectListsModule,
   ],
   providers: [TasksResolver, TasksService],
 })

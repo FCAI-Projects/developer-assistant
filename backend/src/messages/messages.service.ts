@@ -11,18 +11,17 @@ export class MessagesService {
     @InjectModel(Message.name) private messageModel: Model<MessageDocument>,
   ) {}
 
-  async create(
-    createMessageDto: CreateMessageDto,
-    sender: string,
-  ): Promise<MessageDocument> {
+  async create(createMessageDto: CreateMessageDto): Promise<MessageDocument> {
     const createdMessage = new this.messageModel({
       ...createMessageDto,
-      sender,
     });
-    return await createdMessage.save();
+    await createdMessage.save();
+    return createdMessage.populate('sender');
   }
 
   async findAll(group: string): Promise<MessageDocument[]> {
-    return await this.messageModel.find({ group });
+    return await this.messageModel.find({ group }).populate('sender').sort({
+      createdAt: 1,
+    });
   }
 }

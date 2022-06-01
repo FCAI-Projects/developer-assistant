@@ -1,5 +1,5 @@
-mutation CreateProject($createProjectInput: CreateProjectInput!) {
-  createProject(createProjectInput: $createProjectInput) {
+query Project($projectId: String!) {
+  project(id: $projectId) {
     id
   }
 }
@@ -11,6 +11,13 @@ query Projects {
     describtion
   }
 }
+
+mutation CreateProject($createProjectInput: CreateProjectInput!) {
+  createProject(createProjectInput: $createProjectInput) {
+    id
+  }
+}
+
 mutation updateProject($updateProjectId: String!, $updateProjectInput: UpdateProjectInput!) {
   updateProject(id: $updateProjectId, updateProjectInput: $updateProjectInput) {
     name
@@ -18,6 +25,7 @@ mutation updateProject($updateProjectId: String!, $updateProjectInput: UpdatePro
     describtion
   }
 }
+
 query Project($projectId: String!) {
   project(id: $projectId) {
     id
@@ -26,3 +34,4 @@ query Project($projectId: String!) {
     clientEmail
   }
 }
+

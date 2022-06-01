@@ -3,38 +3,66 @@ import { TasksService } from './tasks.service';
 import { Task, TaskDocument } from './entities/task.entity';
 import { CreateTaskInput } from './dto/create-task.input';
 import { UpdateTaskInput } from './dto/update-task.input';
+import { ProjectListsService } from 'src/project-lists/project-lists.service';
+import * as async from 'async';
 
 @Resolver(() => Task)
 export class TasksResolver {
-  constructor(private readonly tasksService: TasksService) {}
+  constructor(
+    private readonly tasksService: TasksService,
+    private readonly projectListsService: ProjectListsService,
+  ) {}
 
   @Mutation(() => Task)
-  createTask(
+  async createTask(
     @Args('createTaskInput') createTaskInput: CreateTaskInput,
   ): Promise<TaskDocument> {
-    return this.tasksService.create(createTaskInput);
+    return await this.tasksService.create(createTaskInput);
   }
 
   @Query(() => [Task], { name: 'tasks' })
-  findAll(): Promise<TaskDocument[]> {
-    return this.tasksService.findAll();
+  async findAll(@Args('project') project: string): Promise<TaskDocument[]> {
+    return await this.tasksService.findAll(project);
+  }
+
+  @Query(() => [Task], { name: 'unlistedTasks' })
+  async findTaskNotListed(
+    @Args('project') project: string,
+  ): Promise<TaskDocument[]> {
+    const tasks = await this.tasksService.findAll(project);
+    const result: TaskDocument[] = [];
+
+    await async.each(tasks, async (task: TaskDocument) => {
+      const projectLists = await this.projectListsService.filter({
+        project,
+        tasks: task.id,
+      });
+
+      console.log(projectLists, task);
+
+      if (projectLists.length === 0) {
+        result.push(task);
+      }
+    });
+
+    return result;
   }
 
   @Query(() => Task, { name: 'task' })
-  findOne(@Args('id') id: string): Promise<TaskDocument> {
-    return this.tasksService.findOne(id);
+  async findOne(@Args('id') id: string): Promise<TaskDocument> {
+    return await this.tasksService.findOne(id);
   }
 
   @Mutation(() => Task)
-  updateTask(
+  async updateTask(
     @Args('id') id: string,
     @Args('updateTaskInput') updateTaskInput: UpdateTaskInput,
   ): Promise<TaskDocument> {
-    return this.tasksService.update(id, updateTaskInput);
+    return await this.tasksService.update(id, updateTaskInput);
   }
 
   @Mutation(() => Task)
-  removeTask(@Args('id') id: string): Promise<TaskDocument> {
-    return this.tasksService.remove(id);
+  async removeTask(@Args('id') id: string): Promise<TaskDocument> {
+    return await this.tasksService.remove(id);
   }
 }

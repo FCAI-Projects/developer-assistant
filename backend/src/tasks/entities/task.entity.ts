@@ -32,7 +32,7 @@ export class Task extends Document {
   @Field(() => [String], { description: 'Task attachments' })
   attachments: Array<string>;
 
-  @Prop({ enum: ['todo', 'inprogress', 'done'] })
+  @Prop({ enum: ['todo', 'doing', 'done'] })
   @Field(() => String, { description: 'Task status' })
   status: string;
 

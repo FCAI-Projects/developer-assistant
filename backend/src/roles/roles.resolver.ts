@@ -16,8 +16,8 @@ export class RolesResolver {
   }
 
   @Query(() => [Role], { name: 'roles' })
-  async findAll(): Promise<RoleDocument[]> {
-    return this.rolesService.findAll();
+  async findAll(@Args('project') project: string): Promise<RoleDocument[]> {
+    return this.rolesService.findAll(project);
   }
 
   @Query(() => Role, { name: 'role' })

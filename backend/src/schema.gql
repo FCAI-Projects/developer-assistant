@@ -45,10 +45,11 @@ type Role {
   """Role ID"""
   id: ID!
 
-  """Projact ID"""
+  """Project ID"""
   project: Project!
 
-  """User ID"""
+  """Role Name"""
+  roleName: String!
   createTask: Boolean!
   deleteTask: Boolean!
   editTask: Boolean!
@@ -124,6 +125,23 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type ProjectLists {
+  """List ID"""
+  id: ID!
+
+  """List Project ID"""
+  project: Project!
+
+  """Status name"""
+  name: String!
+
+  """Status Tasks ID"""
+  tasks: [Task!]!
+
+  """Status Color"""
+  color: String!
+}
+
 type Note {
   """Note ID"""
   id: ID!
@@ -157,16 +175,16 @@ type Group {
   id: ID!
 
   """Group Project"""
-  project: String!
+  project: Project!
 
   """Group Name"""
   name: String!
 
   """Group Members"""
-  members: String!
+  members: [User!]!
 
   """Group Admin"""
-  admin: String!
+  admin: User!
 }
 
 type Query {
@@ -176,9 +194,12 @@ type Query {
   project(id: String!): Project!
   filterMembers(filter: UpdateMemberInput!): [Member!]!
   member(id: String!): Member!
-  tasks: [Task!]!
+  tasks(project: String!): [Task!]!
+  unlistedTasks(project: String!): [Task!]!
   task(id: String!): Task!
-  roles: [Role!]!
+  projectLists(project: String!): [ProjectLists!]!
+  projectListsById(id: String!): ProjectLists!
+  roles(project: String!): [Role!]!
   role(id: String!): Role!
   note(id: String!): Note!
   filterNotes(filter: CreateNoteInput!): Note!
@@ -221,6 +242,9 @@ type Mutation {
   createTask(createTaskInput: CreateTaskInput!): Task!
   updateTask(id: String!, updateTaskInput: UpdateTaskInput!): Task!
   removeTask(id: String!): Task!
+  createProjectLists(createProjectListsInput: CreateProjectListsInput!): ProjectLists!
+  updateProjectLists(updateProjectListsInput: UpdateProjectListsInput!): ProjectLists!
+  removeProjectLists(id: String!): ProjectLists!
   createRole(createRoleInput: CreateRoleInput!): Role!
   updateRole(id: String!, updateRoleInput: UpdateRoleInput!): Role!
   removeRole(id: String!): Role!
@@ -370,9 +394,39 @@ input UpdateTaskInput {
   docs: String
 }
 
+input CreateProjectListsInput {
+  """Status Project ID"""
+  project: String!
+
+  """Status name"""
+  name: String!
+
+  """Status tasks ID"""
+  tasks: [String!]!
+
+  """Status Color"""
+  color: String!
+}
+
+input UpdateProjectListsInput {
+  """Status Project ID"""
+  project: String
+
+  """Status name"""
+  name: String
+
+  """Status tasks ID"""
+  tasks: [String!]
+
+  """Status Color"""
+  color: String
+  id: String!
+}
+
 input CreateRoleInput {
-  projectId: String!
-  createTask: String!
+  roleName: String!
+  project: String!
+  createTask: Boolean!
   deleteTask: Boolean!
   editTask: Boolean!
   assignTask: Boolean!
@@ -382,8 +436,9 @@ input CreateRoleInput {
 }
 
 input UpdateRoleInput {
-  projectId: String
-  createTask: String
+  roleName: String
+  project: String
+  createTask: Boolean
   deleteTask: Boolean
   editTask: Boolean
   assignTask: Boolean

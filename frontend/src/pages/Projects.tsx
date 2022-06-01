@@ -11,6 +11,7 @@ export const Projects: React.FC = () => {
         {data && data.projects.map((project) => {
           return <ProjectCard
             key={project.id}
+            id={project.id}
             name={project.name}
             description={project.describtion}
             link={"project/"+project.id}
