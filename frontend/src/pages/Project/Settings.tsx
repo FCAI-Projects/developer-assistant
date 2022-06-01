@@ -22,11 +22,13 @@ export const ProjectSettings: React.FC = () => {
       name: project?.project.name,
       clientEmail: project?.project.clientEmail,
       description: project?.project.describtion,
+      budget: 0,
     },
     validationSchema: Yup.object({
       name: Yup.string().required("Required"),
       clientEmail: Yup.string().email("Invalid email address").required("Required"),
       description: Yup.string().max(255, "Must be 255 characters or less").required("Required"),
+      budget: Yup.number().required("Required"),
     }),
     enableReinitialize: true,
     onSubmit: async (values) => {
@@ -81,6 +83,15 @@ export const ProjectSettings: React.FC = () => {
               id="clientEmail"
               {...formik.getFieldProps("clientEmail")}
               error={formik.touched.clientEmail ? formik.errors.clientEmail : ""}
+            />
+          </div>
+          <div className="w-full">
+            <Label htmlFor="budget">Budget</Label>
+            <Input
+              type="number"
+              id="budget"
+              {...formik.getFieldProps("budget")}
+              error={formik.touched.budget ? formik.errors.budget : ""}
             />
           </div>
           <div className="w-full">

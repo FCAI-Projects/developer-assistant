@@ -39,6 +39,9 @@ type Project {
 
   """Project describtion"""
   describtion: String!
+
+  """Project Budget"""
+  budget: String!
 }
 
 type Role {
@@ -297,6 +300,9 @@ input CreateProjectInput {
 
   """description of project"""
   describtion: String!
+
+  """project budget"""
+  budget: String
 }
 
 input UpdateProjectInput {
@@ -308,6 +314,9 @@ input UpdateProjectInput {
 
   """description of project"""
   describtion: String
+
+  """project budget"""
+  budget: String
 }
 
 input CreateMemberInput {
