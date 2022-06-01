@@ -1,6 +1,8 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Schema as MongooseSchema } from 'mongoose';
+import { Project } from 'src/projects/entities/project.entity';
+import { User } from 'src/users/entities/user.entity';
 
 export type GroupDocument = Group & Document;
 
@@ -11,7 +13,7 @@ export class Group {
   id: MongooseSchema.Types.ObjectId;
 
   @Prop({ required: true, type: MongooseSchema.Types.ObjectId, ref: 'Project' })
-  @Field(() => String, { description: 'Group Project' })
+  @Field(() => Project, { description: 'Group Project' })
   project: MongooseSchema.Types.ObjectId;
 
   @Prop({ required: true })
@@ -22,7 +24,7 @@ export class Group {
     type: [MongooseSchema.Types.ObjectId],
     ref: 'User',
   })
-  @Field(() => String, { description: 'Group Members' })
+  @Field(() => [User], { description: 'Group Members' })
   members: Array<MongooseSchema.Types.ObjectId>;
 
   @Prop({
@@ -30,7 +32,7 @@ export class Group {
     type: MongooseSchema.Types.ObjectId,
     ref: 'User',
   })
-  @Field(() => String, { description: 'Group Admin' })
+  @Field(() => User, { description: 'Group Admin' })
   admin: MongooseSchema.Types.ObjectId;
 }
 

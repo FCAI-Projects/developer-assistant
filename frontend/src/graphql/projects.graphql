@@ -4,13 +4,6 @@ query Project($projectId: String!) {
   }
 }
 
-query ProjectLists($projectId: String!) {
-  project(id: $projectId) {
-    name
-    status
-  }
-}
-
 query Projects {
   projects {
     id

@@ -19,8 +19,12 @@ export class GroupsService {
     return await createdGroup.save();
   }
 
-  async findAll(): Promise<GroupDocument[]> {
-    return await this.groupModel.find();
+  async findAll(user: string): Promise<GroupDocument[]> {
+    return await this.groupModel
+      .find({ $or: [{ admin: user }, { members: user }] })
+      .populate('members')
+      .populate('project')
+      .populate('admin');
   }
 
   async findOne(id: string): Promise<GroupDocument> {

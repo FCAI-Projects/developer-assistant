@@ -28,8 +28,9 @@ export class GroupsResolver {
   }
 
   @Query(() => [Group], { name: 'groups' })
-  async findAll() {
-    return await this.groupsService.findAll();
+  @UseGuards(JwtAuthGuard)
+  async findAll(@Context('req') context: any) {
+    return await this.groupsService.findAll(context.user._id);
   }
 
   @Query(() => Group, { name: 'group' })
