@@ -5,6 +5,7 @@ import { BsPlusLg } from "react-icons/bs";
 import { useParams } from "react-router-dom";
 import { ListView } from "../../components/listsView/ListView";
 import { Unlists } from "../../components/listsView/Unlists";
+import { Loader } from "../../components/Loader";
 import { ProjectListsDocument, UpdateProjectListsDocument, useProjectListsQuery, useUnlistedTasksQuery } from "../../graphql/generated/graphql";
 
 export interface list {
@@ -30,8 +31,8 @@ type sortAction = {
 
 export const Project: React.FC = () => {
   const projectId = useParams();
-  const UnlistsTasks = useUnlistedTasksQuery({variables: {project: projectId.id as string}});
-  const Lists = useProjectListsQuery({variables: {project: projectId.id as string}});
+  const unlistsTasks = useUnlistedTasksQuery({variables: {project: projectId.id as string}});
+  const lists = useProjectListsQuery({variables: {project: projectId.id as string}});
   const [updateTasks, { loading }] = useMutation(UpdateProjectListsDocument, {
     refetchQueries: [{ query: ProjectListsDocument, variables: { project: projectId.id } }]
   });
@@ -39,8 +40,7 @@ export const Project: React.FC = () => {
   const sort = (state: any, payload : sortAction) => {
     // same list
     if (payload.droppableIdStart === payload.droppableIdEnd) {
-      const data = state;
-      const list = data.find( (list : any) => payload.droppableIdStart === list.id );
+      const list = state.find( (list : any) => payload.droppableIdStart === list.id );
       const tasks = [...list.tasks];
       const card = tasks.splice(payload.droppableIndexStart, 1);
       tasks.splice(payload.droppableIndexEnd, 0, ...card);
@@ -55,40 +55,61 @@ export const Project: React.FC = () => {
         }
       })
     }
-
+    
     // other list
-  //   if (payload.droppableIdStart !== payload.droppableIdEnd) {
-  //     const listStart: any = state.lists.find(
-  //       list => payload.droppableIdStart === list.listId
-  //     );
-  //     const card = listStart.tasks.splice(payload.droppableIndexStart, 1);
-  //     const listEnd: any = state.lists.find(
-  //       list => payload.droppableIdEnd === list.listId
-  //     );
-  //     listEnd.tasks.splice(payload.droppableIndexEnd, 0, ...card);
-  //   }
+    if (payload.droppableIdStart !== payload.droppableIdEnd) {
+      const listStart: any = state.find( (list: any) => payload.droppableIdStart === list.id );
+      const tasksStart = [...listStart.tasks];
+      const card = tasksStart.splice(payload.droppableIndexStart, 1);
+      const listEnd: any = state.find( (list: any) => payload.droppableIdEnd === list.id );
+      const tasksEnd = [...listEnd.tasks];
+      tasksEnd.splice(payload.droppableIndexEnd, 0, ...card);
+
+      const listStartIds: any[] = [];
+      tasksStart.map((task: { id: any; }) => listStartIds.push(task.id));
+      const listEndIds: any[] = [];
+      tasksEnd.map((task: { id: any; }) => listEndIds.push(task.id));
+
+      updateTasks({
+        variables: {
+          updateProjectListsInput: {
+            id: listStart.id,
+            tasks: listStartIds,
+          }
+        }
+      })
+
+      updateTasks({
+        variables: {
+          updateProjectListsInput: {
+            id: listEnd.id,
+            tasks: listEndIds,
+          }
+        }
+      })
+   }
   };
 
   const onDragEnd = (result: any) => {
-     const { destination, source, draggableId } = result;
+     const { destination, source, draggableId, type } = result;
 
      if (!destination) return;
 
     // Move list
-  //   if (type === "COLUMN") {
+    if (type === "COLUMN") {
       // Prevent update if nothing has changed
-  //     if (source.index !== destination.index) {
-  //       const newLists = Array.from(Cards.lists);
-  //       const [removedList] = newLists.splice(source.index, 1);
-  //       newLists.splice(destination.index, 0, removedList);
-  //       setCards({ ...Cards, lists: newLists });
-  //     }
-  //     return;
-  //   }
+      // if (source.index !== destination.index) {
+      //   const newLists: any = lists.data?.projectLists;
+      //   const [removedList] = newLists.splice(source.index, 1);
+      //   newLists.splice(destination.index, 0, removedList);
+      //   console.log(newLists);
+      // }
+      return;
+    }
 
     // Move card
     sort(
-      Lists.data?.projectLists,{
+      lists.data?.projectLists,{
       droppableIdStart: source.droppableId,
       droppableIdEnd: destination.droppableId,
       droppableIndexStart: source.index,
@@ -97,14 +118,23 @@ export const Project: React.FC = () => {
     })
   };
 
+  if (lists.loading || unlistsTasks.loading) {
+    return (
+      <div className="flex items-center justify-center py-10">
+        <Loader />
+      </div>
+    );
+  }
+
+
   return (
     <div className="flex flex-row items-start mt-6 h-[80vh] overflow-x-scroll overflow-y-h  ">
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="board" direction="horizontal" type="COLUMN">
           {provided => (
             <div ref={provided.innerRef} className="flex flex-row items-start">
-              <Unlists list={UnlistsTasks.data?.unlistedTasks} index={-1}/>
-              {Lists.data && Lists.data?.projectLists.map((list, index) => {
+              <Unlists list={unlistsTasks.data?.unlistedTasks} index={-1}/>
+              {lists.data && lists.data?.projectLists.map((list, index) => {
                 return <ListView list={list} index={index} key={list.id} />
               })}
 
