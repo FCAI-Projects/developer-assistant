@@ -1,0 +1,19 @@
+query Groups {
+  groups {
+    id
+    name
+    members {
+      fname
+      lname
+    }
+    project {
+      id
+      name
+    }
+    admin {
+      id
+      fname
+      lname
+    }
+  }
+}

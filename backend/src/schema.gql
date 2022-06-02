@@ -39,6 +39,9 @@ type Project {
 
   """Project describtion"""
   describtion: String!
+
+  """Project Budget"""
+  budget: Float!
 }
 
 type Role {
@@ -175,16 +178,30 @@ type Group {
   id: ID!
 
   """Group Project"""
-  project: String!
+  project: Project!
 
   """Group Name"""
   name: String!
 
   """Group Members"""
-  members: String!
+  members: [User!]!
 
   """Group Admin"""
-  admin: String!
+  admin: User!
+}
+
+type Expense {
+  """Expense ID"""
+  id: ID!
+
+  """Expense Project"""
+  project: Project!
+
+  """Expense Name"""
+  name: String!
+
+  """Expense Amount"""
+  amount: Int!
 }
 
 type Query {
@@ -207,6 +224,8 @@ type Query {
   comment(id: String!): Comment!
   groups: [Group!]!
   group(id: String!): Group!
+  expenses: [Expense!]!
+  expense(id: String!): Expense!
 }
 
 input UpdateMemberInput {
@@ -258,6 +277,9 @@ type Mutation {
   inviteToGroup(groupId: String!, memberId: String!): Group!
   updateGroup(updateGroupInput: UpdateGroupInput!): Group!
   removeGroup(id: String!): Group!
+  createExpense(createExpenseInput: CreateExpenseInput!): Expense!
+  updateExpense(updateExpenseInput: UpdateExpenseInput!): Expense!
+  removeExpense(id: String!): Expense!
 }
 
 input CreateUserInput {
@@ -297,6 +319,9 @@ input CreateProjectInput {
 
   """description of project"""
   describtion: String!
+
+  """project budget"""
+  budget: Float
 }
 
 input UpdateProjectInput {
@@ -308,6 +333,9 @@ input UpdateProjectInput {
 
   """description of project"""
   describtion: String
+
+  """project budget"""
+  budget: Float
 }
 
 input CreateMemberInput {
@@ -500,5 +528,28 @@ input UpdateGroupInput {
 
   """Group Members"""
   members: [String!]
+  id: String!
+}
+
+input CreateExpenseInput {
+  """Expense Project"""
+  project: String!
+
+  """Expense Name"""
+  name: String!
+
+  """Expense Amount"""
+  amount: Int!
+}
+
+input UpdateExpenseInput {
+  """Expense Project"""
+  project: String
+
+  """Expense Name"""
+  name: String
+
+  """Expense Amount"""
+  amount: Int
   id: String!
 }

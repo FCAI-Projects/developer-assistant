@@ -1,11 +1,13 @@
 mutation CreateTask($createTaskInput: CreateTaskInput!) {
   createTask(createTaskInput: $createTaskInput) {
+
     id
   }
 }
 
 mutation UpdateProjectLists($updateProjectListsInput: UpdateProjectListsInput!) {
   updateProjectLists(updateProjectListsInput: $updateProjectListsInput) {
+
     id
   }
 }

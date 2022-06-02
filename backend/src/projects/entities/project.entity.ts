@@ -27,6 +27,10 @@ export class Project {
   @Prop()
   @Field(() => String, { description: 'Project describtion' })
   describtion: string;
+
+  @Prop( {default:0 })
+  @Field(() => Number, { description: 'Project Budget' })
+  budget: number;
 }
 
 export const ProjectSchema = SchemaFactory.createForClass(Project);

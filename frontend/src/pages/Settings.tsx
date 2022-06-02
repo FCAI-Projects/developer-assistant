@@ -8,6 +8,7 @@ import { Input, Label } from "../components/forms";
 import { UpdatePassword } from "../components/modals/UpdatePasswordModal";
 
 
+
 export const Settings: React.FC = () => {
   const formik = useFormik({
     initialValues: {

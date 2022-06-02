@@ -28,7 +28,7 @@ export class ProjectsService {
   }
 
   async findOne(id: string): Promise<ProjectDocument> {
-    return this.projectModel.findOne({ _id: id }).populate('status').populate('tasks');
+    return this.projectModel.findOne({ _id: id });
   }
 
   async update(

@@ -15,6 +15,7 @@ import { CommentsModule } from './comments/comments.module';
 import { GroupsModule } from './groups/groups.module';
 import { MessagesModule } from './messages/messages.module';
 import { ProjectListsModule } from './project-lists/project-lists.module';
+import { ExpensesModule } from './expenses/expenses.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { ProjectListsModule } from './project-lists/project-lists.module';
     GroupsModule,
     MessagesModule,
     ProjectListsModule,
+    ExpensesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

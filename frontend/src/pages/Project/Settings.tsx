@@ -3,35 +3,44 @@ import { Button } from "../../components/Button";
 import { Input, Label } from "../../components/forms";
 import * as Yup from "yup";
 import { useMutation } from "@apollo/client";
-import { UpdateProjectDocument } from "../../graphql/generated/graphql";
+import { Project } from ".";
+import { UpdateProjectDocument, useProjectByIdQuery } from "../../graphql/generated/graphql";
 import { useFormik } from "formik";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import { Loader } from "../../components/Loader";
 
 export const ProjectSettings: React.FC = () => {
   const [updateProject, { loading, data, error }] = useMutation(UpdateProjectDocument);
   const { id } = useParams();
+  const { data: project, loading: projectLoading } = useProjectByIdQuery({
+    variables: { projectId: id as string },
+  });
+
   const formik = useFormik({
     initialValues: {
-      name: "Project Name",
-      clientEmail: "example@domain.com",
-      description:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
+      name: project?.project.name,
+      clientEmail: project?.project.clientEmail,
+      description: project?.project.describtion,
+      budget: project?.project.budget,
     },
     validationSchema: Yup.object({
       name: Yup.string().required("Required"),
       clientEmail: Yup.string().email("Invalid email address").required("Required"),
       description: Yup.string().max(255, "Must be 255 characters or less").required("Required"),
+      budget: Yup.number().required("Required"),
     }),
+    enableReinitialize: true,
     onSubmit: async (values) => {
       try {
-        updateProject({
+        await updateProject({
           variables: {
             updateProjectId: id,
             updateProjectInput: {
               name: values.name,
               clientEmail: values.clientEmail,
               describtion: values.description,
+              budget: values.budget ,
             },
           },
         });
@@ -39,9 +48,18 @@ export const ProjectSettings: React.FC = () => {
         toast.success("Project updated successfully");
       } catch (error) {
         console.log(error);
+        toast.error("An error occured");
       }
     },
   });
+
+  if (projectLoading) {
+    return (
+      <div className="flex items-center justify-center py-10">
+        <Loader />
+      </div>
+    );
+  }
 
   return (
     <>
@@ -53,6 +71,7 @@ export const ProjectSettings: React.FC = () => {
             <Input
               type="text"
               id="name"
+              {...formik.getFieldProps("name")}
               placeholder=""
               {...formik.getFieldProps("name")}
               error={formik.touched.name ? formik.errors.name : ""}
@@ -63,9 +82,17 @@ export const ProjectSettings: React.FC = () => {
             <Input
               type="email"
               id="clientEmail"
-              placeholder="example@gmail.com"
               {...formik.getFieldProps("clientEmail")}
               error={formik.touched.clientEmail ? formik.errors.clientEmail : ""}
+            />
+          </div>
+          <div className="w-full">
+            <Label htmlFor="budget">Budget</Label>
+            <Input
+              type="number"
+              id="budget"
+              {...formik.getFieldProps("budget")}
+              error={formik.touched.budget ? formik.errors.budget : ""}
             />
           </div>
           <div className="w-full">
