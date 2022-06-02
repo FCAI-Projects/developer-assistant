@@ -38,6 +38,15 @@ export type CreateCommentInput = {
   user: Scalars['String'];
 };
 
+export type CreateExpenseInput = {
+  /** Expense Amount */
+  amount: Scalars['Int'];
+  /** Expense Name */
+  name: Scalars['String'];
+  /** Expense Project */
+  project: Scalars['String'];
+};
+
 export type CreateGroupInput = {
   /** Group Members */
   members?: InputMaybe<Array<Scalars['String']>>;
@@ -66,7 +75,7 @@ export type CreateNoteInput = {
 
 export type CreateProjectInput = {
   /** project budget */
-  budget?: InputMaybe<Scalars['String']>;
+  budget?: InputMaybe<Scalars['Float']>;
   /** client email */
   clientEmail: Scalars['String'];
   /** description of project */
@@ -136,20 +145,30 @@ export type CreateUserInput = {
   password: Scalars['String'];
 };
 
+export type Expense = {
+  __typename?: 'Expense';
+  /** Expense Amount */
+  amount: Scalars['Int'];
+  /** Expense ID */
+  id: Scalars['ID'];
+  /** Expense Name */
+  name: Scalars['String'];
+  /** Expense Project */
+  project: Project;
+};
+
 export type Group = {
   __typename?: 'Group';
   /** Group Admin */
-
-  admin: Scalars['String'];
+  admin: User;
   /** Group ID */
   id: Scalars['ID'];
   /** Group Members */
-  members: Scalars['String'];
+  members: Array<User>;
   /** Group Name */
   name: Scalars['String'];
   /** Group Project */
-  project: Scalars['String'];
-
+  project: Project;
 };
 
 export type Member = {
@@ -172,6 +191,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   addMember: Member;
   createComment: Comment;
+  createExpense: Expense;
   createGroup: Group;
   createNote: Note;
   createProject: Project;
@@ -183,6 +203,7 @@ export type Mutation = {
   inviteToGroup: Group;
   login: UserResponse;
   removeComment: Comment;
+  removeExpense: Expense;
   removeGroup: Group;
   removeMember: Member;
   removeNote: Note;
@@ -191,6 +212,7 @@ export type Mutation = {
   removeRole: Role;
   removeTask: Task;
   updateComment: Comment;
+  updateExpense: Expense;
   updateGroup: Group;
   updateMember: Member;
   updateNote: Note;
@@ -209,6 +231,11 @@ export type MutationAddMemberArgs = {
 
 export type MutationCreateCommentArgs = {
   createCommentInput: CreateCommentInput;
+};
+
+
+export type MutationCreateExpenseArgs = {
+  createExpenseInput: CreateExpenseInput;
 };
 
 
@@ -269,6 +296,11 @@ export type MutationRemoveCommentArgs = {
 };
 
 
+export type MutationRemoveExpenseArgs = {
+  id: Scalars['String'];
+};
+
+
 export type MutationRemoveGroupArgs = {
   id: Scalars['String'];
 };
@@ -307,6 +339,11 @@ export type MutationRemoveTaskArgs = {
 export type MutationUpdateCommentArgs = {
   id: Scalars['String'];
   updateCommentInput: UpdateCommentInput;
+};
+
+
+export type MutationUpdateExpenseArgs = {
+  updateExpenseInput: UpdateExpenseInput;
 };
 
 
@@ -368,10 +405,8 @@ export type Note = {
 
 export type Project = {
   __typename?: 'Project';
-
   /** Project Budget */
-  budget: Scalars['String'];
-
+  budget: Scalars['Float'];
   /** Client email */
   clientEmail: Scalars['String'];
   /** Project describtion */
@@ -402,6 +437,8 @@ export type Query = {
   __typename?: 'Query';
   comment: Comment;
   comments: Array<Comment>;
+  expense: Expense;
+  expenses: Array<Expense>;
   filterMembers: Array<Member>;
   filterNotes: Note;
   group: Group;
@@ -423,6 +460,11 @@ export type Query = {
 
 
 export type QueryCommentArgs = {
+  id: Scalars['String'];
+};
+
+
+export type QueryExpenseArgs = {
   id: Scalars['String'];
 };
 
@@ -484,23 +526,12 @@ export type QueryTaskArgs = {
 
 export type QueryTasksArgs = {
   project: Scalars['String'];
-
 };
 
 
 export type QueryUnlistedTasksArgs = {
   project: Scalars['String'];
 };
-
-
-
-};
-
-
-export type QueryUnlistedTasksArgs = {
-  project: Scalars['String'];
-};
-
 
 
 export type QueryUserArgs = {
@@ -563,6 +594,16 @@ export type UpdateCommentInput = {
   user?: InputMaybe<Scalars['String']>;
 };
 
+export type UpdateExpenseInput = {
+  /** Expense Amount */
+  amount?: InputMaybe<Scalars['Int']>;
+  id: Scalars['String'];
+  /** Expense Name */
+  name?: InputMaybe<Scalars['String']>;
+  /** Expense Project */
+  project?: InputMaybe<Scalars['String']>;
+};
+
 export type UpdateGroupInput = {
   id: Scalars['String'];
   /** Group Members */
@@ -592,7 +633,7 @@ export type UpdateNoteInput = {
 
 export type UpdateProjectInput = {
   /** project budget */
-  budget?: InputMaybe<Scalars['String']>;
+  budget?: InputMaybe<Scalars['Float']>;
   /** client email */
   clientEmail?: InputMaybe<Scalars['String']>;
   /** description of project */
@@ -695,7 +736,6 @@ export type ProjectQueryVariables = Exact<{
 
 export type ProjectQuery = { __typename?: 'Query', project: { __typename?: 'Project', id: string } };
 
-
 export type ProjectListsQueryVariables = Exact<{
   project: Scalars['String'];
 }>;
@@ -709,7 +749,6 @@ export type UnlistedTasksQueryVariables = Exact<{
 
 
 export type UnlistedTasksQuery = { __typename?: 'Query', unlistedTasks: Array<{ __typename?: 'Task', id: string, name: string, description: string }> };
-
 
 export type ProjectsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -729,16 +768,14 @@ export type UpdateProjectMutationVariables = Exact<{
 }>;
 
 
-
-export type UpdateProjectMutation = { __typename?: 'Mutation', updateProject: { __typename?: 'Project', name: string, clientEmail: string, describtion: string, budget: string } };
+export type UpdateProjectMutation = { __typename?: 'Mutation', updateProject: { __typename?: 'Project', name: string, clientEmail: string, describtion: string, budget: number } };
 
 export type ProjectByIdQueryVariables = Exact<{
   projectId: Scalars['String'];
 }>;
 
 
-export type ProjectByIdQuery = { __typename?: 'Query', project: { __typename?: 'Project', id: string, name: string, describtion: string, clientEmail: string, budget: string } };
-
+export type ProjectByIdQuery = { __typename?: 'Query', project: { __typename?: 'Project', id: string, name: string, describtion: string, clientEmail: string, budget: number } };
 
 export type RolesQueryVariables = Exact<{
   project: Scalars['String'];
@@ -769,11 +806,9 @@ export type UpdateRoleMutationVariables = Exact<{
 
 export type UpdateRoleMutation = { __typename?: 'Mutation', updateRole: { __typename?: 'Role', id: string } };
 
-
 export type CreateTaskMutationVariables = Exact<{
   createTaskInput: CreateTaskInput;
 }>;
-
 
 
 export type CreateTaskMutation = { __typename?: 'Mutation', createTask: { __typename?: 'Task', id: string } };
@@ -783,11 +818,7 @@ export type UpdateProjectListsMutationVariables = Exact<{
 }>;
 
 
-
 export type UpdateProjectListsMutation = { __typename?: 'Mutation', updateProjectLists: { __typename?: 'ProjectLists', id: string } };
-
-export type CreateTaskMutation = { __typename?: 'Mutation', createTask: { __typename?: 'Task', id: string } };
-
 
 export type CreateUserMutationVariables = Exact<{
   createUserInput: CreateUserInput;
@@ -800,19 +831,6 @@ export type LoginMutationVariables = Exact<{
   email: Scalars['String'];
   password: Scalars['String'];
 }>;
-
-
-
-export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'UserResponse', token: string } };
-
-
-export const ProjectDocument = gql`
-    query Project($projectId: String!) {
-  project(id: $projectId) {
-    id
-  }
-}
-    `;
 
 
 export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'UserResponse', token: string } };
@@ -901,7 +919,6 @@ export function useProjectLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Pr
 export type ProjectQueryHookResult = ReturnType<typeof useProjectQuery>;
 export type ProjectLazyQueryHookResult = ReturnType<typeof useProjectLazyQuery>;
 export type ProjectQueryResult = Apollo.QueryResult<ProjectQuery, ProjectQueryVariables>;
-
 export const ProjectListsDocument = gql`
     query ProjectLists($project: String!) {
   projectLists(project: $project) {
@@ -991,17 +1008,6 @@ export const ProjectsDocument = gql`
 }
     `;
 
-export const ProjectsDocument = gql`
-    query Projects {
-  projects {
-    id
-    name
-    describtion
-  }
-}
-    `;
-
-
 /**
  * __useProjectsQuery__
  *
@@ -1067,9 +1073,7 @@ export const UpdateProjectDocument = gql`
     name
     clientEmail
     describtion
-
     budget
-
   }
 }
     `;
@@ -1100,7 +1104,6 @@ export function useUpdateProjectMutation(baseOptions?: Apollo.MutationHookOption
 export type UpdateProjectMutationHookResult = ReturnType<typeof useUpdateProjectMutation>;
 export type UpdateProjectMutationResult = Apollo.MutationResult<UpdateProjectMutation>;
 export type UpdateProjectMutationOptions = Apollo.BaseMutationOptions<UpdateProjectMutation, UpdateProjectMutationVariables>;
-
 export const ProjectByIdDocument = gql`
     query ProjectById($projectId: String!) {
   project(id: $projectId) {
@@ -1140,7 +1143,6 @@ export function useProjectByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type ProjectByIdQueryHookResult = ReturnType<typeof useProjectByIdQuery>;
 export type ProjectByIdLazyQueryHookResult = ReturnType<typeof useProjectByIdLazyQuery>;
 export type ProjectByIdQueryResult = Apollo.QueryResult<ProjectByIdQuery, ProjectByIdQueryVariables>;
-
 export const RolesDocument = gql`
     query Roles($project: String!) {
   roles(project: $project) {
@@ -1293,7 +1295,6 @@ export const CreateTaskDocument = gql`
     `;
 export type CreateTaskMutationFn = Apollo.MutationFunction<CreateTaskMutation, CreateTaskMutationVariables>;
 
-
 /**
  * __useCreateTaskMutation__
  *
@@ -1327,7 +1328,6 @@ export const UpdateProjectListsDocument = gql`
     `;
 export type UpdateProjectListsMutationFn = Apollo.MutationFunction<UpdateProjectListsMutation, UpdateProjectListsMutationVariables>;
 
-
 /**
  * __useUpdateProjectListsMutation__
  *
@@ -1345,7 +1345,6 @@ export type UpdateProjectListsMutationFn = Apollo.MutationFunction<UpdateProject
  *   },
  * });
  */
-
 export function useUpdateProjectListsMutation(baseOptions?: Apollo.MutationHookOptions<UpdateProjectListsMutation, UpdateProjectListsMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useMutation<UpdateProjectListsMutation, UpdateProjectListsMutationVariables>(UpdateProjectListsDocument, options);
@@ -1353,15 +1352,6 @@ export function useUpdateProjectListsMutation(baseOptions?: Apollo.MutationHookO
 export type UpdateProjectListsMutationHookResult = ReturnType<typeof useUpdateProjectListsMutation>;
 export type UpdateProjectListsMutationResult = Apollo.MutationResult<UpdateProjectListsMutation>;
 export type UpdateProjectListsMutationOptions = Apollo.BaseMutationOptions<UpdateProjectListsMutation, UpdateProjectListsMutationVariables>;
-
-export function useCreateTaskMutation(baseOptions?: Apollo.MutationHookOptions<CreateTaskMutation, CreateTaskMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateTaskMutation, CreateTaskMutationVariables>(CreateTaskDocument, options);
-      }
-export type CreateTaskMutationHookResult = ReturnType<typeof useCreateTaskMutation>;
-export type CreateTaskMutationResult = Apollo.MutationResult<CreateTaskMutation>;
-export type CreateTaskMutationOptions = Apollo.BaseMutationOptions<CreateTaskMutation, CreateTaskMutationVariables>;
-
 export const CreateUserDocument = gql`
     mutation CreateUser($createUserInput: CreateUserInput!) {
   createUser(createUserInput: $createUserInput) {
