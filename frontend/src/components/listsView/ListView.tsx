@@ -13,25 +13,25 @@ export const ListView: React.FC<ListProps> = ({ list, index }) => {
 
     return(
       <div>
-        <Draggable draggableId={list.listId} index={index}>
+        <Draggable draggableId={list.id} index={index}>
           {provided => (
             <div
               ref={provided.innerRef}
               {...provided.draggableProps}
               {...provided.dragHandleProps} 
               className="w-72 h-fit bg-gray-200 rounded-2xl p-3 mr-6" >
-              <Droppable droppableId={list.listId}>
+              <Droppable droppableId={list.id}>
                 {provided => (
                   <div
                     ref={provided.innerRef}
                     {...provided.droppableProps}>
-                    <div className="text-cyan-800 font-bold text-lg ml-2">{list.listName}</div>
+                    <div className="text-cyan-800 font-bold text-lg ml-2">{list.name}</div>
                     {list.tasks && list.tasks.map((task, index) => (
                       <Card 
-                        key={task.taskId} 
+                        key={task.id} 
                         task={task} 
                         index={index} 
-                        listId={list.listId}
+                        listId={list.id}
                       />
                     ))}
                     {provided.placeholder}

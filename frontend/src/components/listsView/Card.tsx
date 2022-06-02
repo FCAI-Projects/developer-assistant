@@ -11,7 +11,7 @@ interface CardProps {
 export const Card: React.FC<CardProps> = ({ task, listId, index }) => {
 
     return(
-      <Draggable draggableId={task.taskId} index={index}>
+      <Draggable draggableId={task.id} index={index}>
         {provided => (
           <div
             ref={provided.innerRef}
@@ -19,8 +19,8 @@ export const Card: React.FC<CardProps> = ({ task, listId, index }) => {
             {...provided.dragHandleProps}
             className="bg-white rounded-xl p-3 my-3"
           >
-            <div className="font-bold">{task.taskName}</div>
-            <div className="text-gray-bold">{task.taskDescription}</div>
+            <div className="font-bold">{task.name}</div>
+            <div className="text-gray-bold">{task.description}</div>
           </div>
         )}
       </Draggable>
