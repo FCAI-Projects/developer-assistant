@@ -18,8 +18,8 @@ export class ExpensesService {
     return await createdExpense.save();
   }
 
-  async findAll(): Promise<ExpenseDocument[]> {
-    return await this.expenseMode.find();
+  async findAll(project: string): Promise<ExpenseDocument[]> {
+    return await this.expenseMode.find({ project });
   }
 
   async findOne(id: string): Promise<ExpenseDocument> {

@@ -16,8 +16,8 @@ export class ExpensesResolver {
   }
 
   @Query(() => [Expense], { name: 'expenses' })
-  findAll() {
-    return this.expensesService.findAll();
+  findAll(@Args('project', { type: () => String }) project: string) {
+    return this.expensesService.findAll(project);
   }
 
   @Query(() => Expense, { name: 'expense' })

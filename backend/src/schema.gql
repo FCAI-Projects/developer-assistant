@@ -224,7 +224,7 @@ type Query {
   comment(id: String!): Comment!
   groups: [Group!]!
   group(id: String!): Group!
-  expenses: [Expense!]!
+  expenses(project: String!): [Expense!]!
   expense(id: String!): Expense!
 }
 
