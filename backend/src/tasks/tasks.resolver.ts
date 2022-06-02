@@ -29,29 +29,6 @@ export class TasksResolver {
     return await this.tasksService.findAll(project);
   }
 
-  @Query(() => [Task], { name: 'unlistedTasks' })
-  async findTaskNotListed(
-    @Args('project') project: string,
-  ): Promise<TaskDocument[]> {
-    const tasks = await this.tasksService.findAll(project);
-    const result: TaskDocument[] = [];
-
-    await async.each(tasks, async (task: TaskDocument) => {
-      const projectLists = await this.projectListsService.filter({
-        project,
-        tasks: task.id,
-      });
-
-      console.log(projectLists, task);
-
-      if (projectLists.length === 0) {
-        result.push(task);
-      }
-    });
-
-    return result;
-  }
-
   @Query(() => Task, { name: 'task' })
   async findOne(@Args('id') id: string): Promise<TaskDocument> {
     return await this.tasksService.findOne(id);

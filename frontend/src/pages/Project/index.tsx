@@ -11,7 +11,6 @@ import {
   ProjectListsDocument,
   UpdateProjectListsDocument,
   useProjectListsQuery,
-  useUnlistedTasksQuery,
 } from "../../graphql/generated/graphql";
 import async from "async";
 
@@ -39,7 +38,6 @@ type sortAction = {
 export const Project: React.FC = () => {
   const params = useParams();
   const [lists, setLists] = React.useState<list[]>([]);
-  const unlistsTasks = useUnlistedTasksQuery({ variables: { project: params.id as string } });
   const {
     data: listsData,
     loading: listsLoading,
@@ -203,7 +201,6 @@ export const Project: React.FC = () => {
         <Droppable droppableId="board" direction="horizontal" type="COLUMN">
           {(provided) => (
             <div ref={provided.innerRef} className="flex flex-row items-start gap-5">
-              {/* <Unlists list={unlistsTasks.data?.unlistedTasks} index={-1}/> */}
               {lists.map((list, index) => {
                 return <ListView list={list} index={index} key={list.id} refetchTasks={refetch} />;
               })}

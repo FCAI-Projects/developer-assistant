@@ -215,7 +215,6 @@ type Query {
   filterMembers(filter: UpdateMemberInput!): [Member!]!
   member(id: String!): Member!
   tasks(project: String!): [Task!]!
-  unlistedTasks(project: String!): [Task!]!
   task(id: String!): Task!
   projectLists(project: String!): [ProjectLists!]!
   projectListsById(id: String!): ProjectLists!

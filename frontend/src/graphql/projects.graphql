@@ -4,27 +4,6 @@ query Project($projectId: String!) {
   }
 }
 
-query ProjectLists($project: String!) {
-  projectLists(project: $project) {
-    id
-    name
-    tasks {
-      id
-      name
-      description
-    }
-    color
-  }
-}
-
-query UnlistedTasks($project: String!) {
-  unlistedTasks(project: $project) {
-    id
-    name
-    description
-  }
-}
-
 query Projects {
   projects {
     id
