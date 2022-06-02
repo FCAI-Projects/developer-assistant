@@ -1,5 +1,5 @@
 import { useFormik } from "formik";
-import React, { useEffect } from "react";
+import React from "react";
 import { useToggleModal } from "../../hooks/useToggleModal";
 import { Button } from "../Button";
 import * as Yup from "yup";
@@ -11,35 +11,20 @@ import { FaPlus } from "react-icons/fa";
 
 // TODO: Use the right query to save to database
 
-interface NewTaskModalProps {
-  listId: string;
-  refetchTasks: () => void;
-}
-
-export const NewTaskModal: React.FC<NewTaskModalProps> = ({ listId, refetchTasks }) => {
+export const NewListModel: React.FC = () => {
   const [addTask, { loading, data, error }] = useMutation(CreateTaskDocument);
   const [isOpen, toggleModal] = useToggleModal();
   const formik = useFormik({
     initialValues: {
       name: "",
-      description: "",
+      color: "",
     },
     validationSchema: Yup.object({
       name: Yup.string().required("Required"),
-      description: Yup.string().max(255, "Must be 255 characters or less").required("Required"),
+      color: Yup.string().required("Required"),
     }),
     onSubmit: async (values) => {
       try {
-        addTask({
-          variables: {
-            createTaskInput: {
-              list: listId,
-              name: values.name,
-              description: values.description,
-              project: "62881f1c471b20f1a0c846fe",
-            },
-          },
-        });
         toggleModal();
       } catch (error) {
         console.log(error);
@@ -47,22 +32,12 @@ export const NewTaskModal: React.FC<NewTaskModalProps> = ({ listId, refetchTasks
     },
   });
 
-  useEffect(() => {
-    if (data) {
-      refetchTasks();
-    }
-  }, [data]);
-
   return (
     <>
-      <button
-        className="flex w-full items-center gap-2 rounded-lg bg-slate-300 py-3 px-3 font-medium"
-        onClick={toggleModal}
-      >
-        <FaPlus />
-        Add Task
-      </button>
-      <Modal title="Add New Task" isOpen={isOpen} handleClose={toggleModal}>
+      <Button lightBlue className="flex items-center gap-2 px-3 py-2 text-xs" onClick={toggleModal}>
+        <FaPlus /> Add List
+      </Button>
+      <Modal title="Add New List" isOpen={isOpen} handleClose={toggleModal}>
         <div className="my-5">
           <form className="flex flex-col gap-4">
             <div className="w-full">
@@ -76,12 +51,12 @@ export const NewTaskModal: React.FC<NewTaskModalProps> = ({ listId, refetchTasks
               />
             </div>
             <div className="w-full">
-              <Label htmlFor="description">Description</Label>
+              <Label htmlFor="color">Color</Label>
               <Input
-                type="text"
-                id="description"
-                {...formik.getFieldProps("description")}
-                error={formik.touched.description ? formik.errors.description : ""}
+                type="color"
+                id="color"
+                {...formik.getFieldProps("color")}
+                error={formik.touched.color ? formik.errors.color : ""}
               />
             </div>
           </form>

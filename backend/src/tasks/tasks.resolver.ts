@@ -17,7 +17,11 @@ export class TasksResolver {
   async createTask(
     @Args('createTaskInput') createTaskInput: CreateTaskInput,
   ): Promise<TaskDocument> {
-    return await this.tasksService.create(createTaskInput);
+    const listId = createTaskInput.list;
+    delete createTaskInput.list;
+    const task = await this.tasksService.create(createTaskInput);
+    await this.projectListsService.pushNewTask(listId, task._id);
+    return task;
   }
 
   @Query(() => [Task], { name: 'tasks' })

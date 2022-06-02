@@ -37,4 +37,7 @@ export class CreateTaskInput {
 
   @Field(() => String, { description: 'Task docs', nullable: true })
   docs: string;
+
+  @Field(() => String, { description: 'List ID' })
+  list: string;
 }

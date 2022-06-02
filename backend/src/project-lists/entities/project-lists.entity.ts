@@ -1,4 +1,4 @@
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Schema as MongooseSchema } from 'mongoose';
 import { Project } from 'src/projects/entities/project.entity';
@@ -27,6 +27,10 @@ export class ProjectLists extends Document {
   @Prop()
   @Field(() => String, { description: 'Status Color' })
   color: string;
+
+  @Prop()
+  @Field(() => Int, { description: 'Status Index' })
+  index: number;
 }
 
 export const ProjectListsSchema = SchemaFactory.createForClass(ProjectLists);

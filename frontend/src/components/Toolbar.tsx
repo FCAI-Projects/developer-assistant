@@ -6,12 +6,13 @@ import { authState } from "../recoil";
 import { Breadcrumb } from "./Breadcrumb";
 import { Button } from "./Button";
 import { InviteMemberModal } from "./modals/InviteMemberModal";
+import { NewListModel } from "./modals/NewListModel";
 import { NewProjectModal } from "./modals/NewProjectModal";
 import { NewTaskModal } from "./modals/NewTaskModal";
 
 interface IProps {
   newProjectModal?: boolean;
-  newTaskModal?: boolean;
+  newListModel?: boolean;
   inviteMemberModal?: boolean;
   projectSettings?: boolean;
   logoutButton?: boolean;
@@ -19,7 +20,7 @@ interface IProps {
 
 export const Toolbar: React.FC<IProps> = ({
   newProjectModal,
-  newTaskModal,
+  newListModel,
   inviteMemberModal,
   projectSettings,
   logoutButton,
@@ -44,7 +45,7 @@ export const Toolbar: React.FC<IProps> = ({
             </Button>
           </Link>
         )}
-        {newTaskModal && <NewTaskModal />}
+        {newListModel && <NewListModel />}
         {inviteMemberModal && <InviteMemberModal />}
         {logoutButton && (
           <Button lightRed className="flex items-center gap-2 px-3 py-2 text-xs" onClick={handleLogout}>

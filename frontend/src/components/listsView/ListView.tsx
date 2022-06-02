@@ -1,51 +1,49 @@
 import React from "react";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 import { BsPlusLg } from "react-icons/bs";
+import { FaPlus, FaTrash } from "react-icons/fa";
 import { list } from "../../pages/Project";
+import { NewTaskModal } from "../modals/NewTaskModal";
 import { Card } from "./Card";
 
 interface ListProps {
   list: list;
   index: any;
+  refetchTasks: () => void;
 }
-  
-export const ListView: React.FC<ListProps> = ({ list, index }) => {
 
-    return(
-      <div>
-        <Draggable draggableId={list.id} index={index}>
-          {provided => (
-            <div
-              ref={provided.innerRef}
-              {...provided.draggableProps}
-              {...provided.dragHandleProps} 
-              className="w-72 h-fit bg-gray-200 rounded-2xl p-3 mr-6" >
-              <Droppable droppableId={list.id}>
-                {provided => (
-                  <div
-                    ref={provided.innerRef}
-                    {...provided.droppableProps}>
-                    <div className="text-cyan-800 font-bold text-lg ml-2">{list.name}</div>
-                    {list.tasks && list.tasks.map((task, index) => (
-                      <Card 
-                        key={task.id} 
-                        task={task} 
-                        index={index} 
-                        listId={list.id}
-                      />
-                    ))}
-                    {provided.placeholder}
+export const ListView: React.FC<ListProps> = ({ list, index, refetchTasks }) => {
+  return (
+    <div>
+      <Draggable draggableId={list.id} index={index}>
+        {(provided) => (
+          <div
+            ref={provided.innerRef}
+            {...provided.draggableProps}
+            {...provided.dragHandleProps}
+            className="flex w-72 flex-row items-center rounded-lg bg-slate-200 px-3 py-3 font-bold text-blue-900"
+          >
+            <Droppable droppableId={list.id}>
+              {(provided) => (
+                <div ref={provided.innerRef} {...provided.droppableProps} className="flex-1">
+                  <header className="mb-5 flex w-full items-center justify-between">
+                    <div className="text-lg font-bold text-slate-900">{list.name}</div>
+                    <button className="text-sm text-slate-600 hover:text-red-600">
+                      <FaTrash />
+                    </button>
+                  </header>
+                  {list.tasks.map((task, index) => (
+                    <Card key={task.id} task={task} index={index} listId={list.id} />
+                  ))}
+                  {provided.placeholder}
 
-                    <div className="flex flex-row items-center bg-gray-200 text-cyan-800 font-bold rounded-md px-2 py-1 ">
-                      <BsPlusLg className=" mr-2" />
-                      Add Task
-                    </div>
-                  </div>
-                )}
-              </Droppable>
-            </div>
-          )}
-        </Draggable>
-      </div>
-    );
-}
+                  <NewTaskModal listId={list.id} refetchTasks={refetchTasks} />
+                </div>
+              )}
+            </Droppable>
+          </div>
+        )}
+      </Draggable>
+    </div>
+  );
+};

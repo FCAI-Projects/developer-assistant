@@ -5,24 +5,23 @@ import { task } from "../../pages/Project";
 interface CardProps {
   task: task;
   listId: string;
-  index: any; 
+  index: any;
 }
-  
-export const Card: React.FC<CardProps> = ({ task, listId, index }) => {
 
-    return(
-      <Draggable draggableId={task.id} index={index}>
-        {provided => (
-          <div
-            ref={provided.innerRef}
-            {...provided.draggableProps}
-            {...provided.dragHandleProps}
-            className="bg-white rounded-xl p-3 my-3"
-          >
-            <div className="font-bold">{task.name}</div>
-            <div className="text-gray-bold">{task.description}</div>
-          </div>
-        )}
-      </Draggable>
-    );
-}
+export const Card: React.FC<CardProps> = ({ task, listId, index }) => {
+  return (
+    <Draggable draggableId={task.id} index={index}>
+      {(provided) => (
+        <div
+          ref={provided.innerRef}
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+          className="mb-3 w-full rounded-lg bg-white py-4 px-3"
+        >
+          <h5 className="font-bold text-slate-800">{task.name}</h5>
+          <p className="font-normal text-slate-600">{task.description}</p>
+        </div>
+      )}
+    </Draggable>
+  );
+};

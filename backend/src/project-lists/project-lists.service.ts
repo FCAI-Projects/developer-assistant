@@ -25,6 +25,7 @@ export class ProjectListsService {
   async findAll(project: string): Promise<ProjectListsDocument[]> {
     return await this.taskModel
       .find({ project })
+      .sort({ index: 1 })
       .populate('tasks')
       .populate('project');
   }
@@ -47,6 +48,14 @@ export class ProjectListsService {
     return await this.taskModel.findByIdAndUpdate(id, updateProjectListsInput, {
       new: true,
     });
+  }
+
+  async pushNewTask(id: string, task: string) {
+    return await this.taskModel.findByIdAndUpdate(
+      id,
+      { $push: { tasks: task } },
+      { new: true },
+    );
   }
 
   async remove(id: string): Promise<ProjectListsDocument> {

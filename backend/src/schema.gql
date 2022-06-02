@@ -143,6 +143,9 @@ type ProjectLists {
 
   """Status Color"""
   color: String!
+
+  """Status Index"""
+  index: Int!
 }
 
 type Note {
@@ -382,6 +385,9 @@ input CreateTaskInput {
 
   """Task docs"""
   docs: String
+
+  """List ID"""
+  list: String!
 }
 
 input UpdateTaskInput {
@@ -420,6 +426,9 @@ input UpdateTaskInput {
 
   """Task docs"""
   docs: String
+
+  """List ID"""
+  list: String
 }
 
 input CreateProjectListsInput {
@@ -434,6 +443,9 @@ input CreateProjectListsInput {
 
   """Status Color"""
   color: String!
+
+  """Status Index"""
+  index: Int!
 }
 
 input UpdateProjectListsInput {
@@ -448,6 +460,9 @@ input UpdateProjectListsInput {
 
   """Status Color"""
   color: String
+
+  """Status Index"""
+  index: Int
   id: String!
 }
 
