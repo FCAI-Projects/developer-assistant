@@ -9,6 +9,9 @@ import { useFormik } from "formik";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Loader } from "../../components/Loader";
+import { FaKey } from "react-icons/fa";
+import { AddGitHubTokenModel } from "../../components/modals/AddGitHubTokenModel";
+import { AddGoogleAppPasswordModel } from "../../components/modals/AddGoogleAppPasswordModel";
 
 export const ProjectSettings: React.FC = () => {
   const [updateProject, { loading, data, error }] = useMutation(UpdateProjectDocument);
@@ -40,7 +43,7 @@ export const ProjectSettings: React.FC = () => {
               name: values.name,
               clientEmail: values.clientEmail,
               describtion: values.description,
-              budget: values.budget ,
+              budget: values.budget,
             },
           },
         });
@@ -107,9 +110,11 @@ export const ProjectSettings: React.FC = () => {
         </form>
       </div>
       <div className="mt-5 flex flex-row-reverse gap-3">
-        <Button type="submit" onClick={() => formik.handleSubmit()} loading={loading}>
+        <Button green type="submit" onClick={() => formik.handleSubmit()} loading={loading}>
           Save Changes
         </Button>
+        <AddGoogleAppPasswordModel />
+        <AddGitHubTokenModel />
       </div>
     </>
   );
