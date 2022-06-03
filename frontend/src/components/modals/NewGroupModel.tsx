@@ -1,15 +1,13 @@
 import { useFormik } from "formik";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useToggleModal } from "../../hooks/useToggleModal";
 import { Button } from "../Button";
 import * as Yup from "yup";
 import { Modal } from "./Base";
-import { useMutation } from "@apollo/client";
-import { LoginDocument } from "../../graphql/generated/graphql";
+import { useMutation, useQuery } from "react-query";
+import { FilterMembersDocument, useFilterMembersQuery, useProjectsQuery } from "../../graphql/generated/graphql";
 import { CustomSelect, Input, Label, Multiselect } from "../forms";
 import { FaPlus } from "react-icons/fa";
-
-// TODO: Use the right query to save to database
 
 interface formikProps {
   name: string;
@@ -18,12 +16,24 @@ interface formikProps {
 }
 
 export const NewGroupModel: React.FC = () => {
-  const [addProject, { loading, data, error }] = useMutation(LoginDocument);
+  var projectId: string = "";
+  const projects = useProjectsQuery();
+  const members = useFilterMembersQuery({variables: { filter: { project: projectId }}}); 
+  const projectOption: any[] = [];
+  const membersOption: any[] = [];
   const [isOpen, toggleModal] = useToggleModal();
+
+  projects.data?.projects.map((project: any) => { 
+    projectOption.push({ 
+      id: project.id, 
+      name: project.name 
+    }) 
+  });
+
   const formik = useFormik<formikProps>({
     initialValues: {
       name: "",
-      project: { id: "1", name: "project 1" },
+      project: { id: "", name: "" },
       members: [],
     },
     validationSchema: Yup.object({
@@ -38,6 +48,17 @@ export const NewGroupModel: React.FC = () => {
     },
   });
 
+  useEffect(() => { 
+    if (members.data) {
+      members.data.filterMembers.map((member: any) => {
+        membersOption.push({
+          id: member.user.id,
+          name: member.user.fname+" "+member.user.lname
+        }); 
+      });
+    }
+  }, [members]);
+  
   return (
     <>
       <button
@@ -62,16 +83,11 @@ export const NewGroupModel: React.FC = () => {
             <div className="w-full">
               <Label htmlFor="project">Project</Label>
               <CustomSelect
-                options={[
-                  { id: "1", name: "project 1" },
-                  { id: "2", name: "project 1" },
-                  { id: "3", name: "project 1" },
-                  { id: "4", name: "project 1" },
-                ]}
+                options={projectOption}
                 value={formik.values.project}
                 onChange={(e) => {
-                  console.log(e);
                   formik.setFieldValue("project", e);
+                  members.refetch({filter: { project: e.id }});
                 }}
                 label="name"
                 id="id"
@@ -80,12 +96,7 @@ export const NewGroupModel: React.FC = () => {
             <div className="w-full">
               <Label htmlFor="members">Members</Label>
               <Multiselect
-                options={[
-                  { id: "1", name: "member 1" },
-                  { id: "2", name: "member 1" },
-                  { id: "3", name: "member 1" },
-                  { id: "4", name: "member 1" },
-                ]}
+                options={membersOption}
                 value={formik.values.members}
                 onChange={(e) => {
                   formik.setFieldValue("members", e);
@@ -97,7 +108,7 @@ export const NewGroupModel: React.FC = () => {
           </form>
         </div>
         <div className="flex flex-row-reverse gap-3">
-          <Button type="submit" blue onClick={() => formik.handleSubmit()} loading={loading}>
+          <Button type="submit" onClick={() => formik.handleSubmit()}>
             Add
           </Button>
           <Button type="submit" lightRed onClick={toggleModal}>
@@ -108,3 +119,4 @@ export const NewGroupModel: React.FC = () => {
     </>
   );
 };
+
