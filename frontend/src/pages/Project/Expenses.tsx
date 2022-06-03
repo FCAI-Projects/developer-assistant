@@ -1,11 +1,18 @@
+import { useMutation } from "@apollo/client";
 import React, { useMemo } from "react";
-import { FaEdit, FaPlus, FaTrash, FaTrashAlt } from "react-icons/fa";
+import { useToggleModal } from "../../hooks/useToggleModal";
+import { FaTrashAlt } from "react-icons/fa";
+import { useParams } from "react-router-dom";
 import { Button } from "../../components/Button";
 import { AddNewExpense } from "../../components/modals/AddNewExpenseModal";
-import { NewRoleModel } from "../../components/modals/NewRoleModel";
 import { Table } from "../../components/Table";
+import { ExpensesDocument, RemoveExpenseDocument,  useExpensesQuery } from "../../graphql/generated/graphql";
 
 export const ProjectExpenses: React.FC = () => {
+  const projectId = useParams();
+   const {data} = useExpensesQuery({variables: {project: projectId.id as string}});
+  const [deleteExpense, { loading }] = useMutation(RemoveExpenseDocument, { refetchQueries: [{ query: RemoveExpenseDocument, variables: { project: projectId.id } }] });
+  console.log(data);
   const column = useMemo(
     () => [
       {
@@ -31,44 +38,22 @@ export const ProjectExpenses: React.FC = () => {
     ],
     []
   );
-  const data = useMemo(
-    () => [
-      {
-        id: 1,
-        name: "Expense 1",
-        amount: "100",
-        date: "2020-01-01",
-        actions: (
-          <Button lightRed onClick={() => {}}>
-            <FaTrashAlt />
-          </Button>
-        ),
-      },
-      {
-        id: 2,
-        name: "Expense 2",
-        amount: "200",
-        date: "2020-01-01",
-        actions: (
-          <Button lightRed onClick={() => {}}>
-            <FaTrashAlt />
-          </Button>
-        ),
-      },
-      {
-        id: 3,
-        name: "Expense 3",
-        amount: "300",
-        date: "2020-01-01",
-        actions: (
-          <Button lightRed onClick={() => {}}>
-            <FaTrashAlt />
-          </Button>
-        ),
-      },
-    ],
-    []
-  );
+  // data = useMemo(
+  //   () => [
+  //     {
+  //       id: 1,
+  //       name: "Expense 1",
+  //       amount: "100",
+  //       date: "2020-01-01",
+  //       actions: (
+  //         <Button lightRed onClick={() => {}}>
+  //           <FaTrashAlt />
+  //         </Button>
+  //       ),
+  //     }
+  //   ],
+  //   []
+  // );
 
   return (
     <div>
@@ -77,8 +62,9 @@ export const ProjectExpenses: React.FC = () => {
         <AddNewExpense />
       </header>
       <div className="py-3">
-        <Table columns={column} data={data} />
+        {/* <Table columns={column} data={data} /> */}
       </div>
     </div>
   );
 };
+    
