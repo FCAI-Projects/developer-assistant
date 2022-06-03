@@ -1,0 +1,22 @@
+query Expenses($project: String!) {
+  expenses(project: $project) {
+    id
+    name
+    amount
+  }
+}
+
+mutation CreateExpense($createExpenseInput: CreateExpenseInput!) {
+  createExpense(createExpenseInput: $createExpenseInput) {
+    id
+  }
+}
+
+mutation RemoveExpense($removeExpenseId: String!) {
+  removeExpense(id: $removeExpenseId) {
+    id
+  }
+}
+
+
+

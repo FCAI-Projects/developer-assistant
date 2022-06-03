@@ -5,14 +5,19 @@ import { Button } from "../Button";
 import * as Yup from "yup";
 import { Modal } from "./Base";
 import { useMutation } from "@apollo/client";
-import { LoginDocument } from "../../graphql/generated/graphql";
+import { ExpensesDocument ,CreateExpenseDocument } from "../../graphql/generated/graphql";
 import { Input, Label } from "../forms";
 import { FaPlus } from "react-icons/fa";
+import { useParams } from "react-router-dom";
+
 
 // TODO: Use the right query to save to database
 
 export const AddNewExpense: React.FC = () => {
-  const [addProject, { loading, data, error }] = useMutation(LoginDocument);
+  const ProjectId = useParams()
+  const [addExpense, { loading }] = useMutation(CreateExpenseDocument , {
+    refetchQueries: [{ query: ExpensesDocument, variables: { project: ProjectId.id } }],
+  });
   const [isOpen, toggleModal] = useToggleModal();
   const formik = useFormik({
     initialValues: {
@@ -25,8 +30,20 @@ export const AddNewExpense: React.FC = () => {
       amount: Yup.number().typeError("Only Numbers").required("Required"),
       date: Yup.string().required("Required"),
     }),
+    enableReinitialize: true,
     onSubmit: async (values) => {
       try {
+        addExpense({
+          variables: {
+            createExpenseInput: {
+              name: values.name,
+              amount: values.amount,
+              date: values.date,
+              project: ProjectId.id,
+            },
+          },
+        }) 
+        
       } catch (error) {
         console.log(error);
       }
@@ -38,7 +55,7 @@ export const AddNewExpense: React.FC = () => {
       <Button lightBlue className="flex items-center gap-2 px-3 py-2 text-xs" onClick={toggleModal}>
         <FaPlus /> Add Expense
       </Button>
-      <Modal title="Add New Task" isOpen={isOpen} handleClose={toggleModal}>
+      <Modal title="Add New Expense" isOpen={isOpen} handleClose={toggleModal}>
         <div className="my-5">
           <form className="flex flex-col gap-4">
             <div className="w-full">
