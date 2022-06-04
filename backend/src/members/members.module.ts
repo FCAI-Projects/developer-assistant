@@ -3,6 +3,7 @@ import { MembersService } from './members.service';
 import { MembersResolver } from './members.resolver';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Member, MemberSchema } from './entities/member.entity';
+import { UsersModule } from 'src/users/users.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { Member, MemberSchema } from './entities/member.entity';
         schema: MemberSchema,
       },
     ]),
+    UsersModule,
   ],
   providers: [MembersResolver, MembersService],
 })
