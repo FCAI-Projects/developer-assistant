@@ -1,0 +1,17 @@
+mutation CreateProjectLists($createProjectListsInput: CreateProjectListsInput!) {
+  createProjectLists(createProjectListsInput: $createProjectListsInput) {
+    id
+  }
+}
+
+mutation UpdateProjectListsName($updateProjectListsInput: UpdateProjectListsInput!) {
+  updateProjectLists(updateProjectListsInput: $updateProjectListsInput) {
+    id
+  }
+}
+
+mutation RemoveProjectLists($removeProjectListsId: String!) {
+  removeProjectLists(id: $removeProjectListsId) {
+    id
+  }
+}

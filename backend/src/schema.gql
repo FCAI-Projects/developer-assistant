@@ -522,7 +522,7 @@ input UpdateProjectListsInput {
   id: String!
 
   """Status Index"""
-  index: Int!
+  index: Int
 }
 
 input UpdateNoteInput {
