@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 import { BsPlusLg } from "react-icons/bs";
 import { FaPlus, FaTrash } from "react-icons/fa";
 import { list } from "../../pages/Project";
+import { Editable } from "../Editable";
 import { NewTaskModal } from "../modals/NewTaskModal";
 import { Card } from "./Card";
 
@@ -10,9 +11,10 @@ interface ListProps {
   list: list;
   index: any;
   refetchTasks: () => void;
+  updateListName: (listId: string, newName: string) => void;
 }
 
-export const ListView: React.FC<ListProps> = ({ list, index, refetchTasks }) => {
+export const ListView: React.FC<ListProps> = ({ list, index, refetchTasks, updateListName }) => {
   return (
     <div>
       <Draggable draggableId={list.id} index={index}>
@@ -27,7 +29,9 @@ export const ListView: React.FC<ListProps> = ({ list, index, refetchTasks }) => 
               {(provided) => (
                 <div ref={provided.innerRef} {...provided.droppableProps} className="flex-1">
                   <header className="mb-5 flex w-full items-center justify-between">
-                    <div className="text-lg font-bold text-slate-900">{list.name}</div>
+                    <h3 className="text-lg font-bold text-slate-900">
+                      <Editable value={list.name} onChange={(value) => updateListName(list.id, value)} />
+                    </h3>
                     <button className="text-sm text-slate-600 hover:text-red-600">
                       <FaTrash />
                     </button>

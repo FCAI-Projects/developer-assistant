@@ -5,7 +5,6 @@ import { BsPlusLg } from "react-icons/bs";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { ListView } from "../../components/listsView/ListView";
-import { Unlists } from "../../components/listsView/Unlists";
 import { Loader } from "../../components/Loader";
 import {
   ProjectListsDocument,
@@ -48,6 +47,26 @@ export const Project: React.FC = () => {
   const [updateTasks, { loading: updateLoading, error: updateError }] = useMutation(UpdateProjectListsDocument, {
     refetchQueries: [{ query: ProjectListsDocument, variables: { project: params.id } }],
   });
+
+  const updateListName = (listId: string, newName: string) => {
+    const newLists = lists.map((list) => {
+      if (list.id === listId) {
+        return { ...list, name: newName };
+      }
+      return list;
+    });
+    setLists(newLists);
+
+    // update database
+    updateTasks({
+      variables: {
+        updateProjectListsInput: {
+          id: listId,
+          name: newName,
+        },
+      },
+    });
+  };
 
   const sort = (state: any, payload: sortAction) => {
     // same list
@@ -202,7 +221,15 @@ export const Project: React.FC = () => {
           {(provided) => (
             <div ref={provided.innerRef} className="flex flex-row items-start gap-5">
               {lists.map((list, index) => {
-                return <ListView list={list} index={index} key={list.id} refetchTasks={refetch} />;
+                return (
+                  <ListView
+                    list={list}
+                    index={index}
+                    key={list.id}
+                    refetchTasks={refetch}
+                    updateListName={updateListName}
+                  />
+                );
               })}
               {provided.placeholder}
             </div>
