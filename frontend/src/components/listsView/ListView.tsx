@@ -1,7 +1,9 @@
-import React, { useRef } from "react";
+import { useMutation } from "@apollo/client";
+import React from "react";
 import { Droppable, Draggable } from "react-beautiful-dnd";
-import { BsPlusLg } from "react-icons/bs";
-import { FaPlus, FaTrash } from "react-icons/fa";
+import { FaTrash } from "react-icons/fa";
+import { toast } from "react-toastify";
+import { ProjectListsDocument, RemoveProjectListsDocument } from "../../graphql/generated/graphql";
 import { list } from "../../pages/Project";
 import { Editable } from "../Editable";
 import { NewTaskModal } from "../modals/NewTaskModal";
@@ -10,11 +12,16 @@ import { Card } from "./Card";
 interface ListProps {
   list: list;
   index: any;
+  projectId: any;
   refetchTasks: () => void;
   updateListName: (listId: string, newName: string) => void;
 }
 
-export const ListView: React.FC<ListProps> = ({ list, index, refetchTasks, updateListName }) => {
+export const ListView: React.FC<ListProps> = ({ list, index, projectId, refetchTasks, updateListName }) => {
+  const [removeList, { loading }] = useMutation(RemoveProjectListsDocument, {
+    refetchQueries: [{ query: ProjectListsDocument, variables: { project: projectId } }],
+  });
+
   return (
     <div>
       <Draggable draggableId={list.id} index={index}>
@@ -32,7 +39,22 @@ export const ListView: React.FC<ListProps> = ({ list, index, refetchTasks, updat
                     <h3 className="text-lg font-bold text-slate-900">
                       <Editable value={list.name} onChange={(value) => updateListName(list.id, value)} />
                     </h3>
-                    <button className="text-sm text-slate-600 hover:text-red-600">
+                    <button 
+                      className="text-sm p-1 text-slate-600 hover:text-red-600"
+                      onClick={() => {
+                        if (list.tasks.length === 0) {
+                          console.log(list.tasks.length);
+                          removeList({
+                            variables: {
+                              removeProjectListsId: list.id,
+                            },
+                          });
+                        } else {
+                          toast.error("Plese remove all tasks from this list before deleting it");
+                        }
+                      }}
+                      disabled={loading}
+                    >
                       <FaTrash />
                     </button>
                   </header>
@@ -51,3 +73,4 @@ export const ListView: React.FC<ListProps> = ({ list, index, refetchTasks, updat
     </div>
   );
 };
+

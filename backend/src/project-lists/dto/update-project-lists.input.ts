@@ -8,6 +8,6 @@ export class UpdateProjectListsInput extends PartialType(
   @Field(() => String)
   id: string;
 
-  @Field(() => Int, { description: 'Status Index' })
-  index: number;
+  @Field(() => Int, { description: 'Status Index', nullable: true })
+  index?: number;
 }

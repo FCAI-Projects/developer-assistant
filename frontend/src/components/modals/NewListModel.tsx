@@ -5,14 +5,16 @@ import { Button } from "../Button";
 import * as Yup from "yup";
 import { Modal } from "./Base";
 import { useMutation } from "@apollo/client";
-import { CreateTaskDocument } from "../../graphql/generated/graphql";
+import { CreateProjectListsDocument, ProjectListsDocument } from "../../graphql/generated/graphql";
 import { Input, Label } from "../forms";
 import { FaPlus } from "react-icons/fa";
-
-// TODO: Use the right query to save to database
+import { useParams } from "react-router-dom";
 
 export const NewListModel: React.FC = () => {
-  const [addTask, { loading, data, error }] = useMutation(CreateTaskDocument);
+  const projectId = useParams().id;
+  const [createList, { loading }] = useMutation(CreateProjectListsDocument, {
+    refetchQueries: [{ query: ProjectListsDocument, variables: { project: projectId } }],
+  });
   const [isOpen, toggleModal] = useToggleModal();
   const formik = useFormik({
     initialValues: {
@@ -23,9 +25,24 @@ export const NewListModel: React.FC = () => {
       name: Yup.string().required("Required"),
       color: Yup.string().required("Required"),
     }),
-    onSubmit: async (values) => {
+    onSubmit: async (values, formikApi) => {
       try {
-        console.log(values);
+        createList({
+          variables: {
+            createProjectListsInput: {
+              project: projectId,
+              name: values.name,
+              color: values.color,
+              tasks: [],
+            },
+          },
+        })
+        formikApi.resetForm({
+          values:{
+            name: "",
+            color: "",
+          }
+        })
         toggleModal();
       } catch (error) {
         console.log(error);

@@ -1,7 +1,6 @@
 import { useMutation } from "@apollo/client";
 import React, { useEffect } from "react";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
-import { BsPlusLg } from "react-icons/bs";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { ListView } from "../../components/listsView/ListView";
@@ -11,7 +10,6 @@ import {
   UpdateProjectListsDocument,
   useProjectListsQuery,
 } from "../../graphql/generated/graphql";
-import async from "async";
 
 export interface list {
   id: string;
@@ -226,6 +224,7 @@ export const Project: React.FC = () => {
                     list={list}
                     index={index}
                     key={list.id}
+                    projectId={params.id}
                     refetchTasks={refetch}
                     updateListName={updateListName}
                   />
@@ -236,10 +235,6 @@ export const Project: React.FC = () => {
           )}
         </Droppable>
       </DragDropContext>
-      {/* <div className="flex w-72 flex-row items-center rounded-lg bg-gray-200 px-4 py-3 font-bold text-blue-900">
-        <BsPlusLg className=" mr-2" />
-        Add List
-      </div> */}
     </div>
   );
 };
