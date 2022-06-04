@@ -16,10 +16,9 @@ interface formikProps {
 }
 
 export const NewGroupModel: React.FC = () => {
-  var projectId: string = "";
   const { data: projects } = useProjectsQuery();
   const { data: members, refetch: refetchMembers } = useFilterMembersQuery({
-    variables: { filter: { project: projectId } },
+    variables: { filter: { project: "" } },
   });
   const [projectOptions, setProjectOptions] = useState<any>([]);
   const [membersOptions, setMembersOptions] = useState<any>([]);
@@ -64,7 +63,7 @@ export const NewGroupModel: React.FC = () => {
         }))
       );
     }
-  }, [members?.filterMembers]);
+  }, [members]);
 
   console.log(membersOptions);
 
