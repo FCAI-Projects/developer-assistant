@@ -3,6 +3,7 @@ import { ProjectsService } from './projects.service';
 import { ProjectsResolver } from './projects.resolver';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Project, ProjectSchema } from './entities/project.entity';
+import { RolesModule } from 'src/roles/roles.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { Project, ProjectSchema } from './entities/project.entity';
         schema: ProjectSchema,
       },
     ]),
+    RolesModule,
   ],
   providers: [ProjectsResolver, ProjectsService],
 })

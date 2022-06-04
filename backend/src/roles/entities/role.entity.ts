@@ -18,7 +18,7 @@ export class Role {
 
   @Prop()
   @Field(() => String, { description: 'Role Name' })
-  roleName: string;
+  name: string;
 
   @Prop({ default: false })
   @Field(() => Boolean, { defaultValue: false })

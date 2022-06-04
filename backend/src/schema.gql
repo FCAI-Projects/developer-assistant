@@ -52,7 +52,7 @@ type Role {
   project: Project!
 
   """Role Name"""
-  roleName: String!
+  name: String!
   createTask: Boolean!
   deleteTask: Boolean!
   editTask: Boolean!
@@ -73,13 +73,7 @@ type Member {
   user: User!
 
   """User role in project"""
-  role: String!
-
-  """Custom Role"""
-  customRole: Role
-
-  """User Badge"""
-  badges: String!
+  role: Role
 
   """User Status"""
   status: String!
@@ -249,14 +243,14 @@ type Query {
   user(id: String!): User!
   projects: [Project!]!
   project(id: String!): Project!
+  roles(project: String!): [Role!]!
+  role(id: String!): Role!
   filterMembers(filter: UpdateMemberInput!): [Member!]!
   member(id: String!): Member!
   tasks(project: String!): [Task!]!
   task(id: String!): Task!
   projectLists(project: String!): [ProjectLists!]!
   projectListsById(id: String!): ProjectLists!
-  roles(project: String!): [Role!]!
-  role(id: String!): Role!
   note(id: String!): Note!
   filterNotes(filter: CreateNoteInput!): Note!
   comments: [Comment!]!
@@ -280,8 +274,6 @@ input UpdateMemberInput {
   project: String
   user: String
   role: String
-  customRole: String
-  badges: String
 }
 
 input CreateNoteInput {
@@ -303,6 +295,9 @@ type Mutation {
   createProject(createProjectInput: CreateProjectInput!): Project!
   updateProject(id: String!, updateProjectInput: UpdateProjectInput!): Project!
   removeProject(id: String!): Project!
+  createRole(createRoleInput: CreateRoleInput!): Role!
+  updateRole(id: String!, updateRoleInput: UpdateRoleInput!): Role!
+  removeRole(id: String!): Role!
   addMember(createMemberInput: CreateMemberInput!): Member!
   updateMember(id: String!, updateMemberInput: UpdateMemberInput!): Member!
   removeMember(id: String!): Member!
@@ -312,9 +307,6 @@ type Mutation {
   createProjectLists(createProjectListsInput: CreateProjectListsInput!): ProjectLists!
   updateProjectLists(updateProjectListsInput: UpdateProjectListsInput!): ProjectLists!
   removeProjectLists(id: String!): ProjectLists!
-  createRole(createRoleInput: CreateRoleInput!): Role!
-  updateRole(id: String!, updateRoleInput: UpdateRoleInput!): Role!
-  removeRole(id: String!): Role!
   createNote(createNoteInput: CreateNoteInput!): Note!
   updateNote(id: String!, updateNoteInput: UpdateNoteInput!): Note!
   removeNote(id: String!): Note!
@@ -389,12 +381,34 @@ input UpdateProjectInput {
   budget: Float
 }
 
+input CreateRoleInput {
+  name: String!
+  project: String!
+  createTask: Boolean = false
+  deleteTask: Boolean = false
+  editTask: Boolean = false
+  assignTask: Boolean = false
+  editProject: Boolean = false
+  inviteToProject: Boolean = false
+  deleteMember: Boolean = false
+}
+
+input UpdateRoleInput {
+  name: String
+  project: String
+  createTask: Boolean = false
+  deleteTask: Boolean = false
+  editTask: Boolean = false
+  assignTask: Boolean = false
+  editProject: Boolean = false
+  inviteToProject: Boolean = false
+  deleteMember: Boolean = false
+}
+
 input CreateMemberInput {
   project: String!
   user: String!
   role: String!
-  customRole: String
-  badges: String!
 }
 
 input CreateTaskInput {
@@ -491,9 +505,6 @@ input CreateProjectListsInput {
 
   """Status Color"""
   color: String!
-
-  """Status Index"""
-  index: Int!
 }
 
 input UpdateProjectListsInput {
@@ -508,34 +519,10 @@ input UpdateProjectListsInput {
 
   """Status Color"""
   color: String
+  id: String!
 
   """Status Index"""
-  index: Int
-  id: String!
-}
-
-input CreateRoleInput {
-  roleName: String!
-  project: String!
-  createTask: Boolean!
-  deleteTask: Boolean!
-  editTask: Boolean!
-  assignTask: Boolean!
-  editProject: Boolean!
-  inviteToProject: Boolean!
-  deleteMember: Boolean!
-}
-
-input UpdateRoleInput {
-  roleName: String
-  project: String
-  createTask: Boolean
-  deleteTask: Boolean
-  editTask: Boolean
-  assignTask: Boolean
-  editProject: Boolean
-  inviteToProject: Boolean
-  deleteMember: Boolean
+  index: Int!
 }
 
 input UpdateNoteInput {

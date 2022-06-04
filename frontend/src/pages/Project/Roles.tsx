@@ -26,12 +26,12 @@ export const ProjectRoles: React.FC = () => {
           return (
             <div className="relative flex items-center gap-3 border-b border-slate-200 py-5" key={role.id}>
               <div>
-                <h4 className="text-xl font-medium">{role.roleName}</h4>
+                <h4 className="text-xl font-medium">{role.name}</h4>
               </div>
               <div className="absolute right-0 flex gap-2">
                 <UpdateRoleModel
                   id={role.id}
-                  name={role.roleName}
+                  name={role.name}
                   createTask={role.createTask}
                   deleteTask={role.deleteTask}
                   editTask={role.editTask}

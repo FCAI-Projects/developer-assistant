@@ -25,7 +25,7 @@ export const NewRoleModel: React.FC = () => {
       assignTask: false,
       editProject: false,
       inviteToProject: false,
-      deleteMember: false
+      deleteMember: false,
     },
     validationSchema: Yup.object({
       name: Yup.string().required("Required"),
@@ -35,7 +35,7 @@ export const NewRoleModel: React.FC = () => {
         addRole({
           variables: {
             createRoleInput: {
-              roleName: values.name,
+              name: values.name,
               project: ProjectId.id,
               createTask: values.createTask,
               deleteTask: values.deleteTask,
@@ -43,12 +43,12 @@ export const NewRoleModel: React.FC = () => {
               assignTask: values.assignTask,
               editProject: values.editProject,
               inviteToProject: values.inviteToProject,
-              deleteMember: values.deleteMember
-            }
+              deleteMember: values.deleteMember,
+            },
           },
-        })
+        });
         formikApi.resetForm({
-          values:{
+          values: {
             name: "",
             createTask: false,
             deleteTask: false,
@@ -56,9 +56,9 @@ export const NewRoleModel: React.FC = () => {
             assignTask: false,
             editProject: false,
             inviteToProject: false,
-            deleteMember: false
-          }
-        })
+            deleteMember: false,
+          },
+        });
         toggleModal();
       } catch (error) {
         console.log(error);

@@ -17,8 +17,12 @@ export class ProjectListsService {
 
   async create(
     createProjectListsInput: CreateProjectListsInput,
+    index: number,
   ): Promise<ProjectListsDocument> {
-    const createdProjectLists = new this.taskModel(createProjectListsInput);
+    const createdProjectLists = new this.taskModel({
+      ...createProjectListsInput,
+      index,
+    });
     return await createdProjectLists.save();
   }
 

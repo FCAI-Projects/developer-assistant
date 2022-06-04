@@ -1,6 +1,6 @@
 query Roles($project: String!) {
   roles(project: $project) {
-    roleName
+    name
     createTask
     deleteTask
     editTask

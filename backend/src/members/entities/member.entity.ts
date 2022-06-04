@@ -21,17 +21,13 @@ export class Member {
   @Field(() => User, { description: 'User ID' })
   user: UserDocument;
 
-  @Prop()
-  @Field(() => String, { description: 'User role in project' })
-  role: string;
-
   @Prop({ nullable: true, type: MongooseSchema.Types.ObjectId, ref: 'Role' })
-  @Field(() => Role, { nullable: true, description: 'Custom Role' })
-  customRole?: RoleDocument;
+  @Field(() => Role, { nullable: true, description: 'User role in project' })
+  role: RoleDocument;
 
-  @Prop()
-  @Field(() => String, { description: 'User Badge' })
-  badges: string;
+  // @Prop()
+  // @Field(() => String, { description: 'User Badge' })
+  // badges: string;
 
   @Prop({ enum: ['declined', 'joined', 'pending'], default: 'pending' })
   @Field(() => String, { description: 'User Status' })

@@ -25,6 +25,7 @@ export const NewListModel: React.FC = () => {
     }),
     onSubmit: async (values) => {
       try {
+        console.log(values);
         toggleModal();
       } catch (error) {
         console.log(error);

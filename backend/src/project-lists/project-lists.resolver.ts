@@ -9,36 +9,42 @@ export class ProjectListsResolver {
   constructor(private readonly projectListsService: ProjectListsService) {}
 
   @Mutation(() => ProjectLists)
-  createProjectLists(
+  async createProjectLists(
     @Args('createProjectListsInput')
     createProjectListsInput: CreateProjectListsInput,
   ) {
-    return this.projectListsService.create(createProjectListsInput);
+    const list = await this.projectListsService.findAll(
+      createProjectListsInput.project,
+    );
+    return await this.projectListsService.create(
+      createProjectListsInput,
+      list.length,
+    );
   }
 
   @Query(() => [ProjectLists], { name: 'projectLists' })
-  findAll(@Args('project', { type: () => String }) project: string) {
-    return this.projectListsService.findAll(project);
+  async findAll(@Args('project', { type: () => String }) project: string) {
+    return await this.projectListsService.findAll(project);
   }
 
   @Query(() => ProjectLists, { name: 'projectListsById' })
-  findOne(@Args('id', { type: () => String }) id: string) {
-    return this.projectListsService.findOne(id);
+  async findOne(@Args('id', { type: () => String }) id: string) {
+    return await this.projectListsService.findOne(id);
   }
 
   @Mutation(() => ProjectLists)
-  updateProjectLists(
+  async updateProjectLists(
     @Args('updateProjectListsInput')
     updateProjectListsInput: UpdateProjectListsInput,
   ) {
-    return this.projectListsService.update(
+    return await this.projectListsService.update(
       updateProjectListsInput.id,
       updateProjectListsInput,
     );
   }
 
   @Mutation(() => ProjectLists)
-  removeProjectLists(@Args('id', { type: () => String }) id: string) {
-    return this.projectListsService.remove(id);
+  async removeProjectLists(@Args('id', { type: () => String }) id: string) {
+    return await this.projectListsService.remove(id);
   }
 }

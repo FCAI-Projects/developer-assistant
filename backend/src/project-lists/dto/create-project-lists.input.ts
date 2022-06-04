@@ -14,7 +14,4 @@ export class CreateProjectListsInput {
 
   @Field(() => String, { description: 'Status Color' })
   color: string;
-
-  @Field(() => Int, { description: 'Status Index' })
-  index: number;
 }
