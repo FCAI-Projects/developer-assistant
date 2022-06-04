@@ -57,9 +57,7 @@ export const Chat: React.FC = () => {
     }
   }, [authToken]);
 
-  if (loading) return <Loader />;
-
-  console.log();
+  if (loading) return <Loader/>;
 
   return (
     <div className="">

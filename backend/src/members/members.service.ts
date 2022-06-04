@@ -18,11 +18,11 @@ export class MembersService {
   }
 
   async filter(filter: UpdateMemberInput): Promise<MemberDocument[]> {
-    return this.memberModel.find(filter);
+    return this.memberModel.find(filter).populate('user').populate('project');
   }
 
   async findOne(id: string): Promise<MemberDocument> {
-    return this.memberModel.findOne({ id });
+    return this.memberModel.findOne({ id }).populate('user').populate('project');
   }
 
   async update(

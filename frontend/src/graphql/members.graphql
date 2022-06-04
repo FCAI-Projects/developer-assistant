@@ -1,0 +1,10 @@
+query FilterMembers($filter: UpdateMemberInput!) {
+  filterMembers(filter: $filter) {
+    id
+    user {
+      id
+      fname
+      lname
+    }
+  }
+}

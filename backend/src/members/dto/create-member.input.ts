@@ -3,16 +3,16 @@ import { InputType, Int, Field } from '@nestjs/graphql';
 @InputType()
 export class CreateMemberInput {
   @Field(() => String)
-  projectId: string;
+  project: string;
 
   @Field(() => String)
-  userId: string;
+  user: string;
 
   @Field(() => String)
   role: string;
 
   @Field(() => String, { nullable: true })
-  customId?: string;
+  customRole?: string;
 
   @Field(() => String)
   badges: string;

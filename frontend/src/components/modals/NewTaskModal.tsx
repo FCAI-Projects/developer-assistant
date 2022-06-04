@@ -8,6 +8,7 @@ import { useMutation } from "@apollo/client";
 import { CreateTaskDocument } from "../../graphql/generated/graphql";
 import { Input, Label } from "../forms";
 import { FaPlus } from "react-icons/fa";
+import { useParams } from "react-router-dom";
 
 // TODO: Use the right query to save to database
 
@@ -17,6 +18,7 @@ interface NewTaskModalProps {
 }
 
 export const NewTaskModal: React.FC<NewTaskModalProps> = ({ listId, refetchTasks }) => {
+  const projectId = useParams();
   const [addTask, { loading, data, error }] = useMutation(CreateTaskDocument);
   const [isOpen, toggleModal] = useToggleModal();
   const formik = useFormik({
@@ -36,7 +38,7 @@ export const NewTaskModal: React.FC<NewTaskModalProps> = ({ listId, refetchTasks
               list: listId,
               name: values.name,
               description: values.description,
-              project: "62881f1c471b20f1a0c846fe",
+              project: projectId.id,
             },
           },
         });

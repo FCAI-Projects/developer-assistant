@@ -252,10 +252,10 @@ type Query {
 }
 
 input UpdateMemberInput {
-  projectId: String
-  userId: String
+  project: String
+  user: String
   role: String
-  customId: String
+  customRole: String
   badges: String
 }
 
@@ -365,10 +365,10 @@ input UpdateProjectInput {
 }
 
 input CreateMemberInput {
-  projectId: String!
-  userId: String!
+  project: String!
+  user: String!
   role: String!
-  customId: String
+  customRole: String
   badges: String!
 }
 
