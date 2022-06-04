@@ -32,8 +32,27 @@ export class TimeTrackingService {
     return await this.TimeTrackingModel.find(filter);
   }
 
-  async findOne(id: string): Promise<TimeTracking> {
-    return await this.TimeTrackingModel.findById(id);
+  async findOneByTask(task: string, user: string): Promise<TimeTracking> {
+    return await this.TimeTrackingModel.findOne({ task, user });
+  }
+
+  async startTimeForTask(task: string, user: string): Promise<any> {
+    return await this.TimeTrackingModel.updateOne(
+      { task, user },
+      { start: new Date() },
+    );
+  }
+
+  async pushNewHistory(id: string, history: any): Promise<any> {
+    return await this.TimeTrackingModel.findByIdAndUpdate(
+      id,
+      {
+        $push: {
+          history: history,
+        },
+      },
+      { new: true },
+    );
   }
 
   async update(

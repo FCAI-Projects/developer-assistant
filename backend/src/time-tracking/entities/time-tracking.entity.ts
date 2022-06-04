@@ -2,13 +2,19 @@ import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Schema as MongooseSchema } from 'mongoose';
 import { Project } from 'src/projects/entities/project.entity';
-import { User } from 'src/users/entities/user.entity';
+import { Task, TaskDocument } from 'src/tasks/entities/task.entity';
+import { User, UserDocument } from 'src/users/entities/user.entity';
 
 export type TimeTrackingDocument = TimeTracking & Document;
-
+@ObjectType()
 class TimeTrackingHistory {
+  @Field(() => Date, { description: 'History Start' })
   start: Date;
+
+  @Field(() => Date, { description: 'History End' })
   end: Date;
+
+  @Field(() => Number, { description: 'History Duration' })
   duration: number;
 }
 
@@ -19,20 +25,26 @@ export class TimeTracking extends Document {
   id: MongooseSchema.Types.ObjectId;
 
   @Prop({ required: true, type: MongooseSchema.Types.ObjectId, ref: 'Task' })
-  @Field(() => Project, { description: 'Task ID' })
-  task: MongooseSchema.Types.ObjectId;
+  @Field(() => Task, { description: 'Task ID' })
+  task: TaskDocument;
 
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'User' })
   @Field(() => User, { description: 'Time Tracking of User' })
-  assign: MongooseSchema.Types.ObjectId;
+  user: UserDocument;
+
+  @Prop()
+  @Field(() => Date, {
+    description: 'Time Tracking Started & Not Finished Yet',
+  })
+  start: Date;
 
   @Prop({ default: 0 })
   @Field(() => String, { description: 'Time Tracking Duration' })
   duration: number;
 
-  // @Prop({ required: true })
-  // @Field(() => [TimeTrackingHistory], { description: 'Time Tracking History' })
-  // history: Array<TimeTrackingHistory>;
+  @Prop()
+  @Field(() => [TimeTrackingHistory], { description: 'Time Tracking History' })
+  history: Array<TimeTrackingHistory>;
 }
 
 export const TimeTrackingSchema = SchemaFactory.createForClass(TimeTracking);

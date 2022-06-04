@@ -213,18 +213,35 @@ type Expense {
   date: DateTime!
 }
 
+type TimeTrackingHistory {
+  """History Start"""
+  start: DateTime!
+
+  """History End"""
+  end: DateTime!
+
+  """History Duration"""
+  duration: Float!
+}
+
 type TimeTracking {
   """Time Tracking ID"""
   id: ID!
 
   """Task ID"""
-  task: Project!
+  task: Task!
 
   """Time Tracking of User"""
-  assign: User!
+  user: User!
+
+  """Time Tracking Started & Not Finished Yet"""
+  start: DateTime!
 
   """Time Tracking Duration"""
   duration: String!
+
+  """Time Tracking History"""
+  history: [TimeTrackingHistory!]!
 }
 
 type Query {
@@ -248,7 +265,15 @@ type Query {
   group(id: String!): Group!
   expenses(project: String!): [Expense!]!
   expense(id: String!): Expense!
-  timeTracking(id: String!): TimeTracking!
+
+  """Get all time tracking for user"""
+  userTimeTracking(user: String!): [TimeTracking!]!
+
+  """Get all time tracking for a task"""
+  taskTimeTracking(task: String!): [TimeTracking!]!
+
+  """Get all task time tracking for a user"""
+  taskUserTimeTracking(task: String!): TimeTracking!
 }
 
 input UpdateMemberInput {
@@ -303,8 +328,8 @@ type Mutation {
   createExpense(createExpenseInput: CreateExpenseInput!): Expense!
   updateExpense(updateExpenseInput: UpdateExpenseInput!): Expense!
   removeExpense(id: String!): Expense!
-  createTimeTracking(createTimeTrackingInput: CreateTimeTrackingInput!): TimeTracking!
-  updateTimeTracking(updateTimeTrackingInput: UpdateTimeTrackingInput!): TimeTracking!
+  startTimeTracking(task: String!): TimeTracking!
+  stopTimeTracking(task: String!): TimeTracking!
   removeTimeTracking(id: String!): TimeTracking!
 }
 
@@ -595,16 +620,5 @@ input UpdateExpenseInput {
 
   """Expense Date"""
   date: DateTime
-  id: String!
-}
-
-input CreateTimeTrackingInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
-
-input UpdateTimeTrackingInput {
-  """Example field (placeholder)"""
-  exampleField: Int
   id: String!
 }

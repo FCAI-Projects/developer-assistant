@@ -5,6 +5,6 @@ import { InputType, Field, Int, PartialType } from '@nestjs/graphql';
 export class UpdateTimeTrackingInput extends PartialType(
   CreateTimeTrackingInput,
 ) {
-  @Field(() => String)
-  id: string;
+  @Field(() => Number)
+  duration: number;
 }
