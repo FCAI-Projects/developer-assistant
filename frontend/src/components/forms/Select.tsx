@@ -129,6 +129,10 @@ export const Multiselect: React.FC<MultiSelectProps> = ({ options, value, onChan
     onChange(selectedItems);
   }, [selectedItems, options]);
 
+  useEffect(() => {
+    setSelected([]);
+  }, [options]);
+
   return (
     <div className="autcomplete-wrapper">
       <div className="autcomplete">

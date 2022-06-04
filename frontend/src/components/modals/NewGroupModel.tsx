@@ -4,10 +4,10 @@ import { useToggleModal } from "../../hooks/useToggleModal";
 import { Button } from "../Button";
 import * as Yup from "yup";
 import { Modal } from "./Base";
-import { useMutation, useQuery } from "react-query";
-import { FilterMembersDocument, useFilterMembersQuery, useProjectsQuery } from "../../graphql/generated/graphql";
+import { CreateGroupDocument, GroupsDocument, useFilterMembersQuery, useGroupsQuery, useProjectsQuery } from "../../graphql/generated/graphql";
 import { CustomSelect, Input, Label, Multiselect } from "../forms";
 import { FaPlus } from "react-icons/fa";
+import { useMutation } from "@apollo/client";
 
 interface formikProps {
   name: string;
@@ -16,6 +16,9 @@ interface formikProps {
 }
 
 export const NewGroupModel: React.FC = () => {
+  const [CreateGroup, { loading }] = useMutation(CreateGroupDocument, {
+    refetchQueries: [{query: GroupsDocument}],
+  });
   const { data: projects } = useProjectsQuery();
   const { data: members, refetch: refetchMembers } = useFilterMembersQuery({
     variables: { filter: { project: "" } },
@@ -23,7 +26,6 @@ export const NewGroupModel: React.FC = () => {
   const [projectOptions, setProjectOptions] = useState<any>([]);
   const [membersOptions, setMembersOptions] = useState<any>([]);
   const [isOpen, toggleModal] = useToggleModal();
-
   const formik = useFormik<formikProps>({
     initialValues: {
       name: "",
@@ -32,11 +34,27 @@ export const NewGroupModel: React.FC = () => {
     },
     validationSchema: Yup.object({
       name: Yup.string().required("Required"),
-      project: Yup.string().required("Required"),
+      project: Yup.object().required("Required"),
     }),
-    onSubmit: async (values) => {
+    onSubmit: async (values, formikApi) => {
       try {
-        console.log(values);
+        CreateGroup({
+          variables: {
+            createGroupInput: {
+              name: values.name,
+              project: values.project.id,
+              members: values.members.map((member) => member.id),
+            },
+          },
+        })
+        formikApi.resetForm({
+          values:{
+            name: "",
+            project: { id: "", name: "" },
+            members: [],
+          }
+        })
+        toggleModal();
       } catch (error) {
         console.log(error);
       }
@@ -55,7 +73,6 @@ export const NewGroupModel: React.FC = () => {
 
   useEffect(() => {
     if (members) {
-      console.log(members);
       setMembersOptions(
         members.filterMembers.map((member: any) => ({
           id: member.user.id,
@@ -64,8 +81,6 @@ export const NewGroupModel: React.FC = () => {
       );
     }
   }, [members]);
-
-  console.log(membersOptions);
 
   return (
     <>
@@ -116,7 +131,7 @@ export const NewGroupModel: React.FC = () => {
           </form>
         </div>
         <div className="flex flex-row-reverse gap-3">
-          <Button type="submit" onClick={() => formik.handleSubmit()}>
+          <Button type="submit" onClick={() => formik.handleSubmit()} loading={loading}>
             Add
           </Button>
           <Button type="submit" lightRed onClick={toggleModal}>
