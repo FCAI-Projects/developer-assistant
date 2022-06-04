@@ -17,18 +17,13 @@ interface formikProps {
 
 export const NewGroupModel: React.FC = () => {
   var projectId: string = "";
-  const projects = useProjectsQuery();
-  const members = useFilterMembersQuery({variables: { filter: { project: projectId }}}); 
-  const projectOption: any[] = [];
-  const membersOption: any[] = [];
-  const [isOpen, toggleModal] = useToggleModal();
-
-  projects.data?.projects.map((project: any) => { 
-    projectOption.push({ 
-      id: project.id, 
-      name: project.name 
-    }) 
+  const { data: projects } = useProjectsQuery();
+  const { data: members, refetch: refetchMembers } = useFilterMembersQuery({
+    variables: { filter: { project: projectId } },
   });
+  const [projectOptions, setProjectOptions] = useState<any>([]);
+  const [membersOptions, setMembersOptions] = useState<any>([]);
+  const [isOpen, toggleModal] = useToggleModal();
 
   const formik = useFormik<formikProps>({
     initialValues: {
@@ -42,23 +37,37 @@ export const NewGroupModel: React.FC = () => {
     }),
     onSubmit: async (values) => {
       try {
+        console.log(values);
       } catch (error) {
         console.log(error);
       }
     },
   });
 
-  useEffect(() => { 
-    if (members.data) {
-      members.data.filterMembers.map((member: any) => {
-        membersOption.push({
+  useEffect(() => {
+    if (projects)
+      setProjectOptions(
+        projects.projects.map((project: any) => ({
+          id: project.id,
+          name: project.name,
+        }))
+      );
+  }, [projects]);
+
+  useEffect(() => {
+    if (members) {
+      console.log(members);
+      setMembersOptions(
+        members.filterMembers.map((member: any) => ({
           id: member.user.id,
-          name: member.user.fname+" "+member.user.lname
-        }); 
-      });
+          name: member.user.fname + " " + member.user.lname,
+        }))
+      );
     }
-  }, [members]);
-  
+  }, [members?.filterMembers]);
+
+  console.log(membersOptions);
+
   return (
     <>
       <button
@@ -83,11 +92,11 @@ export const NewGroupModel: React.FC = () => {
             <div className="w-full">
               <Label htmlFor="project">Project</Label>
               <CustomSelect
-                options={projectOption}
+                options={projectOptions}
                 value={formik.values.project}
                 onChange={(e) => {
                   formik.setFieldValue("project", e);
-                  members.refetch({filter: { project: e.id }});
+                  refetchMembers({ filter: { project: e.id } });
                 }}
                 label="name"
                 id="id"
@@ -96,7 +105,7 @@ export const NewGroupModel: React.FC = () => {
             <div className="w-full">
               <Label htmlFor="members">Members</Label>
               <Multiselect
-                options={membersOption}
+                options={membersOptions}
                 value={formik.values.members}
                 onChange={(e) => {
                   formik.setFieldValue("members", e);
@@ -119,4 +128,3 @@ export const NewGroupModel: React.FC = () => {
     </>
   );
 };
-

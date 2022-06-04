@@ -127,7 +127,7 @@ export const Multiselect: React.FC<MultiSelectProps> = ({ options, value, onChan
   useEffect(() => {
     setFilteredItems(options.filter((option: any) => !selectedItems.find((el: any) => el[id] === option[id])));
     onChange(selectedItems);
-  }, [selectedItems]);
+  }, [selectedItems, options]);
 
   return (
     <div className="autcomplete-wrapper">
