@@ -17,3 +17,9 @@ query Groups {
     }
   }
 }
+
+mutation CreateGroup($createGroupInput: CreateGroupInput!) {
+  createGroup(createGroupInput: $createGroupInput) {
+    id
+  }
+}
