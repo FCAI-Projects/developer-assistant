@@ -1,18 +1,18 @@
 import { useMutation } from "@apollo/client";
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useToggleModal } from "../../hooks/useToggleModal";
 import { FaTrashAlt } from "react-icons/fa";
 import { useParams } from "react-router-dom";
 import { Button } from "../../components/Button";
 import { AddNewExpense } from "../../components/modals/AddNewExpenseModal";
 import { Table } from "../../components/Table";
-import { ExpensesDocument, RemoveExpenseDocument,  useExpensesQuery } from "../../graphql/generated/graphql";
+import { ExpensesDocument, RemoveExpenseDocument, useExpensesQuery } from "../../graphql/generated/graphql";
 
 export const ProjectExpenses: React.FC = () => {
-  const projectId = useParams();
-   const {data} = useExpensesQuery({variables: {project: projectId.id as string}});
-  const [deleteExpense, { loading }] = useMutation(RemoveExpenseDocument, { refetchQueries: [{ query: RemoveExpenseDocument, variables: { project: projectId.id } }] });
-  console.log(data);
+  const paramas = useParams();
+  const [data, setData] = useState<any>([]);
+  const { data: expenses, refetch } = useExpensesQuery({ variables: { project: paramas.id as string } });
+  const [deleteExpense, { loading }] = useMutation(RemoveExpenseDocument);
   const column = useMemo(
     () => [
       {
@@ -38,22 +38,36 @@ export const ProjectExpenses: React.FC = () => {
     ],
     []
   );
-  // data = useMemo(
-  //   () => [
-  //     {
-  //       id: 1,
-  //       name: "Expense 1",
-  //       amount: "100",
-  //       date: "2020-01-01",
-  //       actions: (
-  //         <Button lightRed onClick={() => {}}>
-  //           <FaTrashAlt />
-  //         </Button>
-  //       ),
-  //     }
-  //   ],
-  //   []
-  // );
+
+  const handleDelete = async (id: string) => {
+    try {
+      await deleteExpense({
+        variables: {
+          removeExpenseId: id,
+        },
+      });
+      refetch();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (expenses)
+      setData(
+        expenses.expenses.map((el: any) => ({
+          id: el.id,
+          name: el.name,
+          amount: el.amount,
+          date: new Date(el.date).toDateString(),
+          actions: (
+            <Button lightRed onClick={() => handleDelete(el.id)}>
+              <FaTrashAlt />
+            </Button>
+          ),
+        }))
+      );
+  }, [expenses]);
 
   return (
     <div>
@@ -62,9 +76,8 @@ export const ProjectExpenses: React.FC = () => {
         <AddNewExpense />
       </header>
       <div className="py-3">
-        {/* <Table columns={column} data={data} /> */}
+        <Table columns={column} data={data} />
       </div>
     </div>
   );
 };
-    

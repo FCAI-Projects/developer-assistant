@@ -16,6 +16,7 @@ import { GroupsModule } from './groups/groups.module';
 import { MessagesModule } from './messages/messages.module';
 import { ProjectListsModule } from './project-lists/project-lists.module';
 import { ExpensesModule } from './expenses/expenses.module';
+import { TimeTrackingModule } from './time-tracking/time-tracking.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { ExpensesModule } from './expenses/expenses.module';
     MessagesModule,
     ProjectListsModule,
     ExpensesModule,
+    TimeTrackingModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -3,6 +3,7 @@ query Expenses($project: String!) {
     id
     name
     amount
+    date
   }
 }
 
@@ -17,6 +18,3 @@ mutation RemoveExpense($removeExpenseId: String!) {
     id
   }
 }
-
-
-

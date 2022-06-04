@@ -25,6 +25,12 @@ export class Expense {
   })
   @Field(() => Int, { description: 'Expense Amount' })
   amount: number;
+
+  @Prop({
+    required: true,
+  })
+  @Field(() => Date, { description: 'Expense Date' })
+  date: Date;
 }
 
 export const ExpenseSchema = SchemaFactory.createForClass(Expense);

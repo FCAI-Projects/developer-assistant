@@ -5,18 +5,17 @@ import { Button } from "../Button";
 import * as Yup from "yup";
 import { Modal } from "./Base";
 import { useMutation } from "@apollo/client";
-import { ExpensesDocument ,CreateExpenseDocument } from "../../graphql/generated/graphql";
+import { ExpensesDocument, CreateExpenseDocument } from "../../graphql/generated/graphql";
 import { Input, Label } from "../forms";
 import { FaPlus } from "react-icons/fa";
 import { useParams } from "react-router-dom";
 
-
 // TODO: Use the right query to save to database
 
 export const AddNewExpense: React.FC = () => {
-  const ProjectId = useParams()
-  const [addExpense, { loading }] = useMutation(CreateExpenseDocument , {
-    refetchQueries: [{ query: ExpensesDocument, variables: { project: ProjectId.id } }],
+  const params = useParams();
+  const [addExpense, { loading }] = useMutation(CreateExpenseDocument, {
+    refetchQueries: [{ query: ExpensesDocument, variables: { project: params.id } }],
   });
   const [isOpen, toggleModal] = useToggleModal();
   const formik = useFormik({
@@ -33,17 +32,17 @@ export const AddNewExpense: React.FC = () => {
     enableReinitialize: true,
     onSubmit: async (values) => {
       try {
-        addExpense({
+        await addExpense({
           variables: {
             createExpenseInput: {
               name: values.name,
-              amount: values.amount,
+              amount: parseInt(values.amount, 10),
               date: values.date,
-              project: ProjectId.id,
+              project: params.id,
             },
           },
-        }) 
-        
+        });
+        toggleModal();
       } catch (error) {
         console.log(error);
       }

@@ -80,6 +80,9 @@ type Member {
 
   """User Badge"""
   badges: String!
+
+  """User Status"""
+  status: String!
 }
 
 type Task {
@@ -205,6 +208,23 @@ type Expense {
 
   """Expense Amount"""
   amount: Int!
+
+  """Expense Date"""
+  date: DateTime!
+}
+
+type TimeTracking {
+  """Time Tracking ID"""
+  id: ID!
+
+  """Task ID"""
+  task: Project!
+
+  """Time Tracking of User"""
+  assign: User!
+
+  """Time Tracking Duration"""
+  duration: String!
 }
 
 type Query {
@@ -228,6 +248,7 @@ type Query {
   group(id: String!): Group!
   expenses(project: String!): [Expense!]!
   expense(id: String!): Expense!
+  timeTracking(id: String!): TimeTracking!
 }
 
 input UpdateMemberInput {
@@ -282,6 +303,9 @@ type Mutation {
   createExpense(createExpenseInput: CreateExpenseInput!): Expense!
   updateExpense(updateExpenseInput: UpdateExpenseInput!): Expense!
   removeExpense(id: String!): Expense!
+  createTimeTracking(createTimeTrackingInput: CreateTimeTrackingInput!): TimeTracking!
+  updateTimeTracking(updateTimeTrackingInput: UpdateTimeTrackingInput!): TimeTracking!
+  removeTimeTracking(id: String!): TimeTracking!
 }
 
 input CreateUserInput {
@@ -554,6 +578,9 @@ input CreateExpenseInput {
 
   """Expense Amount"""
   amount: Int!
+
+  """Expense Date"""
+  date: DateTime!
 }
 
 input UpdateExpenseInput {
@@ -565,5 +592,19 @@ input UpdateExpenseInput {
 
   """Expense Amount"""
   amount: Int
+
+  """Expense Date"""
+  date: DateTime
+  id: String!
+}
+
+input CreateTimeTrackingInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateTimeTrackingInput {
+  """Example field (placeholder)"""
+  exampleField: Int
   id: String!
 }

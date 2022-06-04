@@ -10,4 +10,7 @@ export class CreateExpenseInput {
 
   @Field(() => Int, { description: 'Expense Amount' })
   amount: number;
+
+  @Field(() => Date, { description: 'Expense Date' })
+  date: Date;
 }

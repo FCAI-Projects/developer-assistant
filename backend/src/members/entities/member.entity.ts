@@ -32,6 +32,10 @@ export class Member {
   @Prop()
   @Field(() => String, { description: 'User Badge' })
   badges: string;
+
+  @Prop({ enum: ['declined', 'joined', 'pending'], default: 'pending' })
+  @Field(() => String, { description: 'User Status' })
+  status: string;
 }
 
 export const MemberSchema = SchemaFactory.createForClass(Member);

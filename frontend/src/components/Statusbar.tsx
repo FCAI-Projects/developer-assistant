@@ -1,5 +1,5 @@
 import React from "react";
-import { FaCalendarAlt, FaCog, FaCommentDots } from "react-icons/fa";
+import { FaCalendarAlt, FaCog, FaCommentDots, FaUserPlus } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { TaskModal } from "./modals/TaskModal";
 
@@ -10,6 +10,9 @@ export const Statusbar: React.FC = () => {
       <div className="flex items-center gap-5 text-xl text-slate-600">
         <Link to="/app/settings">
           <FaCog className="cursor-pointer" />
+        </Link>
+        <Link to="/app/invitations">
+          <FaUserPlus className="cursor-pointer" />
         </Link>
         <Link to="/app/calendar">
           <FaCalendarAlt className="cursor-pointer" />
