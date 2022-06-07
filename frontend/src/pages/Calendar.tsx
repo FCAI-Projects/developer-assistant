@@ -1,57 +1,24 @@
 import { useEffect, useRef, useState } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { decodeToken } from "react-jwt";
+import { useRecoilValue } from "recoil";
 import { CalendarRow } from "../components/CalendarRow";
+import { Loader } from "../components/Loader";
+import { useTasksByUserIdQuery } from "../graphql/generated/graphql";
+import { authState } from "../recoil";
 
 export interface CalendarProps {}
 
 export const Calendar: React.FC<CalendarProps> = () => {
+  const authToken = useRecoilValue(authState);
+  const [id, setId] = useState("");
+  const [tasks, setTasks] = useState([]);
+  const { data, loading } = useTasksByUserIdQuery({ variables: { userId: id } });
   const [activeMonth, setActiveMonth] = useState(new Date().getMonth());
   const [activeMonthString, setActiveMonthString] = useState(new Date().toDateString().split(" ")[1]);
   const [activeYear, setActiveYear] = useState(new Date().getFullYear());
   const prevMonth = useRef<number>(null);
   const [firstDayInMonth, setFirstDayInMonth] = useState<number[]>([]);
-  const [tasks, _] = useState([
-    {
-      id: 1,
-      name: "Task 1",
-      deadline: new Date(2022, 4, 25).toISOString(),
-    },
-    {
-      id: 2,
-      name: "Task 2",
-      deadline: new Date(2022, 4, 25).toISOString(),
-    },
-    {
-      id: 3,
-      name: "Task 3",
-      deadline: new Date(2022, 4, 27).toISOString(),
-    },
-    {
-      id: 4,
-      name: "Task 4",
-      deadline: new Date(2022, 4, 29).toISOString(),
-    },
-    {
-      id: 5,
-      name: "Task 5",
-      deadline: new Date(2022, 4, 30).toISOString(),
-    },
-    {
-      id: 6,
-      name: "Task 6",
-      deadline: new Date(2022, 5, 1).toISOString(),
-    },
-    {
-      id: 7,
-      name: "Task 7",
-      deadline: new Date(2022, 5, 5).toISOString(),
-    },
-    {
-      id: 8,
-      name: "Task 8",
-      deadline: new Date(2022, 5, 27).toISOString(),
-    },
-  ]);
 
   useEffect(() => {
     let x = [];
@@ -67,6 +34,21 @@ export const Calendar: React.FC<CalendarProps> = () => {
     //@ts-ignore
     prevMonth.current = activeMonth;
   }, [activeMonth]);
+
+  useEffect(() => {
+    if (authToken) {
+      const decode: any = decodeToken(authToken);
+      setId(decode._id);
+    }
+  }, [authToken]);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-10">
+        <Loader />
+      </div>
+    );
+  }
 
   return (
     <div className="m-5 min-h-screen rounded-lg border bg-white p-5">
@@ -115,68 +97,71 @@ export const Calendar: React.FC<CalendarProps> = () => {
                 <th className="border py-3 px-2">SAT</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <CalendarRow
-                  firstDay={firstDayInMonth[activeMonth]}
-                  lastDayInMonth={new Date(activeYear, activeMonth + 1, 0).getDate()}
-                  row={0}
-                  currentMonth={activeMonth}
-                  currentYear={activeYear}
-                  tasks={tasks}
-                />
-              </tr>
-              <tr>
-                <CalendarRow
-                  firstDay={firstDayInMonth[activeMonth]}
-                  lastDayInMonth={new Date(activeYear, activeMonth + 1, 0).getDate()}
-                  row={1}
-                  currentMonth={activeMonth}
-                  currentYear={activeYear}
-                  tasks={tasks}
-                />
-              </tr>
-              <tr>
-                <CalendarRow
-                  firstDay={firstDayInMonth[activeMonth]}
-                  lastDayInMonth={new Date(activeYear, activeMonth + 1, 0).getDate()}
-                  row={2}
-                  currentMonth={activeMonth}
-                  currentYear={activeYear}
-                  tasks={tasks}
-                />
-              </tr>
-              <tr>
-                <CalendarRow
-                  firstDay={firstDayInMonth[activeMonth]}
-                  lastDayInMonth={new Date(activeYear, activeMonth + 1, 0).getDate()}
-                  row={3}
-                  currentMonth={activeMonth}
-                  currentYear={activeYear}
-                  tasks={tasks}
-                />
-              </tr>
-              <tr>
-                <CalendarRow
-                  firstDay={firstDayInMonth[activeMonth]}
-                  lastDayInMonth={new Date(activeYear, activeMonth + 1, 0).getDate()}
-                  row={4}
-                  currentMonth={activeMonth}
-                  currentYear={activeYear}
-                  tasks={tasks}
-                />
-              </tr>
-              <tr>
-                <CalendarRow
-                  firstDay={firstDayInMonth[activeMonth]}
-                  lastDayInMonth={new Date(activeYear, activeMonth + 1, 0).getDate()}
-                  row={5}
-                  currentMonth={activeMonth}
-                  currentYear={activeYear}
-                  tasks={tasks}
-                />
-              </tr>
-            </tbody>
+            {
+              data?.tasksByUserId && 
+              <tbody>
+                <tr>
+                  <CalendarRow
+                    firstDay={firstDayInMonth[activeMonth]}
+                    lastDayInMonth={new Date(activeYear, activeMonth + 1, 0).getDate()}
+                    row={0}
+                    currentMonth={activeMonth}
+                    currentYear={activeYear}
+                    tasks={data?.tasksByUserId}
+                  />
+                </tr>
+                <tr>
+                  <CalendarRow
+                    firstDay={firstDayInMonth[activeMonth]}
+                    lastDayInMonth={new Date(activeYear, activeMonth + 1, 0).getDate()}
+                    row={1}
+                    currentMonth={activeMonth}
+                    currentYear={activeYear}
+                    tasks={data?.tasksByUserId}
+                  />
+                </tr>
+                <tr>
+                  <CalendarRow
+                    firstDay={firstDayInMonth[activeMonth]}
+                    lastDayInMonth={new Date(activeYear, activeMonth + 1, 0).getDate()}
+                    row={2}
+                    currentMonth={activeMonth}
+                    currentYear={activeYear}
+                    tasks={data?.tasksByUserId}
+                  />
+                </tr>
+                <tr>
+                  <CalendarRow
+                    firstDay={firstDayInMonth[activeMonth]}
+                    lastDayInMonth={new Date(activeYear, activeMonth + 1, 0).getDate()}
+                    row={3}
+                    currentMonth={activeMonth}
+                    currentYear={activeYear}
+                    tasks={data?.tasksByUserId}
+                  />
+                </tr>
+                <tr>
+                  <CalendarRow
+                    firstDay={firstDayInMonth[activeMonth]}
+                    lastDayInMonth={new Date(activeYear, activeMonth + 1, 0).getDate()}
+                    row={4}
+                    currentMonth={activeMonth}
+                    currentYear={activeYear}
+                    tasks={data?.tasksByUserId}
+                  />
+                </tr>
+                <tr>
+                  <CalendarRow
+                    firstDay={firstDayInMonth[activeMonth]}
+                    lastDayInMonth={new Date(activeYear, activeMonth + 1, 0).getDate()}
+                    row={5}
+                    currentMonth={activeMonth}
+                    currentYear={activeYear}
+                    tasks={data?.tasksByUserId}
+                  />
+                </tr>
+              </tbody>
+            }
           </table>
         </div>
       </div>

@@ -42,7 +42,7 @@ export const Project: React.FC = () => {
   } = useProjectListsQuery({
     variables: { project: params.id as string },
   });
-  const [updateTasks, { loading: updateLoading, error: updateError }] = useMutation(UpdateProjectListsDocument, {
+  const [updateTasks, { error: updateError }] = useMutation(UpdateProjectListsDocument, {
     refetchQueries: [{ query: ProjectListsDocument, variables: { project: params.id } }],
   });
 

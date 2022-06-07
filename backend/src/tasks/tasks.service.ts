@@ -20,6 +20,10 @@ export class TasksService {
   async findAll(project: string): Promise<TaskDocument[]> {
     return this.taskModel.find({ project }).populate('assign').populate('status').populate('project');
   }
+  
+  async findByUser(assign: string): Promise<TaskDocument[]> {
+    return this.taskModel.find({ assign, "status": {$in: ["todo", "doing"]} }).populate('assign').populate('status').populate('project');
+  }
 
   async filter(filter: CreateTaskInput): Promise<TaskDocument[]> {
     return this.taskModel.find(filter).populate('assign').populate('status').populate('project');

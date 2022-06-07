@@ -4,7 +4,6 @@ import { Task, TaskDocument } from './entities/task.entity';
 import { CreateTaskInput } from './dto/create-task.input';
 import { UpdateTaskInput } from './dto/update-task.input';
 import { ProjectListsService } from 'src/project-lists/project-lists.service';
-import * as async from 'async';
 
 @Resolver(() => Task)
 export class TasksResolver {
@@ -27,6 +26,11 @@ export class TasksResolver {
   @Query(() => [Task], { name: 'tasks' })
   async findAll(@Args('project') project: string): Promise<TaskDocument[]> {
     return await this.tasksService.findAll(project);
+  }
+
+  @Query(() => [Task], { name: 'tasksByUserId' })
+  async findByUser(@Args('userId') userId: string): Promise<TaskDocument[]> {
+    return await this.tasksService.findByUser(userId);
   }
 
   @Query(() => Task, { name: 'task' })

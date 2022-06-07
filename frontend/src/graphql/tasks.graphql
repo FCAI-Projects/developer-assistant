@@ -1,12 +1,8 @@
-mutation CreateTask($createTaskInput: CreateTaskInput!) {
-  createTask(createTaskInput: $createTaskInput) {
+query TasksByUserId($userId: String!) {
+  tasksByUserId(userId: $userId) {
     id
-  }
-}
-
-mutation UpdateProjectLists($updateProjectListsInput: UpdateProjectListsInput!) {
-  updateProjectLists(updateProjectListsInput: $updateProjectListsInput) {
-    id
+    name
+    deadline
   }
 }
 
@@ -20,5 +16,17 @@ query ProjectLists($project: String!) {
       description
     }
     color
+  }
+}
+
+mutation CreateTask($createTaskInput: CreateTaskInput!) {
+  createTask(createTaskInput: $createTaskInput) {
+    id
+  }
+}
+
+mutation UpdateProjectLists($updateProjectListsInput: UpdateProjectListsInput!) {
+  updateProjectLists(updateProjectListsInput: $updateProjectListsInput) {
+    id
   }
 }
