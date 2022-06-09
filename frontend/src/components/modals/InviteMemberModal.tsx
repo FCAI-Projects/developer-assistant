@@ -14,7 +14,7 @@ import { toast } from "react-toastify";
 // TODO: Use the right query to save to database
 interface formikProps {
   member: string;
-  role: { id: string; name: string }; 
+  role: { id: string; name: string };
 }
 export const InviteMemberModal: React.FC = () => {
   const params = useParams();
@@ -25,7 +25,7 @@ export const InviteMemberModal: React.FC = () => {
   const formik = useFormik<formikProps>({
     initialValues: {
       member: "",
-      role: { id: "", name: "role" }
+      role: { id: "0", name: "Choose Role" },
     },
     validationSchema: Yup.object({
       member: Yup.string().email().required("Required"),
@@ -33,32 +33,35 @@ export const InviteMemberModal: React.FC = () => {
     }),
     onSubmit: async (values) => {
       try {
-          await InviteMember({ 
+        if (values.role.id === "0") {
+          toast.error("Please select a role");
+          return;
+        }
+        await InviteMember({
           variables: {
             inviteMemberInput: {
               project: params.id,
               user: values.member,
               role: values.role.id,
-              
             },
           },
         });
         toast.success("Member has been invited !");
         toggleModal();
-        
       } catch (error) {
         console.log(error);
       }
     },
   });
-  useEffect (() => {
-    if (Roles) 
-     setRolesOptions(
-       Roles.roles.map((role:any) => ({
-          id : role.id,
+  useEffect(() => {
+    if (Roles)
+      setRolesOptions(
+        Roles.roles.map((role: any) => ({
+          id: role.id,
           name: role.name,
-          })));
-  } , [Roles]);
+        }))
+      );
+  }, [Roles]);
   return (
     <>
       <Button lightBlue className="flex items-center gap-2 px-3 py-2 text-xs" onClick={toggleModal}>
@@ -74,16 +77,14 @@ export const InviteMemberModal: React.FC = () => {
             <div className="w-full">
               <Label htmlFor="role">Role</Label>
               <CustomSelect
-              
-              options={rolesOptions}
-              value={formik.values.role}
-              onChange={(e) => {
-                formik.setFieldValue("role", e);
-                
-              }}
-              label="name"
-              id="id"
-            />
+                options={rolesOptions}
+                value={formik.values.role}
+                onChange={(e) => {
+                  formik.setFieldValue("role", e);
+                }}
+                label="name"
+                id="id"
+              />
             </div>
           </form>
         </div>
