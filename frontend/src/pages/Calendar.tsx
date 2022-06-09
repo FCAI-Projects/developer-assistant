@@ -85,7 +85,7 @@ export const Calendar: React.FC<CalendarProps> = () => {
           </div>
         </div>
         <div className="">
-          <table className="h-full w-full">
+          <table className="h-full w-full table-fixed">
             <thead>
               <tr>
                 <th className="border py-3 px-2">SUN</th>
@@ -97,8 +97,7 @@ export const Calendar: React.FC<CalendarProps> = () => {
                 <th className="border py-3 px-2">SAT</th>
               </tr>
             </thead>
-            {
-              data?.tasksByUserId && 
+            {data?.tasksByUserId && (
               <tbody>
                 <tr>
                   <CalendarRow
@@ -161,7 +160,7 @@ export const Calendar: React.FC<CalendarProps> = () => {
                   />
                 </tr>
               </tbody>
-            }
+            )}
           </table>
         </div>
       </div>

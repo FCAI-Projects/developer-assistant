@@ -17,6 +17,12 @@ type User {
 
   """User password"""
   password: String
+
+  """User Google App Password"""
+  googleAppPassword: String
+
+  """User GitHub Toekn"""
+  githubToekn: String
 }
 
 type UserResponse {
@@ -352,6 +358,8 @@ input UpdateUserInput {
 
   """Password of the user"""
   password: String
+  googleAppPassword: String
+  githubToekn: String
 }
 
 input CreateProjectInput {
