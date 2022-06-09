@@ -5,14 +5,13 @@ import { Button } from "../Button";
 import * as Yup from "yup";
 import { Modal } from "./Base";
 import { useMutation } from "@apollo/client";
-import { LoginDocument } from "../../graphql/generated/graphql";
+import { LoginDocument, UpdateUserDocument } from "../../graphql/generated/graphql";
 import { Input, Label } from "../forms";
-import { FaKey, FaPlus } from "react-icons/fa";
-
-// TODO: Use the right query to save to database
+import { FaKey } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 export const AddGoogleAppPasswordModel: React.FC = () => {
-  const [addProject, { loading, data, error }] = useMutation(LoginDocument);
+  const [addGoogleAppPassword, { loading }] = useMutation(UpdateUserDocument);
   const [isOpen, toggleModal] = useToggleModal();
   const formik = useFormik({
     initialValues: {
@@ -23,6 +22,15 @@ export const AddGoogleAppPasswordModel: React.FC = () => {
     }),
     onSubmit: async (values) => {
       try {
+        await addGoogleAppPassword({
+          variables: {
+            user: {
+              googleAppPassword: values.password,
+            },
+          },
+        });
+        toggleModal();
+        toast.success("Google App Password Added successfully");
       } catch (error) {
         console.log(error);
       }
@@ -51,7 +59,7 @@ export const AddGoogleAppPasswordModel: React.FC = () => {
           </form>
         </div>
         <div className="flex flex-row-reverse gap-3">
-          <Button green type="submit" blue onClick={() => formik.handleSubmit()} loading={loading}>
+          <Button green type="submit" onClick={() => formik.handleSubmit()} loading={loading}>
             Add
           </Button>
           <Button type="submit" lightRed onClick={toggleModal}>

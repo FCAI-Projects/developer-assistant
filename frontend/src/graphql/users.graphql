@@ -9,3 +9,9 @@ mutation Login($email: String!, $password: String!) {
     token
   }
 }
+
+mutation UpdateUser($user: UpdateUserInput!) {
+  updateUser(user: $user) {
+    id
+  }
+}

@@ -12,7 +12,6 @@ export interface CalendarProps {}
 export const Calendar: React.FC<CalendarProps> = () => {
   const authToken = useRecoilValue(authState);
   const [id, setId] = useState("");
-  const [tasks, setTasks] = useState([]);
   const { data, loading } = useTasksByUserIdQuery({ variables: { userId: id } });
   const [activeMonth, setActiveMonth] = useState(new Date().getMonth());
   const [activeMonthString, setActiveMonthString] = useState(new Date().toDateString().split(" ")[1]);
