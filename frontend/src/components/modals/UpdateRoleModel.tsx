@@ -3,6 +3,7 @@ import { useFormik } from "formik";
 import React from "react";
 import { FaEdit } from "react-icons/fa";
 import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import * as Yup from "yup";
 import { RolesDocument, UpdateRoleDocument } from "../../graphql/generated/graphql";
 import { useToggleModal } from "../../hooks/useToggleModal";
@@ -71,6 +72,7 @@ export const UpdateRoleModel: React.FC<UpdateRoleProps> = ({
           },
         });
         toggleModal();
+        toast.success("Role Updated successfully");
       } catch (error) {
         console.log(error);
       }

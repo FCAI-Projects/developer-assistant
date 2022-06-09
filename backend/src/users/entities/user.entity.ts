@@ -27,10 +27,7 @@ export class User extends Document {
   password: string;
 
   @Prop()
-  @Field(() => String, {
-    description: 'User Google App Password',
-    nullable: true,
-  })
+  @Field(() => String, { description: 'User Google App Password', nullable: true })
   googleAppPassword: string;
 
   @Prop()

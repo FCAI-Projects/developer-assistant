@@ -9,6 +9,7 @@ import { CreateRoleDocument, RolesDocument } from "../../graphql/generated/graph
 import { Input, Label, ToggleSwitch } from "../forms";
 import { FaPlus } from "react-icons/fa";
 import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export const NewRoleModel: React.FC = () => {
   const ProjectId = useParams();
@@ -60,6 +61,7 @@ export const NewRoleModel: React.FC = () => {
           },
         });
         toggleModal();
+        toast.success("Role created successfully");
       } catch (error) {
         console.log(error);
       }

@@ -75,8 +75,6 @@ export const ProjectSettings: React.FC = () => {
               type="text"
               id="name"
               {...formik.getFieldProps("name")}
-              placeholder=""
-              {...formik.getFieldProps("name")}
               error={formik.touched.name ? formik.errors.name : ""}
             />
           </div>

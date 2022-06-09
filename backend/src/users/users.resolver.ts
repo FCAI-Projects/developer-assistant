@@ -5,7 +5,7 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { JwtService } from '@nestjs/jwt';
 import { compareSync } from 'bcrypt';
 import { JwtAuthGuard } from 'src/auth/jwt.guard';
@@ -93,10 +93,10 @@ export class UsersResolver {
   @Mutation(() => User)
   @UseGuards(JwtAuthGuard)
   updateUser(
-    @Req() req: any,
+    @Context('req') context: any,
     @Args('user') user: UpdateUserInput,
   ): Promise<UserDocument> {
-    return this.usersService.updateOne(req.user.id, user);
+    return this.usersService.updateOne(context.user._id, user);
   }
 
   private createToken(user: UserDocument): string {
