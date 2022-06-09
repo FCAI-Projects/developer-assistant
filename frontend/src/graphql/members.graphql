@@ -8,3 +8,23 @@ query FilterMembers($filter: UpdateMemberInput!) {
     }
   }
 }
+mutation InviteMember($inviteMemberInput: CreateMemberInput!) {
+  inviteMember(inviteMemberInput: $inviteMemberInput) {
+    id
+  }
+}
+query InvitedMember($memberId: String!) {
+  member(id: $memberId) {
+    id
+    project {
+      id
+    }
+    user {
+      email
+    }
+    role {
+      name
+    }
+    status
+  }
+}

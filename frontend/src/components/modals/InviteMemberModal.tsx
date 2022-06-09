@@ -1,22 +1,27 @@
 import { useFormik } from "formik";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useToggleModal } from "../../hooks/useToggleModal";
 import { Button } from "../Button";
 import * as Yup from "yup";
 import { Modal } from "./Base";
 import { useMutation } from "@apollo/client";
-import { LoginDocument } from "../../graphql/generated/graphql";
+import { InvitedMemberDocument, InviteMemberDocument, useRolesQuery } from "../../graphql/generated/graphql";
 import { CustomSelect, Input, Label } from "../forms";
-import { FaPlus, FaUserPlus } from "react-icons/fa";
+import { FaUserPlus } from "react-icons/fa";
+import { useParams } from "react-router-dom";
 
 // TODO: Use the right query to save to database
 
 export const InviteMemberModal: React.FC = () => {
-  const [addProject, { loading, data, error }] = useMutation(LoginDocument);
+  const params = useParams();
+  const [rolesOptions, setRolesOptions] = useState<any>([]);
+  const { data: Roles } = useRolesQuery({ variables: { project: params.id as string } });
+  const [InviteMember, { loading }] = useMutation(InviteMemberDocument, { refetchQueries: [{query: InvitedMemberDocument , variables:{project: params.id}}],});
   const [isOpen, toggleModal] = useToggleModal();
+  // console.log(Roles);
   const formik = useFormik({
     initialValues: {
-      member: "",
+      memberEmail: "",
       role: "",
     },
     validationSchema: Yup.object({
@@ -25,18 +30,36 @@ export const InviteMemberModal: React.FC = () => {
     }),
     onSubmit: async (values) => {
       try {
+        await InviteMember({ 
+          variables: {
+            inviteMemberInput: {
+              memberEmail: values.memberEmail,
+              role: values.role,
+              project: params.id,
+            },
+          },
+        });
       } catch (error) {
         console.log(error);
       }
     },
   });
+ useEffect (() => {
+   if (Roles) 
+    setRolesOptions(
+      Roles.roles.map((role:any) => ({
+         id : role.id,
+         name: role.name,
+         })));
+ } , [Roles]);
+  
 
   return (
     <>
       <Button lightBlue className="flex items-center gap-2 px-3 py-2 text-xs" onClick={toggleModal}>
         <FaUserPlus /> Invite Member
       </Button>
-      <Modal title="Create New Project" isOpen={isOpen} handleClose={toggleModal}>
+      <Modal title="Invite Member" isOpen={isOpen} handleClose={toggleModal}>
         <div className="my-5">
           <form className="flex flex-col gap-4">
             <div className="w-full">
@@ -46,15 +69,11 @@ export const InviteMemberModal: React.FC = () => {
             <div className="w-full">
               <Label htmlFor="role">Role</Label>
               <CustomSelect
-                options={[
-                  { id: "1", name: "Member" },
-                  { id: "2", name: "Admin" },
-                  { id: "3", name: "Editor" },
-                  { id: "4", name: "Custom Role" },
-                ]}
-                value={{ id: "1", name: "Member" }}
+                options={rolesOptions}
+                value={formik.values.role}
                 onChange={(e) => {
-                  console.log(e);
+                  formik.setFieldValue("role", e);
+                  
                 }}
                 label="name"
                 id="id"
