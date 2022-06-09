@@ -22,7 +22,17 @@ export class MembersService {
   }
 
   async findOne(id: string): Promise<MemberDocument> {
-    return this.memberModel.findOne({ id }).populate('user').populate('project');
+    return this.memberModel
+      .findOne({ id })
+      .populate('user')
+      .populate('project');
+  }
+
+  async findUserInProject(
+    user: string,
+    project: string,
+  ): Promise<MemberDocument> {
+    return this.memberModel.findOne({ user, project });
   }
 
   async update(

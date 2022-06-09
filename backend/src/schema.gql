@@ -251,6 +251,7 @@ type Query {
   project(id: String!): Project!
   roles(project: String!): [Role!]!
   role(id: String!): Role!
+  invitations: [Member!]!
   filterMembers(filter: UpdateMemberInput!): [Member!]!
   member(id: String!): Member!
   tasks(project: String!): [Task!]!

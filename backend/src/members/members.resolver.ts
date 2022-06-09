@@ -1,10 +1,11 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int, Context } from '@nestjs/graphql';
 import { MembersService } from './members.service';
 import { Member, MemberDocument } from './entities/member.entity';
 import { CreateMemberInput } from './dto/create-member.input';
 import { UpdateMemberInput } from './dto/update-member.input';
 import { UsersService } from 'src/users/users.service';
-import { HttpException, HttpStatus } from '@nestjs/common';
+import { HttpException, HttpStatus, UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/jwt.guard';
 
 @Resolver(() => Member)
 export class MembersResolver {
@@ -24,7 +25,27 @@ export class MembersResolver {
       throw new HttpException('User Not Found', HttpStatus.NOT_FOUND);
     }
     inviteMemberInput.user = user._id;
+
+    const userInProject = await this.membersService.findUserInProject(
+      inviteMemberInput.user,
+      inviteMemberInput.project,
+    );
+    if (userInProject) {
+      throw new HttpException(
+        'User Already In Project',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
     return await this.membersService.create(inviteMemberInput);
+  }
+
+  @Query(() => [Member], { name: 'invitations' })
+  @UseGuards(JwtAuthGuard)
+  async getUserInvitations(
+    @Context('req') context: any,
+  ): Promise<MemberDocument[]> {
+    return await this.membersService.filter({ user: context.user._id });
   }
 
   @Query(() => [Member])
