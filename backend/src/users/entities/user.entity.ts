@@ -25,6 +25,17 @@ export class User extends Document {
   @Prop({ required: true })
   @Field(() => String, { description: 'User password', nullable: true })
   password: string;
+
+  @Prop()
+  @Field(() => String, {
+    description: 'User Google App Password',
+    nullable: true,
+  })
+  googleAppPassword: string;
+
+  @Prop()
+  @Field(() => String, { description: 'User GitHub Toekn', nullable: true })
+  githubToekn: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
