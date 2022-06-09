@@ -1,12 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { FaAngleRight, FaPlus, FaVideo } from "react-icons/fa";
-import { Button } from "../components/Button";
+import { FaAngleRight, FaVideo } from "react-icons/fa";
 import socketIOClient from "socket.io-client";
-import axios from "axios";
-import { useQuery } from "@apollo/client";
-import { Group, useGroupsQuery } from "../graphql/generated/graphql";
+import { useGroupsQuery } from "../graphql/generated/graphql";
 import { Loader } from "../components/Loader";
-import { group } from "console";
 import { useRecoilValue } from "recoil";
 import { authState } from "../recoil";
 import { decodeToken } from "react-jwt";
@@ -57,7 +53,7 @@ export const Chat: React.FC = () => {
     }
   }, [authToken]);
 
-  if (loading) return <Loader/>;
+  if (loading) return <Loader />;
 
   return (
     <div className="">

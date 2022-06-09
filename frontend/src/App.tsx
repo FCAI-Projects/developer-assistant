@@ -17,6 +17,7 @@ import { Chat } from "./pages/Chat";
 import { Calendar } from "./pages/Calendar";
 import { Task } from "./pages/Project/Task";
 import { Invitations } from "./pages/Invitations";
+import { Video } from "./pages/Video";
 
 export const App: React.FC = () => {
   const authToken = useRecoilValue(authState);
@@ -49,6 +50,7 @@ export const App: React.FC = () => {
             <Route path="calendar" element={<Calendar />} />
             <Route path="invitations" element={<Invitations />} />
           </Route>
+          <Route path="video/:group" element={<Video />} />
 
           <Route path="project/:id" element={<ProjectLayout />}>
             <Route index element={<Project />} />

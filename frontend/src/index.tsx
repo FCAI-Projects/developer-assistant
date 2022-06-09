@@ -9,6 +9,7 @@ import { RecoilRoot, useRecoilSnapshot } from "recoil";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { setContext } from "@apollo/client/link/context";
+import adapter from "webrtc-adapter";
 
 const httpLink = createHttpLink({
   uri: "http://localhost:3030/graphql",
