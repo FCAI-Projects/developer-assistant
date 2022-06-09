@@ -1,3 +1,22 @@
+query ProjectLists($project: String!) {
+  projectLists(project: $project) {
+    id
+    name
+    tasks {
+      id
+      name
+      description
+    }
+    color
+  }
+}
+
+mutation UpdateProjectLists($updateProjectListsInput: UpdateProjectListsInput!) {
+  updateProjectLists(updateProjectListsInput: $updateProjectListsInput) {
+    id
+  }
+}
+
 mutation CreateProjectLists($createProjectListsInput: CreateProjectListsInput!) {
   createProjectLists(createProjectListsInput: $createProjectListsInput) {
     id

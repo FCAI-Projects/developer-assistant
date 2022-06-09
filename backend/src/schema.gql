@@ -99,31 +99,31 @@ type Task {
   description: String!
 
   """Task assigned to"""
-  assign: User!
+  assign: User
 
   """Task attachments"""
-  attachments: [String!]!
+  attachments: [String!]
 
   """Task status"""
-  status: String!
+  status: String
 
   """Task periority"""
-  periority: String!
+  periority: String
 
   """Task tags"""
-  tags: [String!]!
+  tags: [String!]
 
   """Task started at"""
-  startedAt: DateTime!
+  startedAt: DateTime
 
   """Task finished at"""
-  finishedAt: DateTime!
+  finishedAt: DateTime
 
   """Task deadline"""
-  deadline: DateTime!
+  deadline: DateTime
 
   """Task docs"""
-  docs: String!
+  docs: String
 }
 
 """

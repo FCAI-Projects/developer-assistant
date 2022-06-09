@@ -25,39 +25,39 @@ export class Task extends Document {
   description: string;
 
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'User' })
-  @Field(() => User, { description: 'Task assigned to' })
+  @Field(() => User, { description: 'Task assigned to', nullable: true })
   assign: MongooseSchema.Types.ObjectId;
 
   @Prop()
-  @Field(() => [String], { description: 'Task attachments' })
+  @Field(() => [String], { description: 'Task attachments', nullable: true })
   attachments: Array<string>;
 
   @Prop({ enum: ['todo', 'doing', 'done'] })
-  @Field(() => String, { description: 'Task status' })
+  @Field(() => String, { description: 'Task status', nullable: true })
   status: string;
 
   @Prop({ enum: ['low', 'medium', 'high'] })
-  @Field(() => String, { description: 'Task periority' })
+  @Field(() => String, { description: 'Task periority', nullable: true })
   periority: string;
 
   @Prop()
-  @Field(() => [String], { description: 'Task tags' })
+  @Field(() => [String], { description: 'Task tags', nullable: true })
   tags: Array<string>;
 
   @Prop()
-  @Field(() => Date, { description: 'Task started at' })
+  @Field(() => Date, { description: 'Task started at', nullable: true })
   startedAt: Date;
 
   @Prop()
-  @Field(() => Date, { description: 'Task finished at' })
+  @Field(() => Date, { description: 'Task finished at', nullable: true })
   finishedAt: Date;
 
   @Prop()
-  @Field(() => Date, { description: 'Task deadline' })
+  @Field(() => Date, { description: 'Task deadline', nullable: true })
   deadline: Date;
 
   @Prop()
-  @Field(() => String, { description: 'Task docs' })
+  @Field(() => String, { description: 'Task docs', nullable: true })
   docs: string;
 }
 
