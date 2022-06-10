@@ -1,3 +1,4 @@
+import { toast } from "react-toastify";
 import socketIOClient from "socket.io-client";
 
 const { RTCPeerConnection, RTCSessionDescription } = window;
@@ -79,7 +80,13 @@ class PeerConnectionSession {
 
   joinRoom(room: any) {
     this._room = room;
-    this.socket.emit("joinRoom", room);
+    this.socket.on(`room-not-found`, ({ users, current }: any) => {
+      toast('Your are not a member', {
+        type: "error",
+      });
+    });
+    this.socket.emit("joinRoom", {room, userId: localStorage.getItem("id")});
+    
   }
 
   onCallMade() {

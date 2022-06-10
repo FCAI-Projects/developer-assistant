@@ -53,4 +53,9 @@ export class GroupsService {
   async remove(id: string): Promise<GroupDocument> {
     return await this.groupModel.findByIdAndRemove(id);
   }
+
+  async checkMember(id: string, userId: string): Promise<GroupDocument> {
+    console.log(id);
+    return await this.groupModel.findOne({ id });
+  }
 }

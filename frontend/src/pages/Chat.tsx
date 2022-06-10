@@ -87,7 +87,7 @@ export const Chat: React.FC = () => {
                 </p>
               </div>
               <div>
-                <Link to={"/app/chat/video/:" + selectedGroup.id} target="_blank">
+                <Link to={"/app/chat/video/" + selectedGroup.id} target="_blank">
                   <FaVideo className="cursor-pointer text-xl text-slate-600" />
                 </Link>
               </div>

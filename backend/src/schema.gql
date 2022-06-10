@@ -28,6 +28,9 @@ type User {
 type UserResponse {
   """Token of the user"""
   token: String!
+
+  """userId of the user"""
+  userId: String!
 }
 
 type Project {
@@ -264,6 +267,7 @@ type Query {
   comment(id: String!): Comment!
   groups: [Group!]!
   group(id: String!): Group!
+  checkMemberGroup(id: String!): Group!
   expenses(project: String!): [Expense!]!
   expense(id: String!): Expense!
 

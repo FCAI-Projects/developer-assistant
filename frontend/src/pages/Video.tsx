@@ -28,6 +28,7 @@ const createMediaStream = async (vedioControl :VedioControl ) => {
 };
 
 export const Video: React.FC = () => {
+ 
   const { group } = useParams();
   const localVideoRef: any = useRef();
   const mainRef = useRef();
@@ -127,3 +128,5 @@ export const Video: React.FC = () => {
     </div>
   );
 };
+
+
