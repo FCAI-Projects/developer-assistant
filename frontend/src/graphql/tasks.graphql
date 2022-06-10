@@ -12,7 +12,13 @@ mutation CreateTask($createTaskInput: CreateTaskInput!) {
   }
 }
 
-query Task($taskId: String!) {
+mutation UpdateTask($updateTaskId: String!, $updateTaskInput: UpdateTaskInput!) {
+  updateTask(id: $updateTaskId, updateTaskInput: $updateTaskInput) {
+    id
+  }
+}
+
+query TaskById($taskId: String!) {
   task(id: $taskId) {
     id
     name

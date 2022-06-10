@@ -1,16 +1,22 @@
 import React, { useRef } from "react";
 import ContentEditable from "react-contenteditable";
+import sanitizeHtml from "sanitize-html";
 
 interface EditableProps {
-  value: string;
+  value: string | undefined | null;
   onChange: (value: string) => void;
+  tag?: string; // wrapper tag
 }
 
-export const Editable: React.FC<EditableProps> = ({ value, onChange }) => {
+export const Editable: React.FC<EditableProps> = ({ value, onChange, tag }) => {
   const text = useRef<any>(value);
 
+  const sanitizeConf = {
+    allowedTags: [],
+  };
+
   const handleChange = (evt: any) => {
-    text.current = evt.target.value;
+    text.current = sanitizeHtml(evt.target.value, sanitizeConf);
   };
 
   const handleBlur = () => {
@@ -23,7 +29,7 @@ export const Editable: React.FC<EditableProps> = ({ value, onChange }) => {
       disabled={false} // use true to disable editing
       onChange={handleChange} // handle innerHTML change
       onBlur={handleBlur} // handle innerHTML change
-      tagName="" // Use a custom HTML tag (uses a div by default)
+      tagName={tag} // Use a custom HTML tag (uses a div by default)
     />
   );
 };

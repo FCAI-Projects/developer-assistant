@@ -13,7 +13,7 @@ export const Card: React.FC<CardProps> = ({ task, listId, index }) => {
   return (
     <Draggable draggableId={task.id} index={index}>
       {(provided) => (
-        <Link to={`task/${listId}`} className="cursor-pointer">
+        <Link to={`task/${task.id}`} className="cursor-pointer">
           <div
             ref={provided.innerRef}
             {...provided.draggableProps}
