@@ -9,13 +9,24 @@ import { useCreateMediaStream } from "../hooks/useCreateMediaStream";
 import { useStartPeerSession } from "../hooks/useStartPeerSession";
 import { toggleFullscreen } from "../utils/toggleFullscreen";
 
+export interface VedioControl {
+  video: boolean;
+    audio: boolean;
+}
+
 export const Video: React.FC = () => {
   const { group } = useParams();
   const localVideoRef = useRef();
   const mainRef = useRef();
   const gridRef = useRef<any>();
+  const [vedioControl, setVedioControl] = useState<VedioControl>({
+    video: false,
+    audio: false,
+  });
+  let gridClass:string = "grid grid-cols-2 grid-flow-row gap-4 auto-cols-auto";
 
-  const userMediaStream = useCreateMediaStream(localVideoRef);
+
+  let userMediaStream = useCreateMediaStream(localVideoRef, vedioControl);
 
   const { connectedUsers, cancelScreenSharing, isScreenShared, shareScreen } = useStartPeerSession(
     group,
@@ -37,15 +48,44 @@ export const Video: React.FC = () => {
     toggleFullscreen(fullscreen, mainRef.current);
   }
 
+  useEffect(() => {
+   
+    const numberConttection = (connectedUsers.length + 1) % 2 == 0? connectedUsers.length + 1 : connectedUsers.length + 2;
+   
+    gridClass = "grid grid-cols-" + (numberConttection / 2)  + " grid-flow-row gap-4 auto-cols-auto place-content-center";
+  }
+  , [connectedUsers]);
+
+   useEffect(() => {
+   
+    // userMediaStream = useCreateMediaStream(localVideoRef, vedioControl);
+  }
+  , [vedioControl]);
+
+  const toggleAudio = (audio: boolean) => {
+    setVedioControl({ ...vedioControl, audio });
+  }
+
+    const toggleVedio = (video: boolean) => {
+    setVedioControl({ ...vedioControl, video });
+  }
   return (
-    <div className="bg-slate-700">
-      <div ref={gridRef}>
-        <LocalVideo ref={localVideoRef} autoPlay playsInline muted />
-        {connectedUsers.map((user: any) => (
-          <RemoteVideo key={user} id={user} autoPlay playsInline />
-        ))}
+    
+    <div className="">
+      
+      <div ref={gridRef} className={connectedUsers.length > 0 ? gridClass : "grid gap-4 grid-flow-col auto-cols-auto"}>
+        <LocalVideo numberMember={connectedUsers} ref={localVideoRef} autoPlay playsInline muted  className="h-screen" />
+        {connectedUsers.map((user: any) => {return (
+          <RemoteVideo key={user} id={user} autoPlay playsInline className=""/>
+     
+        );})}
+         
       </div>
       <VideoControls
+        toggleAudio={toggleAudio}
+        togglevideo={toggleVedio}
+        audio={vedioControl.audio}
+        video={vedioControl.video}
         isScreenShared={isScreenShared}
         onScreenShare={handleScreenSharing}
         onToggleFullscreen={handleFullscreen}

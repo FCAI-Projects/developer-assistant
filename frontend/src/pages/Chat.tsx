@@ -7,6 +7,7 @@ import { useRecoilValue } from "recoil";
 import { authState } from "../recoil";
 import { decodeToken } from "react-jwt";
 import { NewGroupModel } from "../components/modals/NewGroupModel";
+import { Link } from "react-router-dom";
 
 const socket = socketIOClient("http://localhost:3030");
 
@@ -86,7 +87,9 @@ export const Chat: React.FC = () => {
                 </p>
               </div>
               <div>
-                <FaVideo className="cursor-pointer text-xl text-slate-600" />
+                <Link to={"/app/chat/video/:" + selectedGroup.id} target="_blank">
+                  <FaVideo className="cursor-pointer text-xl text-slate-600" />
+                </Link>
               </div>
             </header>
             <div className="mb-1 flex max-h-screen flex-col items-baseline gap-5 overflow-auto p-5 scrollbar-thin scrollbar-track-slate-200 scrollbar-thumb-slate-500">
