@@ -29,7 +29,13 @@ export const RemoteVideo: React.FC<VideoProps> = ({ ...props }) => {
   return (
     <div className="box-border">
       {/* <VoiceVisualizer id={props.id} /> */}
-      <video {...props} className="h-full w-full" />
+      <video {...props} style={{
+           maxWidth: "100%",
+           height: "auto",
+           position: "relative",
+           left: "50%",
+           transform: "translateX(-50%)"
+      }} />
     </div>
   );
 };

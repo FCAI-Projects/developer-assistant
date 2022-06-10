@@ -81,11 +81,26 @@ export const useStartPeerSession = (
     setDisplayMediaStream(stream);
   };
 
+  const changeControlsVideo = async (userMediaStream:  MediaStream | null) => {
+    const senders = await peerVideoConnection.senders.filter((sender: any) => sender.track.kind === "video");
+
+    if (senders) {
+      senders.forEach((sender: any) =>
+        sender.replaceTrack(userMediaStream?.getTracks().find((track) => track.kind === "video"))
+      );
+    }
+
+    localVideoRef.current.srcObject = userMediaStream;
+    displayMediaStream?.getTracks().forEach((track) => track.stop());
+    setDisplayMediaStream(null);
+  }
+
   return {
     connectedUsers,
     peerVideoConnection,
     shareScreen,
     cancelScreenSharing,
+    changeControlsVideo,
     isScreenShared: !!displayMediaStream,
   };
 };

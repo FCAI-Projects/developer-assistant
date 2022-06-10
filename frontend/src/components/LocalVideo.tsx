@@ -14,7 +14,13 @@ export const LocalVideo = forwardRef<any, VideoProps>((props, ref) => {
       <video {...props} ref={ref}  className={props.numberMember > 0 ? "h-full w-full" : ""}  style={props.numberMember == 0 ?{
         height: "90vh",
         width: "100%"
-      } : {}}/>
+      } : {
+        maxWidth: "100%",
+    height: "auto",
+    position: "relative",
+    left: "50%",
+    transform: "translateX(-50%)"
+      }}/>
     </div>
   );
 });

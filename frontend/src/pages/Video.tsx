@@ -14,21 +14,47 @@ export interface VedioControl {
     audio: boolean;
 }
 
+const createMediaStream = async (vedioControl :VedioControl ) => {
+  const stream = await navigator.mediaDevices.getUserMedia({
+    video: vedioControl.video? true :  {
+      width: { min: 640, ideal: 1920 },
+      height: { min: 400, ideal: 1080 },
+      aspectRatio: { ideal: 1.7777777778 },
+    }, audio: vedioControl.audio
+  });
+
+  return stream;
+
+};
+
 export const Video: React.FC = () => {
   const { group } = useParams();
-  const localVideoRef = useRef();
+  const localVideoRef: any = useRef();
   const mainRef = useRef();
   const gridRef = useRef<any>();
   const [vedioControl, setVedioControl] = useState<VedioControl>({
     video: false,
     audio: false,
   });
+
   let gridClass:string = "grid grid-cols-2 grid-flow-row gap-4 auto-cols-auto";
 
 
-  let userMediaStream = useCreateMediaStream(localVideoRef, vedioControl);
+  const [userMediaStream, setUserMediaStream] = useState<MediaStream | null>(null);
 
-  const { connectedUsers, cancelScreenSharing, isScreenShared, shareScreen } = useStartPeerSession(
+  useEffect(() => {
+    
+    setVideoControl();
+    
+  }, [localVideoRef]);
+
+  const setVideoControl = async () => {
+    const stream = await createMediaStream(vedioControl);
+    localVideoRef.current.srcObject = stream;
+    setUserMediaStream(stream);
+  }
+
+  const { connectedUsers, cancelScreenSharing, isScreenShared, shareScreen, changeControlsVideo } = useStartPeerSession(
     group,
     userMediaStream,
     localVideoRef
@@ -48,6 +74,7 @@ export const Video: React.FC = () => {
     toggleFullscreen(fullscreen, mainRef.current);
   }
 
+  // handle number of cols when multi users
   useEffect(() => {
    
     const numberConttection = (connectedUsers.length + 1) % 2 == 0? connectedUsers.length + 1 : connectedUsers.length + 2;
@@ -56,17 +83,24 @@ export const Video: React.FC = () => {
   }
   , [connectedUsers]);
 
-   useEffect(() => {
-   
-    // userMediaStream = useCreateMediaStream(localVideoRef, vedioControl);
+  useEffect(() => {
+    changeControlVideo();
+    
   }
   , [vedioControl]);
 
-  const toggleAudio = (audio: boolean) => {
-    setVedioControl({ ...vedioControl, audio });
+  const changeControlVideo = async () => {
+    const stream = await createMediaStream(vedioControl);
+    localVideoRef.current.srcObject = stream;
+    changeControlsVideo(stream);
   }
 
-    const toggleVedio = (video: boolean) => {
+  const toggleAudio = (audio: boolean) => {
+    setVedioControl({ ...vedioControl, audio });
+ 
+  }
+
+    const toggleVideo = (video: boolean) => {
     setVedioControl({ ...vedioControl, video });
   }
   return (
@@ -83,7 +117,7 @@ export const Video: React.FC = () => {
       </div>
       <VideoControls
         toggleAudio={toggleAudio}
-        togglevideo={toggleVedio}
+        togglevideo={toggleVideo}
         audio={vedioControl.audio}
         video={vedioControl.video}
         isScreenShared={isScreenShared}

@@ -31,8 +31,8 @@ export const VideoControls: React.FC<VideoControlsProps> = ({ isScreenShared, on
       <div className="inline-flex gap-3">
       
      
-      <IconVedio audio active={video} onClick={() => {togglevideo(!video)}}/>
-      <IconVedio vedio active={audio} onClick={() => {toggleAudio(!audio)}}/>
+      <IconVedio vedio  active={video} onClick={() => {togglevideo(!video)}}/>
+      <IconVedio audio active={audio} onClick={() => {toggleAudio(!audio)}}/>
       <IconVedio onClick={handleScreenShare} screenSharing active={isScreenShared}/>
         {/* <Button onClick={handleScreenShare}>{isScreenShared ? "Cancel Sharing" : "Share Screen"}</Button>
         <Button onClick={handleToggleFullscreen}>{isFullscreen ? "Exit Full Screen" : "Full Screen"}</Button> */}
