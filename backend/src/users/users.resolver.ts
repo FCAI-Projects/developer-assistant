@@ -52,7 +52,7 @@ export class UsersResolver {
     }
     const user = await this.usersService.createUser(createUserInput);
     const token = this.createToken(user);
-    return { token };
+    return { token, userId: user._id };
   }
 
   @Mutation(() => UserResponse)
@@ -81,7 +81,8 @@ export class UsersResolver {
       );
     }
     const token = this.createToken(user);
-    return { token };
+
+    return { token, userId: user.id };
   }
 
   @Mutation(() => User)

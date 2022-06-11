@@ -5,4 +5,6 @@ import { CreateUserInput } from './create-user.dto';
 export class UserResponse {
   @Field(() => String, { description: 'Token of the user' })
   token: string;
+  @Field(() => String, { description: 'userId of the user' })
+  userId: string;
 }

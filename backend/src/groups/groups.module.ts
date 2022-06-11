@@ -9,5 +9,6 @@ import { Group, GroupSchema } from './entities/group.entity';
     MongooseModule.forFeature([{ name: Group.name, schema: GroupSchema }]),
   ],
   providers: [GroupsResolver, GroupsService],
+  exports: [GroupsService],
 })
 export class GroupsModule {}

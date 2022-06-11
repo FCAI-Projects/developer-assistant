@@ -41,6 +41,7 @@ import { VideoModule } from './video/video.module';
     ExpensesModule,
     TimeTrackingModule,
     VideoModule,
+    GroupsModule
   ],
   controllers: [AppController],
   providers: [AppService],

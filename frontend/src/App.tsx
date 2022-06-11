@@ -46,11 +46,12 @@ export const App: React.FC = () => {
           <Route element={<AppLayout />}>
             <Route index element={<Projects />} />
             <Route path="settings" element={<Settings />} />
-            <Route path="chat" element={<Chat />} />
+            <Route path="chat" element={<Chat />} /> 
+            <Route path="chat/video/:group" element={<Video />} />
             <Route path="calendar" element={<Calendar />} />
             <Route path="invitations" element={<Invitations />} />
           </Route>
-          <Route path="video/:group" element={<Video />} />
+         
 
           <Route path="project/:id" element={<ProjectLayout />}>
             <Route index element={<Project />} />

@@ -12,9 +12,15 @@ import { UpdateVideoDto } from './dto/update-video.dto';
 import { Socket } from 'socket.io';
 import { Logger } from '@nestjs/common';
 import { Server } from 'ws';
+import { GroupsService } from 'src/groups/groups.service';
+import { ObjectId } from "mongoose";
+
 
 @WebSocketGateway({ namespace: 'video' })
 export class VideoGateway implements OnGatewayInit, OnGatewayDisconnect {
+
+  constructor(private readonly groupsService: GroupsService) {}
+  
   @WebSocketServer() server: Server;
 
   private activeSockets: { room: string; id: string }[] = [];
@@ -22,32 +28,40 @@ export class VideoGateway implements OnGatewayInit, OnGatewayDisconnect {
   private logger: Logger = new Logger('VideoGateway');
 
   @SubscribeMessage('joinRoom')
-  public joinRoom(client: Socket, room: string): void {
-    console.log('joinRoom');
+  public async joinRoom(client: Socket, data: {room: string, userId: string}): Promise<void> {
+
+    const group = await this.groupsService.findOne(data.room);
+    if (!group.members.includes(data.userId as unknown as ObjectId) && group.admin !== data.userId as unknown as ObjectId) {
+      client.emit('room-not-found', {
+        room: data.room,
+      });
+      return;
+    }
+
     /*
     client.join(room);
     client.emit('joinedRoom', room);
     */
 
     const existingSocket = this.activeSockets?.find(
-      (socket) => socket.room === room && socket.id === client.id,
+      (socket) => socket.room === data.room && socket.id === client.id,
     );
-
+      const room = data.room;
     if (!existingSocket) {
       this.activeSockets = [...this.activeSockets, { id: client.id, room }];
-      client.emit(`${room}-update-user-list`, {
+      client.emit(`${data.room}-update-user-list`, {
         users: this.activeSockets
-          .filter((socket) => socket.room === room && socket.id !== client.id)
+          .filter((socket) => socket.room === data.room && socket.id !== client.id)
           .map((existingSocket) => existingSocket.id),
         current: client.id,
       });
 
-      client.broadcast.emit(`${room}-add-user`, {
+      client.broadcast.emit(`${data.room}-add-user`, {
         user: client.id,
       });
     }
 
-    return this.logger.log(`Client ${client.id} joined ${room}`);
+    return this.logger.log(`Client ${client.id} joined ${data.room}`);
   }
 
   @SubscribeMessage('call-user')

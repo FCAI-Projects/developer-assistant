@@ -38,6 +38,13 @@ export class GroupsResolver {
     return await this.groupsService.findOne(id);
   }
 
+  @Query(() => Group || null, { name: 'checkMemberGroup' })
+  @UseGuards(JwtAuthGuard)
+  async CheckMemberGroup(@Args('id', { type: () => String }) id: string) {
+
+    return await this.groupsService.findOne(id);
+  }
+
   @Mutation(() => Group)
   async updateGroup(
     @Args('updateGroupInput') updateGroupInput: UpdateGroupInput,
