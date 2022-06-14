@@ -6,7 +6,7 @@ interface AssignMemberProps {}
 
 export const AssignMember: React.FC<AssignMemberProps> = () => {
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-5 border-b pb-3">
       <header className="flex items-center justify-between">
         <h6 className="mb-1 flex items-center gap-2">
           <FaGreaterThanEqual className="text-sm" />

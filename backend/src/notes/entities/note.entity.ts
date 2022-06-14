@@ -19,6 +19,7 @@ export class Note {
 
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'User' })
   @Field(() => User, { description: 'User Id', nullable: true })
+
   user: MongooseSchema.Types.ObjectId;
 
   @Prop()
