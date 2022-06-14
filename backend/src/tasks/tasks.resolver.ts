@@ -48,27 +48,27 @@ export class TasksResolver {
     return await this.tasksService.update(id, updateTaskInput);
   }
 
-  @Mutation(() => Boolean)
-  async uploadAttachments(
-    @Args('id') id: string,
-    @Args({ name: 'attachment', type: () => GraphQLUpload })
-    { createReadStream, filename }: FileUpload,
-  ): Promise<boolean> {
-    return new Promise(async (resolve, reject) =>
-      createReadStream()
-        .pipe(createWriteStream(`./uploads/${filename}`))
-        .on('finish', async () => {
-          await this.tasksService.updateModel(id, {
-            $push: { attachments: filename },
-          });
-          resolve(true);
-        })
-        .on('error', () => reject(false)),
-    );
-  }
+  // @Mutation(() => Boolean)
+  // async uploadAttachments(
+  //   @Args('id') id: string,
+  //   @Args({ name: 'attachment', type: () => GraphQLUpload })
+  //   { createReadStream, filename }: FileUpload,
+  // ): Promise<boolean> {
+  //   return new Promise(async (resolve, reject) =>
+  //     createReadStream()
+  //       .pipe(createWriteStream(`./uploads/${filename}`))
+  //       .on('finish', async () => {
+  //         await this.tasksService.updateModel(id, {
+  //           $push: { attachments: filename },
+  //         });
+  //         resolve(true);
+  //       })
+  //       .on('error', () => reject(false)),
+  //   );
+  // }
 
   @Mutation(() => Task)
-  async inviteMember(
+  async assignMember(
     @Args('id') id: string,
     @Args('member') member: string,
   ): Promise<TaskDocument> {
