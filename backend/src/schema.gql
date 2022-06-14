@@ -102,7 +102,7 @@ type Task {
   description: String!
 
   """Task assigned to"""
-  assign: User
+  assign: [User!]
 
   """Task attachments"""
   attachments: [String!]
@@ -319,7 +319,7 @@ type Mutation {
   createRole(createRoleInput: CreateRoleInput!): Role!
   updateRole(id: String!, updateRoleInput: UpdateRoleInput!): Role!
   removeRole(id: String!): Role!
-  inviteMember(inviteMemberInput: CreateMemberInput!): Member!
+  inviteMember(id: String!, member: String!): Task!
   updateMember(id: String!, updateMemberInput: UpdateMemberInput!): Member!
   removeMember(id: String!): Member!
   createTask(createTaskInput: CreateTaskInput!): Task!
@@ -426,12 +426,6 @@ input UpdateRoleInput {
   editProject: Boolean = false
   inviteToProject: Boolean = false
   deleteMember: Boolean = false
-}
-
-input CreateMemberInput {
-  project: String!
-  user: String!
-  role: String!
 }
 
 input CreateTaskInput {

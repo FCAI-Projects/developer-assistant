@@ -2,7 +2,7 @@ import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Schema as MongooseSchema } from 'mongoose';
 import { Project } from 'src/projects/entities/project.entity';
-import { User } from 'src/users/entities/user.entity';
+import { User, UserDocument } from 'src/users/entities/user.entity';
 
 export type TaskDocument = Task & Document;
 
@@ -24,9 +24,9 @@ export class Task extends Document {
   @Field(() => String, { description: 'Task description' })
   description: string;
 
-  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'User' })
-  @Field(() => User, { description: 'Task assigned to', nullable: true })
-  assign: MongooseSchema.Types.ObjectId;
+  @Prop({ type: [MongooseSchema.Types.ObjectId], ref: 'User' })
+  @Field(() => [User], { description: 'Task assigned to', nullable: true })
+  assign: Array<UserDocument>;
 
   @Prop()
   @Field(() => [String], { description: 'Task attachments', nullable: true })

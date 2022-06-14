@@ -47,6 +47,16 @@ export class TasksResolver {
   }
 
   @Mutation(() => Task)
+  async inviteMember(
+    @Args('id') id: string,
+    @Args('member') member: string,
+  ): Promise<TaskDocument> {
+    return await this.tasksService.updateModel(id, {
+      $push: { assign: member },
+    });
+  }
+
+  @Mutation(() => Task)
   async removeTask(@Args('id') id: string): Promise<TaskDocument> {
     return await this.tasksService.remove(id);
   }
