@@ -13,4 +13,6 @@ export class CreateMemberInput {
 
   // @Field(() => String)
   // badges: string;
+  @Field(() => String, {description: 'Member Status' , nullable: true})
+  status: string;
 }
