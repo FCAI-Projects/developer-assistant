@@ -6,19 +6,16 @@ import * as Yup from "yup";
 import { Modal } from "./Base";
 import { useMutation } from "@apollo/client";
 import { CreateNoteDocument } from "../../graphql/generated/graphql";
-import { Input, Label, Textarea } from "../forms";
+import { Label, Textarea } from "../forms";
 import { FaPlus } from "react-icons/fa";
 import { toast } from "react-toastify";
-import { useRecoilValue } from "recoil";
-import { authState } from "../../recoil";
-import { decodeToken } from "react-jwt";
-import { useParams } from "react-router-dom";
 
-export const AddPrivateNotesModel: React.FC = () => {
-  const authToken = useRecoilValue(authState);
-  const [id, setId] = useState("");
-  const taskId  = useParams().taskId;
-  const [addNote, { loading }] = useMutation(CreateNoteDocument);
+interface AddPrivateNotesModelProps {
+  userId: string;
+  taskId: any;
+}
+export const AddPrivateNotesModel: React.FC<AddPrivateNotesModelProps> = ({ userId, taskId }) => {
+  const [addNote, { loading }] = useMutation(CreateNoteDocument, { refetchQueries: ["FilterNotes"] });
   const [isOpen, toggleModal] = useToggleModal();
   const formik = useFormik({
     initialValues: {
@@ -27,16 +24,21 @@ export const AddPrivateNotesModel: React.FC = () => {
     validationSchema: Yup.object({
       note: Yup.string().required("Required"),
     }),
-    onSubmit: async (values) => {
+    onSubmit: async (values, formikApi) => {
       try {
         await addNote({
           variables: {
             createNoteInput: {
-              userId: id,
-              taskId: taskId,
+              user: userId,
+              task: taskId,
               note: values.note,
             },
           },
+        });
+        formikApi.resetForm({
+          values: {
+            note: "",
+          }
         });
         toggleModal();
         toast.success("Note Added successfully");
@@ -45,13 +47,6 @@ export const AddPrivateNotesModel: React.FC = () => {
       }
     },
   });
-
-  useEffect(() => {
-    if (authToken) {
-      const decode: any = decodeToken(authToken);
-      setId(decode._id);
-    }
-  }, [authToken]);
 
   return (
     <>

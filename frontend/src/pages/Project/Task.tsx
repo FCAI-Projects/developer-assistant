@@ -1,11 +1,8 @@
 import { useMutation } from "@apollo/client";
 import React, { useEffect, useMemo } from "react";
-import { FaGreaterThanEqual, FaPause, FaPlay, FaPlus, FaTrash, FaUpload } from "react-icons/fa";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { Button } from "../../components/Button";
 import { Editable } from "../../components/Editable";
-import { Textarea } from "../../components/forms";
 import { Loader } from "../../components/Loader";
 import { AssignMember } from "../../components/TaskPage/AssignMember";
 import { Attachments } from "../../components/TaskPage/Attachments";
