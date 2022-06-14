@@ -21,7 +21,7 @@ export class NotesService {
     return this.NoteModel.findOne({ _id: id });
   }
 
-  async findByTaskId(filter: CreateNoteInput): Promise<NoteDocument[]> {
+  async findByTaskId(filter: UpdateNoteInput): Promise<NoteDocument[]> {
     return this.NoteModel.find(filter);
   }
 

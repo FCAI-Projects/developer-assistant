@@ -156,7 +156,7 @@ type ProjectLists {
 
 type Note {
   """Note ID"""
-  id: ID!
+  id: ID
 
   """Task Id"""
   task: Task!
@@ -165,7 +165,7 @@ type Note {
   user: User!
 
   """Task Note"""
-  note: String!
+  note: String
 }
 
 type Comment {
@@ -272,7 +272,7 @@ type Query {
   projectLists(project: String!): [ProjectLists!]!
   projectListsById(id: String!): ProjectLists!
   note(id: String!): Note!
-  filterNotes(filter: CreateNoteInput!): Note!
+  filterNotes(filter: UpdateNoteInput!): Note!
   comments(taskId: String!): [Comment!]!
   comment(id: String!): Comment!
   groups: [Group!]!
@@ -297,15 +297,15 @@ input UpdateMemberInput {
   role: String
 }
 
-input CreateNoteInput {
+input UpdateNoteInput {
   """Task Id"""
-  taskId: String!
+  task: String
 
   """User Id"""
-  userId: String!
+  user: String
 
   """Task Note"""
-  note: String!
+  note: String
 }
 
 type Mutation {
@@ -548,15 +548,15 @@ input UpdateProjectListsInput {
   index: Int
 }
 
-input UpdateNoteInput {
+input CreateNoteInput {
   """Task Id"""
-  taskId: String
+  task: String!
 
   """User Id"""
-  userId: String
+  user: String!
 
   """Task Note"""
-  note: String
+  note: String!
 }
 
 input CreateCommentInput {

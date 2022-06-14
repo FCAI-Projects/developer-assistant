@@ -101,7 +101,7 @@ export const Comments: React.FC<CommentsProps> = () => {
                 <header className="flex items-center justify-between">
                   <h6 className="font-medium">{comment.user.fname +" "+ comment.user.lname}</h6>
                   <div className="flex items-center">
-                    <p>{new Date(comment.createdAt).toLocaleString('en-us')}</p>
+                    <p className="text-xs">{new Date(comment.createdAt).toLocaleString('en-us')}</p>
                     <Button
                       lightRed
                       className="ml-2 px-2 py-2 text-xs"

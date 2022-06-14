@@ -22,7 +22,7 @@ export class NotesResolver {
 
   @Query(() => Note)
   async filterNotes(
-    @Args('filter') filter: CreateNoteInput,
+    @Args('filter') filter: UpdateNoteInput,
   ): Promise<NoteDocument[]> {
     return this.notesService.findByTaskId(filter);
   }
