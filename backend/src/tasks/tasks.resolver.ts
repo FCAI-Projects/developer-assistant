@@ -5,6 +5,7 @@ import { CreateTaskInput } from './dto/create-task.input';
 import { UpdateTaskInput } from './dto/update-task.input';
 import { ProjectListsService } from 'src/project-lists/project-lists.service';
 import { GraphQLUpload, FileUpload } from 'graphql-upload';
+import { createWriteStream } from 'fs';
 
 @Resolver(() => Task)
 export class TasksResolver {
@@ -45,6 +46,25 @@ export class TasksResolver {
     @Args('updateTaskInput') updateTaskInput: UpdateTaskInput,
   ): Promise<TaskDocument> {
     return await this.tasksService.update(id, updateTaskInput);
+  }
+
+  @Mutation(() => Boolean)
+  async uploadAttachments(
+    @Args('id') id: string,
+    @Args({ name: 'attachment', type: () => GraphQLUpload })
+    { createReadStream, filename }: FileUpload,
+  ): Promise<boolean> {
+    return new Promise(async (resolve, reject) =>
+      createReadStream()
+        .pipe(createWriteStream(`./uploads/${filename}`))
+        .on('finish', async () => {
+          await this.tasksService.updateModel(id, {
+            $push: { attachments: filename },
+          });
+          resolve(true);
+        })
+        .on('error', () => reject(false)),
+    );
   }
 
   @Mutation(() => Task)
