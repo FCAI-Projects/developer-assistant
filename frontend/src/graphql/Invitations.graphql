@@ -1,0 +1,18 @@
+query Invitations {
+  invitations {
+    id
+    project {
+      name
+    }
+    user {
+      fname
+      lname
+    }
+    status
+  }
+}
+mutation UpdateMember($updateMemberId: String!, $updateMemberInput: UpdateMemberInput!) {
+  updateMember(id: $updateMemberId, updateMemberInput: $updateMemberInput) {
+    id
+  }
+}

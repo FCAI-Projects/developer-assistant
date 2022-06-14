@@ -12,19 +12,19 @@ export class NotesResolver {
   async createNote(
     @Args('createNoteInput') createNoteInput: CreateNoteInput,
   ): Promise<NoteDocument> {
-    return this.notesService.create(createNoteInput);
+    return await this.notesService.create(createNoteInput);
   }
 
   @Query(() => Note, { name: 'note' })
   async findById(@Args('id') id: string): Promise<NoteDocument> {
-    return this.notesService.findById(id);
+    return await this.notesService.findById(id);
   }
 
   @Query(() => Note)
   async filterNotes(
-    @Args('filter') filter: UpdateNoteInput,
-  ): Promise<NoteDocument[]> {
-    return this.notesService.findByTaskId(filter);
+    @Args('filter') filter: CreateNoteInput,
+  ): Promise<NoteDocument> {
+    return await this.notesService.filterNotes(filter);
   }
 
   @Mutation(() => Note)
@@ -32,11 +32,11 @@ export class NotesResolver {
     @Args('id') id: string,
     @Args('updateNoteInput') updateNoteInput: UpdateNoteInput,
   ): Promise<NoteDocument> {
-    return this.notesService.update(id, updateNoteInput);
+    return await this.notesService.update(id, updateNoteInput);
   }
 
   @Mutation(() => Note)
   async removeNote(@Args('id') id: string): Promise<NoteDocument> {
-    return this.notesService.remove(id);
+    return await this.notesService.remove(id);
   }
 }

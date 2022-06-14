@@ -102,7 +102,7 @@ type Task {
   description: String!
 
   """Task assigned to"""
-  assign: User
+  assign: [User!]
 
   """Task attachments"""
   attachments: [String!]
@@ -159,10 +159,10 @@ type Note {
   id: ID
 
   """Task Id"""
-  task: Task!
+  task: Task
 
   """User Id"""
-  user: User!
+  user: User
 
   """Task Note"""
   note: String
@@ -295,6 +295,9 @@ input UpdateMemberInput {
   project: String
   user: String
   role: String
+
+  """Member Status"""
+  status: String
 }
 
 input UpdateNoteInput {
@@ -324,6 +327,7 @@ type Mutation {
   removeMember(id: String!): Member!
   createTask(createTaskInput: CreateTaskInput!): Task!
   updateTask(id: String!, updateTaskInput: UpdateTaskInput!): Task!
+  assignMember(id: String!, member: String!): Task!
   removeTask(id: String!): Task!
   createProjectLists(createProjectListsInput: CreateProjectListsInput!): ProjectLists!
   updateProjectLists(updateProjectListsInput: UpdateProjectListsInput!): ProjectLists!
@@ -432,6 +436,9 @@ input CreateMemberInput {
   project: String!
   user: String!
   role: String!
+
+  """Member Status"""
+  status: String
 }
 
 input CreateTaskInput {
@@ -554,6 +561,7 @@ input CreateNoteInput {
 
   """User Id"""
   user: String!
+
 
   """Task Note"""
   note: String!

@@ -11,7 +11,6 @@ import { FaPlus, FaUserPlus } from "react-icons/fa";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
-// TODO: Use the right query to save to database
 interface formikProps {
   member: string;
   role: { id: string; name: string };
@@ -48,8 +47,8 @@ export const InviteMemberModal: React.FC = () => {
         });
         toast.success("Member has been invited !");
         toggleModal();
-      } catch (error) {
-        console.log(error);
+      } catch (error: any) {
+        toast.error(error.message);
       }
     },
   });
@@ -67,7 +66,7 @@ export const InviteMemberModal: React.FC = () => {
       <Button lightBlue className="flex items-center gap-2 px-3 py-2 text-xs" onClick={toggleModal}>
         <FaUserPlus /> Invite Member
       </Button>
-      <Modal title="Create New Project" isOpen={isOpen} handleClose={toggleModal}>
+      <Modal title="invite Member" isOpen={isOpen} handleClose={toggleModal}>
         <div className="my-5">
           <form className="flex flex-col gap-4">
             <div className="w-full">

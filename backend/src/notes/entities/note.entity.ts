@@ -13,12 +13,13 @@ export class Note {
   @Field(() => ID, { description: 'Note ID', nullable: true })
   id: MongooseSchema.Types.ObjectId;
 
-  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Task', nullable: true })
-  @Field(() => Task, { description: 'Task Id' })
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Task' })
+  @Field(() => Task, { description: 'Task Id', nullable: true })
   task: MongooseSchema.Types.ObjectId;
 
-  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'User', nullable: true })
-  @Field(() => User, { description: 'User Id' })
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'User' })
+  @Field(() => User, { description: 'User Id', nullable: true })
+
   user: MongooseSchema.Types.ObjectId;
 
   @Prop()

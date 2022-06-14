@@ -42,6 +42,10 @@ export class TasksService {
       .populate('project');
   }
 
+  async updateModel(id: string, update: any): Promise<TaskDocument> {
+    return this.taskModel.findOneAndUpdate({ _id: id }, update);
+  }
+
   async update(
     id: string,
     updateTaskInput: UpdateTaskInput,

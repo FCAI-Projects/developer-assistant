@@ -8,6 +8,6 @@ export class CreateNoteInput {
   @Field(() => String, { description: 'User Id' })
   user: string;
 
-  @Field(() => String, { description: 'Task Note' })
+  @Field(() => String, { description: 'Task Note', nullable: true })
   note: string;
 }
