@@ -8,6 +8,9 @@ export class CreateCommentInput {
   @Field(() => String, { description: 'User ID' })
   user: String;
 
+  @Field(() => String, { description: 'Task ID' })
+  task: String;
+
   @Field(() => String, { description: 'Comment Content' })
   content: String;
 }

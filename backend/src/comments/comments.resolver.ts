@@ -16,8 +16,8 @@ export class CommentsResolver {
   }
 
   @Query(() => [Comment], { name: 'comments' })
-  async findAll(): Promise<CommentDocument> {
-    return this.commentsService.findAll();
+  async findByTask(@Args('taskId') taskId: string): Promise<CommentDocument[]> {
+    return this.commentsService.findByTask({task: taskId});
   }
 
   @Query(() => Comment, { name: 'comment' })

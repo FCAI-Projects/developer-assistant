@@ -4,6 +4,7 @@ import { CreateCommentInput } from './dto/create-comment.input';
 import { UpdateCommentInput } from './dto/update-comment.input';
 import { Model } from 'mongoose';
 import { Comment, CommentDocument } from './entities/comment.entity';
+import { filter } from 'rxjs';
 
 @Injectable()
 export class CommentsService {
@@ -18,8 +19,8 @@ export class CommentsService {
     return comment.save();
   }
 
-  async findAll(): Promise<CommentDocument> {
-    return this.commentModel.findOne();
+  async findByTask(filter: UpdateCommentInput): Promise<CommentDocument[]> {
+    return this.commentModel.find(filter).populate('user');
   }
 
   async findOne(id: String): Promise<CommentDocument> {

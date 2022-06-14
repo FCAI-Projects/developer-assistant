@@ -178,8 +178,17 @@ type Comment {
   """User ID"""
   user: User!
 
+  """Task ID"""
+  task: String!
+
   """Comment Content"""
   content: String!
+
+  """Created At"""
+  createdAt: DateTime!
+
+  """Updated At"""
+  updatedAt: DateTime!
 }
 
 type Group {
@@ -264,7 +273,7 @@ type Query {
   projectListsById(id: String!): ProjectLists!
   note(id: String!): Note!
   filterNotes(filter: CreateNoteInput!): Note!
-  comments: [Comment!]!
+  comments(taskId: String!): [Comment!]!
   comment(id: String!): Comment!
   groups: [Group!]!
   group(id: String!): Group!
@@ -557,6 +566,9 @@ input CreateCommentInput {
   """User ID"""
   user: String!
 
+  """Task ID"""
+  task: String!
+
   """Comment Content"""
   content: String!
 }
@@ -567,6 +579,9 @@ input UpdateCommentInput {
 
   """User ID"""
   user: String
+
+  """Task ID"""
+  task: String
 
   """Comment Content"""
   content: String

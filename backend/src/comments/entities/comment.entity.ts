@@ -12,7 +12,7 @@ export class Comment {
   @Field(() => ID, { description: 'Comment ID' })
   id: MongooseSchema.Types.ObjectId;
 
-  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Comment' })
+  @Prop({ nullable: true, type: MongooseSchema.Types.ObjectId, ref: 'Comment' })
   @Field(() => String, { description: 'Relay to comment' })
   replayTo: MongooseSchema.Types.ObjectId;
 
@@ -20,9 +20,21 @@ export class Comment {
   @Field(() => User, { description: 'User ID' })
   user: MongooseSchema.Types.ObjectId;
 
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Task' })
+  @Field(() => String, { description: 'Task ID' })
+  task: MongooseSchema.Types.ObjectId;
+
   @Prop()
   @Field(() => String, { description: 'Comment Content' })
   content: String;
+
+  @Prop()
+  @Field(() => Date, { description: 'Created At' })
+  createdAt?: Date
+
+  @Prop()
+  @Field(() => Date, { description: 'Updated At' })
+  updatedAt?: Date
 }
 
 export const CommentSchema = SchemaFactory.createForClass(Comment);

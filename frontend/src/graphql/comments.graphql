@@ -1,0 +1,25 @@
+query Comments($taskId: String!) {
+  comments(taskId: $taskId) {
+    id
+    task
+    content
+    user {
+      fname
+      lname
+    }
+    createdAt
+    updatedAt
+  }
+}
+
+mutation CreateComment($createCommentInput: CreateCommentInput!) {
+  createComment(createCommentInput: $createCommentInput) {
+    id
+  }
+}
+
+mutation RemoveComment($removeCommentId: String!) {
+  removeComment(id: $removeCommentId) {
+    id
+  }
+}
