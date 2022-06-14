@@ -295,6 +295,9 @@ input UpdateMemberInput {
   project: String
   user: String
   role: String
+
+  """Member Status"""
+  status: String
 }
 
 input CreateNoteInput {
@@ -432,6 +435,9 @@ input CreateMemberInput {
   project: String!
   user: String!
   role: String!
+
+  """Member Status"""
+  status: String
 }
 
 input CreateTaskInput {
