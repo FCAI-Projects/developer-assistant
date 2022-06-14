@@ -1,5 +1,6 @@
 query Invitations {
   invitations {
+    id
     project {
       name
     }
