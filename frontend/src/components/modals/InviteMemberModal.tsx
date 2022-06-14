@@ -67,7 +67,7 @@ export const InviteMemberModal: React.FC = () => {
       <Button lightBlue className="flex items-center gap-2 px-3 py-2 text-xs" onClick={toggleModal}>
         <FaUserPlus /> Invite Member
       </Button>
-      <Modal title="Create New Project" isOpen={isOpen} handleClose={toggleModal}>
+      <Modal title="invite Member" isOpen={isOpen} handleClose={toggleModal}>
         <div className="my-5">
           <form className="flex flex-col gap-4">
             <div className="w-full">
