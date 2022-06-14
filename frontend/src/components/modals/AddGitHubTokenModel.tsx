@@ -20,7 +20,7 @@ export const AddGitHubTokenModel: React.FC = () => {
     validationSchema: Yup.object({
       token: Yup.string().required("Required"),
     }),
-    onSubmit: async (values) => {
+    onSubmit: async (values, formikApi) => {
       try {
         await addGithubToken({
           variables: {
@@ -28,6 +28,11 @@ export const AddGitHubTokenModel: React.FC = () => {
               githubToekn: values.token,
             },
           },
+        });
+        formikApi.resetForm({ 
+          values: { 
+            token: "" 
+          } 
         });
         toggleModal();
         toast.success("GitHub Token Added successfully");

@@ -20,13 +20,18 @@ export const AddGoogleAppPasswordModel: React.FC = () => {
     validationSchema: Yup.object({
       password: Yup.string().required("Required"),
     }),
-    onSubmit: async (values) => {
+    onSubmit: async (values, formikApi) => {
       try {
         await addGoogleAppPassword({
           variables: {
             user: {
               googleAppPassword: values.password,
             },
+          },
+        });
+        formikApi.resetForm({
+          values: {
+            password: "",
           },
         });
         toggleModal();
