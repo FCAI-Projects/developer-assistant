@@ -4,6 +4,7 @@ import { Task, TaskDocument } from './entities/task.entity';
 import { CreateTaskInput } from './dto/create-task.input';
 import { UpdateTaskInput } from './dto/update-task.input';
 import { ProjectListsService } from 'src/project-lists/project-lists.service';
+import { GraphQLUpload, FileUpload } from 'graphql-upload';
 
 @Resolver(() => Task)
 export class TasksResolver {

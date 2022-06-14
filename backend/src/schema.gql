@@ -156,16 +156,16 @@ type ProjectLists {
 
 type Note {
   """Note ID"""
-  id: ID!
+  id: ID
 
   """Task Id"""
-  task: Task!
+  task: Task
 
   """User Id"""
-  user: User!
+  user: User
 
   """Task Note"""
-  note: String!
+  note: String
 }
 
 type Comment {
@@ -302,13 +302,13 @@ input UpdateMemberInput {
 
 input CreateNoteInput {
   """Task Id"""
-  taskId: String!
+  task: String!
 
   """User Id"""
-  userId: String!
+  user: String!
 
   """Task Note"""
-  note: String!
+  note: String
 }
 
 type Mutation {
@@ -547,10 +547,10 @@ input UpdateProjectListsInput {
 
 input UpdateNoteInput {
   """Task Id"""
-  taskId: String
+  task: String
 
   """User Id"""
-  userId: String
+  user: String
 
   """Task Note"""
   note: String

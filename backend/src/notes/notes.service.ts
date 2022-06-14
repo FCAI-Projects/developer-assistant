@@ -14,29 +14,29 @@ export class NotesService {
 
   async create(createNoteInput: CreateNoteInput): Promise<NoteDocument> {
     const note = new this.NoteModel(createNoteInput);
-    return note.save();
+    return await note.save();
   }
 
   async findById(id: string): Promise<NoteDocument> {
-    return this.NoteModel.findOne({ _id: id });
+    return await this.NoteModel.findOne({ _id: id });
   }
 
-  async findByTaskId(filter: CreateNoteInput): Promise<NoteDocument[]> {
-    return this.NoteModel.find(filter);
+  async filterNotes(filter: CreateNoteInput): Promise<NoteDocument> {
+    return await this.NoteModel.findOne(filter);
   }
 
   async findByUserId(userId: string): Promise<NoteDocument[]> {
-    return this.NoteModel.find({ userId });
+    return await this.NoteModel.find({ userId });
   }
 
   async update(
     id: string,
     updateNoteInput: UpdateNoteInput,
   ): Promise<NoteDocument> {
-    return this.NoteModel.findByIdAndUpdate({ _id: id }, updateNoteInput);
+    return await this.NoteModel.findByIdAndUpdate({ _id: id }, updateNoteInput);
   }
 
   async remove(id: string) {
-    return this.NoteModel.findByIdAndRemove({ _id: id });
+    return await this.NoteModel.findByIdAndRemove({ _id: id });
   }
 }

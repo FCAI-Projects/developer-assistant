@@ -10,19 +10,19 @@ export type NoteDocument = Note & Document;
 @Schema({ timestamps: true })
 @ObjectType()
 export class Note {
-  @Field(() => ID, { description: 'Note ID' })
+  @Field(() => ID, { description: 'Note ID', nullable: true })
   id: MongooseSchema.Types.ObjectId;
 
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Task' })
-  @Field(() => Task, { description: 'Task Id' })
+  @Field(() => Task, { description: 'Task Id', nullable: true })
   task: MongooseSchema.Types.ObjectId;
 
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'User' })
-  @Field(() => User, { description: 'User Id' })
+  @Field(() => User, { description: 'User Id', nullable: true })
   user: MongooseSchema.Types.ObjectId;
 
   @Prop()
-  @Field(() => String, { description: 'Task Note' })
+  @Field(() => String, { description: 'Task Note', nullable: true })
   note: string;
 }
 
