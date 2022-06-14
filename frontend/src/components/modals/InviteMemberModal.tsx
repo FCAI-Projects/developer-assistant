@@ -11,7 +11,6 @@ import { FaPlus, FaUserPlus } from "react-icons/fa";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
-// TODO: Use the right query to save to database
 interface formikProps {
   member: string;
   role: { id: string; name: string };
@@ -48,8 +47,8 @@ export const InviteMemberModal: React.FC = () => {
         });
         toast.success("Member has been invited !");
         toggleModal();
-      } catch (error) {
-        console.log(error);
+      } catch (error: any) {
+        toast.error(error.message);
       }
     },
   });
