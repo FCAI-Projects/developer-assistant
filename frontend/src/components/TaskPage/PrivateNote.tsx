@@ -73,7 +73,7 @@ export const PrivateNote: React.FC<PrivateNoteProps> = () => {
       {noteData?.filterNotes ? (
         <div>
           <Editable
-            value={noteData?.filterNotes.note ==="" ? "No Note" : noteData?.filterNotes.note}
+            value={noteData?.filterNotes.note ==="" ? "Write your Note Here" : noteData?.filterNotes.note}
             onChange={(value) => handleUpdateNote(noteData?.filterNotes.id, value)}
             tag="p"
           />

@@ -46,6 +46,10 @@ export class TasksService {
     return this.taskModel.findOneAndUpdate({ _id: id }, update);
   }
 
+  async RemoveAssignMember(id: string, update: any): Promise<TaskDocument> {
+    return this.taskModel.findOneAndUpdate({ _id: id }, update);
+  }
+
   async update(
     id: string,
     updateTaskInput: UpdateTaskInput,
