@@ -5,20 +5,27 @@ import { Button } from "../Button";
 import * as Yup from "yup";
 import { Modal } from "./Base";
 import { useMutation } from "@apollo/client";
-import { AssignMemberDocument, TaskDocument, useMembersByProjectQuery, useTaskQuery } from "../../graphql/generated/graphql";
+import {
+  AssignMemberDocument,
+  TaskDocument,
+  useMembersByProjectQuery,
+  useTaskQuery,
+} from "../../graphql/generated/graphql";
 import { CustomSelect, Label } from "../forms";
 import { FaPlus } from "react-icons/fa";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
-export const TaskAssignModal: React.FC = () => {
+interface AssignMemberProps {
+  assignMember: any;
+  assignMemberLoading: boolean;
+  taskData: any;
+}
+
+export const TaskAssignModal: React.FC<AssignMemberProps> = ({ assignMember, assignMemberLoading, taskData }) => {
   const params = useParams();
   const [membersOptions, setMembersOptions] = useState<any>([]);
   const { data: members } = useMembersByProjectQuery({ variables: { projectId: params.id as string } });
-  const { data: taskData } = useTaskQuery({ variables: { taskId: params.taskId as string } });
-  const [assignMember, { loading: assignMemberLoading }] = useMutation(AssignMemberDocument, {
-    refetchQueries: [{ query: TaskDocument, variables: { taskId: params.taskId } }],
-  });
   const [isOpen, toggleModal] = useToggleModal();
   const formik = useFormik({
     initialValues: {
@@ -29,6 +36,9 @@ export const TaskAssignModal: React.FC = () => {
     }),
     onSubmit: async (values, formikApi) => {
       try {
+        if (values.members.id === "0") {
+          return toast.error("Please select a member");
+        }
         await assignMember({
           variables: {
             assignMemberId: params.taskId,
@@ -49,15 +59,17 @@ export const TaskAssignModal: React.FC = () => {
   });
 
   useEffect(() => {
-    if (members){
-      setMembersOptions(
-        members.membersByProject.map((member: any) => ({
-          id: member.user.id,
-          name: member.user.fname+" "+member.user.lname,
-        }))
+    if (members) {
+      let membersOptions: any = members.membersByProject.map((member: any) => ({
+        id: member.user.id,
+        name: member.user.fname + " " + member.user.lname,
+      }));
+      membersOptions = membersOptions.filter(
+        (member: any) => taskData?.task.assign?.findIndex((el: any) => el.id === member.id) === -1
       );
+      setMembersOptions(membersOptions);
     }
-  }, [members]);
+  }, [members, taskData]);
 
   return (
     <>
@@ -82,7 +94,7 @@ export const TaskAssignModal: React.FC = () => {
           </form>
         </div>
         <div className="flex flex-row-reverse gap-3">
-          <Button type="submit" green onClick={() => formik.handleSubmit()}  loading={assignMemberLoading} >
+          <Button type="submit" green onClick={() => formik.handleSubmit()} loading={assignMemberLoading}>
             Assign
           </Button>
           <Button type="submit" lightRed onClick={toggleModal}>
