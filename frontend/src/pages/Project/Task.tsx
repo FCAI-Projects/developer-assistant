@@ -11,7 +11,7 @@ import { Deadline } from "../../components/TaskPage/Deadline";
 import { Docs } from "../../components/TaskPage/Docs";
 import { PrivateNote } from "../../components/TaskPage/PrivateNote";
 import { TimeTracking } from "../../components/TaskPage/TimeTracking";
-import { UpdateTaskDocument, useTaskByIdQuery } from "../../graphql/generated/graphql";
+import { TaskByIdDocument, TaskDocument, UpdateTaskDocument, useTaskByIdQuery } from "../../graphql/generated/graphql";
 
 export const Task: React.FC = () => {
   const { taskId = "" } = useParams();
@@ -20,7 +20,9 @@ export const Task: React.FC = () => {
     loading: taskLoading,
     refetch: refetchTask,
   } = useTaskByIdQuery({ variables: { taskId: taskId } });
-  const [updateTask, { error: updateError }] = useMutation(UpdateTaskDocument);
+  const [updateTask, { error: updateError }] = useMutation(UpdateTaskDocument, {
+    refetchQueries: [{ query: TaskByIdDocument, variables: { taskId: taskId } }],
+  });
 
   const handleUpdateTask = async (field: string, value: string) => {
     await updateTask({
@@ -67,7 +69,7 @@ export const Task: React.FC = () => {
               tag="p"
             />
           </div>
-          <Docs />
+          <Docs handleUpdateTask={handleUpdateTask} docs={taskData?.task.docs} />
           <Comments />
         </div>
         <div className="flex basis-2/6 flex-col gap-5">

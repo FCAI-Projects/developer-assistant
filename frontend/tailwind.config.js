@@ -8,5 +8,6 @@ module.exports = {
       strategy: "base",
     }),
     require("tailwind-scrollbar"),
+    require("@tailwindcss/typography"),
   ],
 };

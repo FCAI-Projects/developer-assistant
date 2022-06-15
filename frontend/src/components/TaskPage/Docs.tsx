@@ -1,35 +1,27 @@
 import React from "react";
 import { FaGreaterThanEqual } from "react-icons/fa";
+import { UpdateDocsModel } from "../modals/UpdateDocsModel";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
-interface DocsProps {}
+interface DocsProps {
+  docs: string | null | undefined;
+  handleUpdateTask: (field: string, value: string) => void;
+}
 
-export const Docs: React.FC<DocsProps> = () => {
+export const Docs: React.FC<DocsProps> = ({ docs, handleUpdateTask }) => {
   return (
     <div>
-      <h6 className="mb-1 flex items-center gap-2">
-        <FaGreaterThanEqual className="text-sm" />
-        Docs
-      </h6>
-      <div>
-        <h5 className="font-medium">Introduction</h5>
-        <p>
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Neque architecto nam et nesciunt unde omnis, veniam
-          inventore optio quam minima reiciendis? Possimus, similique iure aut ratione quae earum beatae. Delectus.
-        </p>
-      </div>
-      <div>
-        <h5 className="font-medium">Part 2</h5>
-        <p>
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Neque architecto nam et nesciunt unde omnis, veniam
-          inventore optio quam minima reiciendis? Possimus, similique iure aut ratione quae earum beatae. Delectus.
-        </p>
-      </div>
-      <div>
-        <h5 className="font-medium">Part 3</h5>
-        <p>
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Neque architecto nam et nesciunt unde omnis, veniam
-          inventore optio quam minima reiciendis? Possimus, similique iure aut ratione quae earum beatae. Delectus.
-        </p>
+      <header className="flex items-center justify-between">
+        <h6 className="mb-1 flex items-center gap-2">
+          <FaGreaterThanEqual className="text-sm" />
+          Docs
+        </h6>
+        <UpdateDocsModel handleUpdateTask={handleUpdateTask} value={docs} />
+      </header>
+      <div className="prose prose-sm">
+        {docs && <ReactMarkdown children={docs} remarkPlugins={[remarkGfm]} />}{" "}
+        {!docs && "There is no docs to display!"}
       </div>
     </div>
   );
