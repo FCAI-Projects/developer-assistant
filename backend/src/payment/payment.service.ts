@@ -1,26 +1,24 @@
 import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
 import { CreatePaymentInput } from './dto/create-payment.input';
 import { UpdatePaymentInput } from './dto/update-payment.input';
+import { Payment, PaymentDocument } from './entities/payment.entity';
+import { Model } from 'mongoose';
+import { CreatePaymentUrlInput } from './dto/create-payment-url';
 
 @Injectable()
 export class PaymentService {
-  create(createPaymentInput: CreatePaymentInput) {
-    return 'This action adds a new payment';
+  constructor(
+    @InjectModel(Payment.name)
+    private readonly paymnetModel: Model<PaymentDocument>,
+  ) {}
+
+  create(createPaymentInput: CreatePaymentUrlInput) {
+    const payment = new this.paymnetModel(createPaymentInput);
+    return payment.save();
   }
 
-  findAll() {
-    return `This action returns all payment`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} payment`;
-  }
-
-  update(id: number, updatePaymentInput: UpdatePaymentInput) {
-    return `This action updates a #${id} payment`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} payment`;
+  findOne(projectId: string) {
+    return this.paymnetModel.findOne({projectId});
   }
 }
