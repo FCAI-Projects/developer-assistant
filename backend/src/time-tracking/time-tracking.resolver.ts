@@ -29,6 +29,7 @@ export class TimeTrackingResolver {
   @Query(() => TimeTracking, {
     name: 'taskUserTimeTracking',
     description: 'Get all task time tracking for a user',
+    nullable: true,
   })
   @UseGuards(JwtAuthGuard)
   async findOneByTaskForUser(

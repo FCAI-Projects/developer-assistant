@@ -71,8 +71,8 @@ export const Task: React.FC = () => {
           <Comments />
         </div>
         <div className="flex basis-2/6 flex-col gap-5">
-          <TimeTracking />
-          <Deadline />
+          <TimeTracking taskId={taskId} />
+          <Deadline handleUpdateTask={handleUpdateTask} deadline={taskData?.task.deadline} />
           <AssignMember />
           <PrivateNote />
           <Attachments data={taskData?.task.attachments} id={taskId} refetchTask={refetchTask} />

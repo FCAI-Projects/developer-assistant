@@ -227,33 +227,33 @@ type Expense {
 
 type TimeTrackingHistory {
   """History Start"""
-  start: DateTime!
+  start: DateTime
 
   """History End"""
-  end: DateTime!
+  end: DateTime
 
   """History Duration"""
-  duration: Float!
+  duration: Float
 }
 
 type TimeTracking {
   """Time Tracking ID"""
-  id: ID!
+  id: ID
 
   """Task ID"""
-  task: Task!
+  task: Task
 
   """Time Tracking of User"""
-  user: User!
+  user: User
 
   """Time Tracking Started & Not Finished Yet"""
-  start: DateTime!
+  start: DateTime
 
   """Time Tracking Duration"""
-  duration: String!
+  duration: String
 
   """Time Tracking History"""
-  history: [TimeTrackingHistory!]!
+  history: [TimeTrackingHistory!]
 }
 
 type Query {
@@ -288,7 +288,7 @@ type Query {
   taskTimeTracking(task: String!): [TimeTracking!]!
 
   """Get all task time tracking for a user"""
-  taskUserTimeTracking(task: String!): TimeTracking!
+  taskUserTimeTracking(task: String!): TimeTracking
 }
 
 input UpdateMemberInput {
