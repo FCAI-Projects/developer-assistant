@@ -272,7 +272,7 @@ type Query {
   projectLists(project: String!): [ProjectLists!]!
   projectListsById(id: String!): ProjectLists!
   note(id: String!): Note!
-  filterNotes(filter: UpdateNoteInput!): Note!
+  filterNotes(filter: CreateNoteInput!): Note!
   comments(taskId: String!): [Comment!]!
   comment(id: String!): Comment!
   groups: [Group!]!
@@ -300,12 +300,12 @@ input UpdateMemberInput {
   status: String
 }
 
-input UpdateNoteInput {
+input CreateNoteInput {
   """Task Id"""
-  task: String
+  task: String!
 
   """User Id"""
-  user: String
+  user: String!
 
   """Task Note"""
   note: String
@@ -348,6 +348,7 @@ type Mutation {
   startTimeTracking(task: String!): TimeTracking!
   stopTimeTracking(task: String!): TimeTracking!
   removeTimeTracking(id: String!): TimeTracking!
+  create_payment(createPaymentInput: CreatePaymentInput!): String!
 }
 
 input CreateUserInput {
@@ -555,16 +556,15 @@ input UpdateProjectListsInput {
   index: Int
 }
 
-input CreateNoteInput {
+input UpdateNoteInput {
   """Task Id"""
-  task: String!
+  task: String
 
   """User Id"""
-  user: String!
-
+  user: String
 
   """Task Note"""
-  note: String!
+  note: String
 }
 
 input CreateCommentInput {
@@ -645,4 +645,9 @@ input UpdateExpenseInput {
   """Expense Date"""
   date: DateTime
   id: String!
+}
+
+input CreatePaymentInput {
+  amount: Int!
+  orderId: String!
 }
