@@ -1,5 +1,24 @@
+query FilterNotes($filter: CreateNoteInput!) {
+  filterNotes(filter: $filter) {
+    id
+    note
+  }
+}
+
 mutation CreateNote($createNoteInput: CreateNoteInput!) {
   createNote(createNoteInput: $createNoteInput) {
+    id
+  }
+}
+
+mutation UpdateNote($updateNoteId: String!, $updateNoteInput: UpdateNoteInput!) {
+  updateNote(id: $updateNoteId, updateNoteInput: $updateNoteInput) {
+    id
+  }
+}
+
+mutation RemoveNote($removeNoteId: String!) {
+  removeNote(id: $removeNoteId) {
     id
   }
 }
