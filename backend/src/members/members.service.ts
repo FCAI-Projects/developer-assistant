@@ -21,6 +21,11 @@ export class MembersService {
     return this.memberModel.find({filter, status: "pending"}).populate('user').populate('project');
   }
 
+  async findMembersByProject(projectId: string): Promise<MemberDocument[]> {
+    return this.memberModel.find({projectId, status: "joined"}).populate('user').populate('project');
+  }
+
+
   async findOne(id: string): Promise<MemberDocument> {
     return this.memberModel
       .findOne({ id })

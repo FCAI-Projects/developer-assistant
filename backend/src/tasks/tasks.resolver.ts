@@ -87,6 +87,16 @@ export class TasksResolver {
   }
 
   @Mutation(() => Task)
+  async RemoveAssignMember(
+    @Args('id') id: string,
+    @Args('member') member: string,
+  ): Promise<TaskDocument> {
+    return await this.tasksService.RemoveAssignMember(id, {
+      $pull: { assign: member },
+    });
+  }
+
+  @Mutation(() => Task)
   async removeTask(@Args('id') id: string): Promise<TaskDocument> {
     return await this.tasksService.remove(id);
   }

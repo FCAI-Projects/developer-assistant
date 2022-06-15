@@ -55,6 +55,13 @@ export class MembersResolver {
     return await this.membersService.filter(filter);
   }
 
+  @Query(() => [Member], { name: 'membersByProject' })
+  async findMembersByProject(
+    @Args('projectId') projectId: string,
+  ): Promise<MemberDocument[]> {
+    return await this.membersService.findMembersByProject(projectId);
+  }
+
   @Query(() => Member, { name: 'member' })
   async findById(@Args('id') id: string): Promise<MemberDocument> {
     return await this.membersService.findOne(id);

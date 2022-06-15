@@ -28,3 +28,14 @@ query InvitedMember($memberId: String!) {
     status
   }
 }
+
+query MembersByProject($projectId: String!) {
+  membersByProject(projectId: $projectId) {
+    id
+    user {
+      id
+      fname
+      lname
+    }
+  }
+}
