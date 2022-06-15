@@ -40,7 +40,15 @@ export const Invitations: React.FC = () => {
               className="flex items-center justify-between border-b p-3"
             >
               <div>
-                <h4 className="text-lg">{invitation.user.fname+" "+invitation.user.lname}</h4>
+                <h4 className="text-lg">
+                  {invitation.user.fname+" "+invitation.user.lname }
+                </h4>
+              </div>
+              
+              <div className="text-lg">
+                <h5>
+                  {"Project: " + invitation.project.name}
+                </h5>
               </div>
               <div className="flex gap-2">
                 <Button 
