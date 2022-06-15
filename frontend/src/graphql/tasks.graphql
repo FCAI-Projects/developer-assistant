@@ -38,3 +38,7 @@ query TaskById($taskId: String!) {
     docs
   }
 }
+
+mutation UploadAttachments($uploadAttachmentsId: String!, $attachment: Upload!) {
+  uploadAttachments(id: $uploadAttachmentsId, attachment: $attachment)
+}
