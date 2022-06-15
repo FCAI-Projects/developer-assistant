@@ -34,6 +34,7 @@ query TaskById($taskId: String!) {
   }
 }
 
+
 mutation AssignMember($assignMemberId: String!, $member: String!) {
   assignMember(id: $assignMemberId, member: $member) {
     id
@@ -56,3 +57,8 @@ mutation RemoveAssignMember($removeAssignMemberId: String!, $member: String!) {
     id
   }
 }
+
+mutation UploadAttachments($uploadAttachmentsId: String!, $attachment: Upload!) {
+  uploadAttachments(id: $uploadAttachmentsId, attachment: $attachment)
+}
+

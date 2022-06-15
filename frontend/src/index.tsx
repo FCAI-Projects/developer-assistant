@@ -6,12 +6,16 @@ import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 import { ApolloClient, ApolloProvider, createHttpLink, InMemoryCache } from "@apollo/client";
 import { RecoilRoot, useRecoilSnapshot } from "recoil";
+import { createUploadLink } from "apollo-upload-client";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { setContext } from "@apollo/client/link/context";
 import adapter from "webrtc-adapter";
+import axios from "axios";
 
-const httpLink = createHttpLink({
+axios.defaults.baseURL = "http://localhost:3030";
+
+const httpLink = createUploadLink({
   uri: "http://localhost:3030/graphql",
 });
 

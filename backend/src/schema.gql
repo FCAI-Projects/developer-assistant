@@ -328,6 +328,7 @@ type Mutation {
   removeMember(id: String!): Member!
   createTask(createTaskInput: CreateTaskInput!): Task!
   updateTask(id: String!, updateTaskInput: UpdateTaskInput!): Task!
+  uploadAttachments(id: String!, attachment: Upload!): Boolean!
   assignMember(id: String!, member: String!): Task!
   RemoveAssignMember(id: String!, member: String!): Task!
   removeTask(id: String!): Task!
@@ -524,6 +525,9 @@ input UpdateTaskInput {
   """List ID"""
   list: String
 }
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
 
 input CreateProjectListsInput {
   """Status Project ID"""

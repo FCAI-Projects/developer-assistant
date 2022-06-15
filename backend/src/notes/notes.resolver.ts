@@ -3,6 +3,8 @@ import { NotesService } from './notes.service';
 import { Note, NoteDocument } from './entities/note.entity';
 import { CreateNoteInput } from './dto/create-note.input';
 import { UpdateNoteInput } from './dto/update-note.input';
+import mongoose from 'mongoose';
+import { HttpException } from '@nestjs/common';
 
 @Resolver(() => Note)
 export class NotesResolver {
@@ -24,6 +26,12 @@ export class NotesResolver {
   async filterNotes(
     @Args('filter') filter: CreateNoteInput,
   ): Promise<NoteDocument> {
+    if (
+      !mongoose.isValidObjectId(filter.task) ||
+      !mongoose.isValidObjectId(filter.user)
+    ) {
+      throw new HttpException('Invalid filter', 400);
+    }
     return await this.notesService.filterNotes(filter);
   }
 

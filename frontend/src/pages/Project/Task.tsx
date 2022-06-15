@@ -75,7 +75,7 @@ export const Task: React.FC = () => {
           <Deadline />
           <AssignMember />
           <PrivateNote />
-          <Attachments />
+          <Attachments data={taskData?.task.attachments} id={taskId} refetchTask={refetchTask} />
         </div>
       </div>
     </div>
