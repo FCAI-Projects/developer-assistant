@@ -41,7 +41,7 @@ export const ProjectMembers: React.FC = () => {
               />
             </div>
             <div>
-              <h4 className="text-xl font-medium">{member.user.fname + " " + member.user.lname}</h4>
+              <h4 className="text-xl font-medium">{member.user?.fname + " " + member.user?.lname}</h4>
               <p>{member.role?.name}</p>
             </div>
             <div className="absolute right-0 flex gap-2">
