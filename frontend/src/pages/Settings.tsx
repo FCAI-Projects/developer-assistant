@@ -1,21 +1,31 @@
 import { useMutation } from "@apollo/client";
 import { useFormik } from "formik";
-import React from "react";
-import { FaExclamationCircle } from "react-icons/fa";
+import React, { useEffect, useState } from "react";
+import { decodeToken } from "react-jwt";
+import { toast } from "react-toastify";
+import { useRecoilValue } from "recoil";
 import * as Yup from "yup";
 import { Button } from "../components/Button";
 import { Input, Label } from "../components/forms";
 import { UpdatePassword } from "../components/modals/UpdatePasswordModal";
-
-
+import { UpdateUserDocument, UserDocument, useUserQuery } from "../graphql/generated/graphql";
+import { authState } from "../recoil";
 
 export const Settings: React.FC = () => {
+  const authToken = useRecoilValue(authState);
+  const [id, setId] = useState("");
+  const { data } = useUserQuery({ variables: { userId: id } });
+  const [updateUser, { loading: updateLoading}] = useMutation(UpdateUserDocument, {
+    refetchQueries: [{ query: UserDocument, variables: { userId: id } }],
+  });
+
   const formik = useFormik({
     initialValues: {
-      fname: "Ezzdin",
-      lname: "Atef",
-      email: "ezzdinatef@gmail.com",
+      fname: data?.user?.fname,
+      lname: data?.user?.lname,
+      email: data?.user?.email,
     },
+    enableReinitialize: true,
     validationSchema: Yup.object({
       fname: Yup.string().max(15, "Must be 15 characters or less").required("Required"),
       lname: Yup.string().max(20, "Must be 20 characters or less").required("Required"),
@@ -23,11 +33,28 @@ export const Settings: React.FC = () => {
     }),
     onSubmit: async (values) => {
       try {
+        await updateUser({
+          variables: {
+            user: {
+              fname: values.fname,
+              lname: values.lname,
+              email: values.email,
+            }
+          },
+        });
+        toast.success("Successfully updated user");
       } catch (error) {
         console.log(error);
       }
     },
   });
+
+  useEffect(() => {
+    if (authToken) {
+      const decode: any = decodeToken(authToken);
+      setId(decode._id);
+    }
+  }, [authToken]);
 
   return (
     <div>
@@ -73,7 +100,7 @@ export const Settings: React.FC = () => {
               />
             </div>
             <div className="flex flex-row-reverse gap-5">
-              <Button type="submit">Save Changes</Button>
+              <Button type="submit" loading={updateLoading}>Save Changes</Button>
               <UpdatePassword />
             </div>
           </div>

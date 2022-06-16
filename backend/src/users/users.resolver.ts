@@ -14,6 +14,7 @@ import { UserResponse } from './dto/user-response.dto';
 import { UpdateUserInput } from './dto/update-user.dto';
 import { User, UserDocument } from './entities/user.entity';
 import { UsersService } from './users.service';
+import mongoose from 'mongoose';
 
 @Resolver(() => User)
 export class UsersResolver {
@@ -31,6 +32,15 @@ export class UsersResolver {
   @Query((returns) => User, { name: 'user' })
   @UseGuards(JwtAuthGuard)
   findById(@Args('id') id: string): Promise<UserDocument> {
+    if (!mongoose.isValidObjectId(id)) {
+      throw new HttpException(
+        {
+          statusCode: HttpStatus.BAD_REQUEST,
+          message: 'Invalid id',
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
     return this.usersService.findOne(id);
   }
 

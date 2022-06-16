@@ -36,6 +36,7 @@ export class UsersService {
   }
 
   async updateOne(id: string, user: UpdateUserInput): Promise<UserDocument> {
+    if (user.password) user.password = await hash(user.password, 10);
     return this.userModel.findOneAndUpdate({ _id: id }, user);
   }
 }
