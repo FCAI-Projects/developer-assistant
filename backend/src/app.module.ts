@@ -18,7 +18,9 @@ import { ProjectListsModule } from './project-lists/project-lists.module';
 import { ExpensesModule } from './expenses/expenses.module';
 import { TimeTrackingModule } from './time-tracking/time-tracking.module';
 import { VideoModule } from './video/video.module';
-import { PaymentModule } from './payment/payment.module';
+
+import { UploadsModule } from './uploads/uploads.module';
+
 
 @Module({
   imports: [
@@ -43,7 +45,9 @@ import { PaymentModule } from './payment/payment.module';
     TimeTrackingModule,
     VideoModule,
     GroupsModule,
-    PaymentModule
+
+    UploadsModule
+
   ],
   controllers: [AppController],
   providers: [AppService],

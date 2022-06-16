@@ -5,7 +5,7 @@ import { CreateTaskInput } from './dto/create-task.input';
 import { UpdateTaskInput } from './dto/update-task.input';
 import { ProjectListsService } from 'src/project-lists/project-lists.service';
 import { GraphQLUpload, FileUpload } from 'graphql-upload';
-import { createWriteStream } from 'fs';
+import { createWriteStream, mkdirSync } from 'fs';
 
 @Resolver(() => Task)
 export class TasksResolver {
@@ -48,24 +48,33 @@ export class TasksResolver {
     return await this.tasksService.update(id, updateTaskInput);
   }
 
-  // @Mutation(() => Boolean)
-  // async uploadAttachments(
-  //   @Args('id') id: string,
-  //   @Args({ name: 'attachment', type: () => GraphQLUpload })
-  //   { createReadStream, filename }: FileUpload,
-  // ): Promise<boolean> {
-  //   return new Promise(async (resolve, reject) =>
-  //     createReadStream()
-  //       .pipe(createWriteStream(`./uploads/${filename}`))
-  //       .on('finish', async () => {
-  //         await this.tasksService.updateModel(id, {
-  //           $push: { attachments: filename },
-  //         });
-  //         resolve(true);
-  //       })
-  //       .on('error', () => reject(false)),
-  //   );
-  // }
+  @Mutation(() => Boolean)
+  async uploadAttachments(
+    @Args('id') id: string,
+    @Args({ name: 'attachment', type: () => GraphQLUpload })
+    { createReadStream, filename }: FileUpload,
+  ): Promise<boolean> {
+    mkdirSync(`./uploads/attachments`, { recursive: true });
+    const newFileName = `${id}-${new Date().getTime()}-${filename.replace(
+      /\s/g,
+      '-',
+    )}`;
+
+    return new Promise(async (resolve, reject) =>
+      createReadStream()
+        .pipe(createWriteStream(`./uploads/attachments/${newFileName}`))
+        .on('finish', async () => {
+          await this.tasksService.updateModel(id, {
+            $push: { attachments: newFileName },
+          });
+          resolve(true);
+        })
+        .on('error', (error) => {
+          console.log('error', error);
+          reject(false);
+        }),
+    );
+  }
 
   @Mutation(() => Task)
   async assignMember(
@@ -74,6 +83,16 @@ export class TasksResolver {
   ): Promise<TaskDocument> {
     return await this.tasksService.updateModel(id, {
       $push: { assign: member },
+    });
+  }
+
+  @Mutation(() => Task)
+  async RemoveAssignMember(
+    @Args('id') id: string,
+    @Args('member') member: string,
+  ): Promise<TaskDocument> {
+    return await this.tasksService.RemoveAssignMember(id, {
+      $pull: { assign: member },
     });
   }
 

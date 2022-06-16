@@ -62,13 +62,24 @@ type Role {
 
   """Role Name"""
   name: String!
+  createList: Boolean!
+  editList: Boolean!
+  deleteList: Boolean!
   createTask: Boolean!
   deleteTask: Boolean!
   editTask: Boolean!
   assignTask: Boolean!
+  unAssignTask: Boolean!
+  editDocs: Boolean!
+  canComment: Boolean!
   editProject: Boolean!
-  inviteToProject: Boolean!
+  manageRoles: Boolean!
+  manageExpenses: Boolean!
+  sendMails: Boolean!
+  managePayment: Boolean!
+  inviteMember: Boolean!
   deleteMember: Boolean!
+  editMember: Boolean!
 }
 
 type Member {
@@ -227,33 +238,33 @@ type Expense {
 
 type TimeTrackingHistory {
   """History Start"""
-  start: DateTime!
+  start: DateTime
 
   """History End"""
-  end: DateTime!
+  end: DateTime
 
   """History Duration"""
-  duration: Float!
+  duration: Float
 }
 
 type TimeTracking {
   """Time Tracking ID"""
-  id: ID!
+  id: ID
 
   """Task ID"""
-  task: Task!
+  task: Task
 
   """Time Tracking of User"""
-  user: User!
+  user: User
 
   """Time Tracking Started & Not Finished Yet"""
-  start: DateTime!
+  start: DateTime
 
   """Time Tracking Duration"""
-  duration: String!
+  duration: String
 
   """Time Tracking History"""
-  history: [TimeTrackingHistory!]!
+  history: [TimeTrackingHistory!]
 }
 
 type Payment {
@@ -285,7 +296,9 @@ type Query {
   role(id: String!): Role!
   invitations: [Member!]!
   filterMembers(filter: UpdateMemberInput!): [Member!]!
+  membersByProject(projectId: String!): [Member!]!
   member(id: String!): Member!
+  memberInfo(project: String!): Member!
   tasks(project: String!): [Task!]!
   tasksByUserId(userId: String!): [Task!]!
   task(id: String!): Task!
@@ -308,8 +321,9 @@ type Query {
   taskTimeTracking(task: String!): [TimeTracking!]!
 
   """Get all task time tracking for a user"""
-  taskUserTimeTracking(task: String!): TimeTracking!
-  find_payment(projectId: String!): Payment!
+
+  taskUserTimeTracking(task: String!): TimeTracking
+
 }
 
 input UpdateMemberInput {
@@ -348,7 +362,9 @@ type Mutation {
   removeMember(id: String!): Member!
   createTask(createTaskInput: CreateTaskInput!): Task!
   updateTask(id: String!, updateTaskInput: UpdateTaskInput!): Task!
+  uploadAttachments(id: String!, attachment: Upload!): Boolean!
   assignMember(id: String!, member: String!): Task!
+  RemoveAssignMember(id: String!, member: String!): Task!
   removeTask(id: String!): Task!
   createProjectLists(createProjectListsInput: CreateProjectListsInput!): ProjectLists!
   updateProjectLists(updateProjectListsInput: UpdateProjectListsInput!): ProjectLists!
@@ -433,25 +449,47 @@ input UpdateProjectInput {
 input CreateRoleInput {
   name: String!
   project: String!
+  createList: Boolean = false
+  editList: Boolean = false
+  deleteList: Boolean = false
   createTask: Boolean = false
   deleteTask: Boolean = false
   editTask: Boolean = false
   assignTask: Boolean = false
+  unAssignTask: Boolean = false
+  editDocs: Boolean = false
+  canComment: Boolean = false
   editProject: Boolean = false
-  inviteToProject: Boolean = false
+  manageRoles: Boolean = false
+  manageExpenses: Boolean = false
+  sendMails: Boolean = false
+  managePayment: Boolean = false
+  inviteMember: Boolean = false
   deleteMember: Boolean = false
+  editMember: Boolean = false
 }
 
 input UpdateRoleInput {
   name: String
   project: String
+  createList: Boolean = false
+  editList: Boolean = false
+  deleteList: Boolean = false
   createTask: Boolean = false
   deleteTask: Boolean = false
   editTask: Boolean = false
   assignTask: Boolean = false
+  unAssignTask: Boolean = false
+  editDocs: Boolean = false
+  canComment: Boolean = false
   editProject: Boolean = false
-  inviteToProject: Boolean = false
+  manageRoles: Boolean = false
+  manageExpenses: Boolean = false
+  sendMails: Boolean = false
+  managePayment: Boolean = false
+  inviteMember: Boolean = false
   deleteMember: Boolean = false
+  editMember: Boolean = false
 }
 
 input CreateMemberInput {
@@ -544,6 +582,9 @@ input UpdateTaskInput {
   """List ID"""
   list: String
 }
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
 
 input CreateProjectListsInput {
   """Status Project ID"""

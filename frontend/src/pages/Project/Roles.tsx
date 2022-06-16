@@ -32,13 +32,24 @@ export const ProjectRoles: React.FC = () => {
                 <UpdateRoleModel
                   id={role.id}
                   name={role.name}
+                  createList={role.createList}
+                  editList={role.editList}
+                  deleteList={role.deleteList}
                   createTask={role.createTask}
                   deleteTask={role.deleteTask}
                   editTask={role.editTask}
                   assignTask={role.assignTask}
+                  unAssignTask={role.unAssignTask}
+                  editDocs={role.editDocs}
+                  canComment={role.canComment}
                   editProject={role.editProject}
-                  inviteToProject={role.inviteToProject}
+                  manageRoles={role.manageRoles}
+                  manageExpenses={role.manageExpenses}
+                  sendMails={role.sendMails}
+                  managePayment={role.managePayment}
+                  inviteMember={role.inviteMember}
                   deleteMember={role.deleteMember}
+                  editMember={role.editMember}
                 />
                 <Button
                   lightRed

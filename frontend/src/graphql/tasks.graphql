@@ -23,11 +23,6 @@ query TaskById($taskId: String!) {
     id
     name
     description
-    assign {
-      id
-      fname
-      lname
-    }
     attachments
     status
     periority
@@ -38,3 +33,32 @@ query TaskById($taskId: String!) {
     docs
   }
 }
+
+
+mutation AssignMember($assignMemberId: String!, $member: String!) {
+  assignMember(id: $assignMemberId, member: $member) {
+    id
+  }
+}
+
+query Task($taskId: String!) {
+  task(id: $taskId) {
+    id
+    assign {
+      id
+      fname
+      lname
+    }
+  }
+}
+
+mutation RemoveAssignMember($removeAssignMemberId: String!, $member: String!) {
+  RemoveAssignMember(id: $removeAssignMemberId, member: $member) {
+    id
+  }
+}
+
+mutation UploadAttachments($uploadAttachmentsId: String!, $attachment: Upload!) {
+  uploadAttachments(id: $uploadAttachmentsId, attachment: $attachment)
+}
+

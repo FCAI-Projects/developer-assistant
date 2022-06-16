@@ -78,11 +78,14 @@ export const Chat: React.FC = () => {
             <header className="flex items-center justify-between border-b border-slate-300 p-3">
               <div className="flex flex-col">
                 <h4 className="text-xl font-medium text-slate-800">{selectedGroup?.name}</h4>
-                <p className="text-xs text-slate-500">
-                  <span>{selectedGroup?.admin.fname}</span>
+                <p className="flex gap-1 text-xs text-slate-500">
+                  <span className="">{selectedGroup?.admin.fname},</span>
 
-                  {selectedGroup?.members.map((el: any) => (
-                    <span key={el._id}>{el.fname}</span>
+                  {selectedGroup?.members.map((el: any, index: number) => (
+                    <span key={el._id} className="">
+                      {el.fname}
+                      {index !== selectedGroup?.members.length - 1 ? ", " : ""}
+                    </span>
                   ))}
                 </p>
               </div>

@@ -1,11 +1,8 @@
 import { useMutation } from "@apollo/client";
 import React, { useEffect, useMemo } from "react";
-import { FaGreaterThanEqual, FaPause, FaPlay, FaPlus, FaTrash, FaUpload } from "react-icons/fa";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { Button } from "../../components/Button";
 import { Editable } from "../../components/Editable";
-import { Textarea } from "../../components/forms";
 import { Loader } from "../../components/Loader";
 import { AssignMember } from "../../components/TaskPage/AssignMember";
 import { Attachments } from "../../components/TaskPage/Attachments";
@@ -14,7 +11,7 @@ import { Deadline } from "../../components/TaskPage/Deadline";
 import { Docs } from "../../components/TaskPage/Docs";
 import { PrivateNote } from "../../components/TaskPage/PrivateNote";
 import { TimeTracking } from "../../components/TaskPage/TimeTracking";
-import { UpdateTaskDocument, useTaskByIdQuery } from "../../graphql/generated/graphql";
+import { TaskByIdDocument, TaskDocument, UpdateTaskDocument, useTaskByIdQuery } from "../../graphql/generated/graphql";
 
 export const Task: React.FC = () => {
   const { taskId = "" } = useParams();
@@ -23,7 +20,9 @@ export const Task: React.FC = () => {
     loading: taskLoading,
     refetch: refetchTask,
   } = useTaskByIdQuery({ variables: { taskId: taskId } });
-  const [updateTask, { error: updateError }] = useMutation(UpdateTaskDocument);
+  const [updateTask, { error: updateError }] = useMutation(UpdateTaskDocument, {
+    refetchQueries: [{ query: TaskByIdDocument, variables: { taskId: taskId } }],
+  });
 
   const handleUpdateTask = async (field: string, value: string) => {
     await updateTask({
@@ -70,15 +69,15 @@ export const Task: React.FC = () => {
               tag="p"
             />
           </div>
-          <Docs />
+          <Docs handleUpdateTask={handleUpdateTask} docs={taskData?.task.docs} />
           <Comments />
         </div>
         <div className="flex basis-2/6 flex-col gap-5">
-          <TimeTracking />
-          <Deadline />
+          <TimeTracking taskId={taskId} />
+          <Deadline handleUpdateTask={handleUpdateTask} deadline={taskData?.task.deadline} />
           <AssignMember />
           <PrivateNote />
-          <Attachments />
+          <Attachments data={taskData?.task.attachments} id={taskId} refetchTask={refetchTask} />
         </div>
       </div>
     </div>

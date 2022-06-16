@@ -46,12 +46,11 @@ export const App: React.FC = () => {
           <Route element={<AppLayout />}>
             <Route index element={<Projects />} />
             <Route path="settings" element={<Settings />} />
-            <Route path="chat" element={<Chat />} /> 
+            <Route path="chat" element={<Chat />} />
             <Route path="chat/video/:group" element={<Video />} />
             <Route path="calendar" element={<Calendar />} />
             <Route path="invitations" element={<Invitations />} />
           </Route>
-         
 
           <Route path="project/:id" element={<ProjectLayout />}>
             <Route index element={<Project />} />
@@ -60,8 +59,6 @@ export const App: React.FC = () => {
 
             <Route path="settings">
               <Route index element={<ProjectConfig />} />
-              <Route path="roles" element={<ProjectRoles />} />
-              <Route path="members" element={<ProjectMembers />} />
             </Route>
           </Route>
         </Route>
@@ -69,3 +66,12 @@ export const App: React.FC = () => {
     </div>
   );
 };
+
+/**
+ * 1- open project page
+ * 2- get user role of this project (if user is admin, he can see all the project optioins and store recoil state is set to true)
+ * 3- store it in recoil state
+ * 4- use it authorize user to access project
+ * 5- if user is not authorized, hide them
+ 
+ */

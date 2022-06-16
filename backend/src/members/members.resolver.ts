@@ -55,9 +55,25 @@ export class MembersResolver {
     return await this.membersService.filter(filter);
   }
 
+  @Query(() => [Member], { name: 'membersByProject' })
+  async findMembersByProject(
+    @Args('projectId') projectId: string,
+  ): Promise<MemberDocument[]> {
+    return await this.membersService.findMembersByProject(projectId);
+  }
+
   @Query(() => Member, { name: 'member' })
   async findById(@Args('id') id: string): Promise<MemberDocument> {
     return await this.membersService.findOne(id);
+  }
+
+  @Query(() => Member, { name: 'memberInfo' })
+  @UseGuards(JwtAuthGuard)
+  async findUserRoleOfProject(
+    @Context('req') context: any,
+    @Args('project') project: string,
+  ): Promise<MemberDocument> {
+    return this.membersService.findUserInProject(context.user._id, project);
   }
 
   @Mutation(() => Member)

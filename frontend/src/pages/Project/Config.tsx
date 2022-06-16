@@ -5,9 +5,10 @@ import { ProjectMembers } from "./Members";
 import { ProjectRoles } from "./Roles";
 import { ProjectExpenses } from "./Expenses";
 import { SendMails } from "./SendMails";
+import { ProjectPayments } from "./Payments";
 
 export const ProjectConfig: React.FC = () => {
-  const tabs = useMemo(() => ["Settings", "Members", "Roles", "Expenses", "Mails"], []);
+  const tabs = useMemo(() => ["Settings", "Members", "Roles", "Expenses", "Mails", "Payments"], []);
 
   return (
     <div className="container mx-auto">
@@ -43,6 +44,9 @@ export const ProjectConfig: React.FC = () => {
             </Tab.Panel>
             <Tab.Panel>
               <SendMails />
+            </Tab.Panel>
+            <Tab.Panel>
+              <ProjectPayments />
             </Tab.Panel>
           </Tab.Panels>
         </div>

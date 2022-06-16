@@ -10,8 +10,6 @@ import { Input, Label } from "../forms";
 import { FaPlus } from "react-icons/fa";
 import { useParams } from "react-router-dom";
 
-// TODO: Use the right query to save to database
-
 interface NewTaskModalProps {
   listId: string;
   refetchTasks: () => void;
