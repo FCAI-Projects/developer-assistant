@@ -47,7 +47,7 @@ export class MembersResolver {
   async getUserInvitations(
     @Context('req') context: any,
   ): Promise<MemberDocument[]> {
-    return await this.membersService.filter({ user: context.user._id });
+    return await this.membersService.filter({ user: context.user._id, status: 'pending' });
   }
 
   @Query(() => [Member])
