@@ -28,8 +28,14 @@ export class Payment {
   status?: string;
 
   @Prop({ default: "",  type: Date})
-  @Field(() => Date, { description: 'payment date done' })
+  @Field(() => Date, { description: 'payment date done', nullable: true })
   paymentDate?: Date;
+
+  @Field(() => Date, { description: 'Created At' })
+  createdAt?: Date
+
+  @Field(() => Date, { description: 'Updated At' })
+  updatedAt?: Date
 }
 
 export const PaymentSchema = SchemaFactory.createForClass(Payment);

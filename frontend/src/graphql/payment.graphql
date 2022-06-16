@@ -1,0 +1,17 @@
+query FindPayments($project: String!) {
+  findPayments(project: $project) {
+    id
+    paymentUrl
+    amount
+    status
+    paymentDate
+    createdAt
+  }
+}
+
+mutation CreatePayment($createPaymentInput: CreatePaymentInput!) {
+  createPayment(createPaymentInput: $createPaymentInput) {
+    id
+    paymentUrl
+  }
+}

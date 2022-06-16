@@ -284,7 +284,13 @@ type Payment {
   status: String!
 
   """payment date done"""
-  paymentDate: DateTime!
+  paymentDate: DateTime
+
+  """Created At"""
+  createdAt: DateTime!
+
+  """Updated At"""
+  updatedAt: DateTime!
 }
 
 type Query {
