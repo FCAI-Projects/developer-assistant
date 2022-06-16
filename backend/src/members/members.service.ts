@@ -19,7 +19,7 @@ export class MembersService {
 
   async filter(filter: UpdateMemberInput): Promise<MemberDocument[]> {
     return this.memberModel
-      .find({ filter, status: 'pending' })
+      .find(filter)
       .populate('user')
       .populate('project');
   }
@@ -28,7 +28,8 @@ export class MembersService {
     return this.memberModel
       .find({ projectId, status: 'joined' })
       .populate('user')
-      .populate('project');
+      .populate('project')
+      .populate('role');
   }
 
   async findOne(id: string): Promise<MemberDocument> {
@@ -42,9 +43,9 @@ export class MembersService {
     user: string,
     project: string,
   ): Promise<MemberDocument> {
-    return (await this.memberModel.findOne({ user, project }))?.populate(
-      'role',
-    );
+
+    return (await this.memberModel.findOne({ user, project }))?.populate('role');
+
   }
 
   async update(
