@@ -1,8 +1,11 @@
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 import { PaymentService } from './payment.service';
-import { Payment } from './entities/payment.entity';
+import { Payment, PaymentDocument } from './entities/payment.entity';
 import { CreatePaymentInput } from './dto/create-payment.input';
+<<<<<<< HEAD
 import { UpdatePaymentInput } from './dto/update-payment.input';
+=======
+>>>>>>> 5011148b7e3b510215c94f452ecc2c5597f139a4
 import { createHmac } from 'crypto';
 import { CreatePaymentUrlInput } from './dto/create-payment-url';
 import { JwtAuthGuard } from 'src/auth/jwt.guard';
@@ -12,10 +15,18 @@ import { UseGuards } from '@nestjs/common';
 export class PaymentResolver {
   constructor(private readonly paymentService: PaymentService) {}
 
+<<<<<<< HEAD
   @Query(() => Payment, { name: 'findPayment' })
   @UseGuards(JwtAuthGuard)
   async findPayment(@Args('projectId') projectId: string) {
     return await this.paymentService.findOne(projectId);
+=======
+  @Query(() => [Payment], { name: 'findPayments' })
+  @UseGuards(JwtAuthGuard)
+  async findPayments(@Args('project') project: string): Promise<PaymentDocument[]> {
+    
+    return await this.paymentService.findAll(project);
+>>>>>>> 5011148b7e3b510215c94f452ecc2c5597f139a4
   }
 
   @Mutation(() => Payment, { name: 'createPayment' })
@@ -27,9 +38,13 @@ export class PaymentResolver {
     let order = {
       amount: createPaymentInput.amount,
       currency: 'EGP',
+<<<<<<< HEAD
       merchantOrderId: createPaymentInput.projectId,
+=======
+      merchantOrderId: createPaymentInput.project,
+>>>>>>> 5011148b7e3b510215c94f452ecc2c5597f139a4
       mid: paymentCon.mid,
-      orderId: createPaymentInput.projectId,
+      orderId: createPaymentInput.project,
       secret: paymentCon.iFrameSecret,
       baseUrl: paymentCon.baseUrl,
       hash: '',
@@ -38,7 +53,11 @@ export class PaymentResolver {
     order.hash = generateKashierOrderHash(order);
     order.secret = paymentCon.HPPSecret;
 
+<<<<<<< HEAD
     let callbackUrl = encodeURI('http://localhost:3030/' + 'hppCallback');
+=======
+    let callbackUrl = encodeURI('http://localhost:3030/' + 'paymentcallback/callback');
+>>>>>>> 5011148b7e3b510215c94f452ecc2c5597f139a4
 
     //Hosted payment page URL
     let paymentUrl = `${paymentCon.baseUrl}/payment?mid=${order.mid}&orderId=${order.merchantOrderId}&amount=${order.amount}&currency=${order.currency}&hash=${order.hash}&merchantRedirect=${callbackUrl}`;
@@ -52,7 +71,11 @@ export class PaymentResolver {
   }
 }
 
+<<<<<<< HEAD
 const paymentConfig = {
+=======
+export const paymentConfig = {
+>>>>>>> 5011148b7e3b510215c94f452ecc2c5597f139a4
   mode: 'live-test',
   // "live-live": {
   //   baseUrl: "https://iframe.kashier.io",

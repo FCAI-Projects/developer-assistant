@@ -9,7 +9,7 @@ export class CreatePaymentUrlInput {
 
   @Prop({ required: true })
   @Field(() => String)
-  projectId: String;
+  project: String;
 
   @Prop({ required: true })
   @Field(() => String)
