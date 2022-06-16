@@ -9,6 +9,6 @@ export class CreatePaymentInput {
 
   @Prop({ required: true })
   @Field(() => String)
-  projectId: String;
+  project: String;
 
 }

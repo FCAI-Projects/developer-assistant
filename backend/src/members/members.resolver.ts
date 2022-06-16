@@ -6,12 +6,14 @@ import { UpdateMemberInput } from './dto/update-member.input';
 import { UsersService } from 'src/users/users.service';
 import { HttpException, HttpStatus, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt.guard';
+import { ProjectsService } from 'src/projects/projects.service';
 
 @Resolver(() => Member)
 export class MembersResolver {
   constructor(
     private readonly membersService: MembersService,
     private readonly usersService: UsersService,
+    private readonly projectsService: ProjectsService,
   ) {}
 
   @Mutation(() => Member)
@@ -72,7 +74,16 @@ export class MembersResolver {
   async findUserRoleOfProject(
     @Context('req') context: any,
     @Args('project') project: string,
-  ): Promise<MemberDocument> {
+  ): Promise<any> {
+    const projectRecord = await this.projectsService.findOne(project);
+    console.log(context.user._id, projectRecord.owner.toString());
+    if (context.user._id === projectRecord.owner.toString()) {
+      console.log('aa');
+      throw new HttpException(
+        "You're the owner of this project",
+        HttpStatus.BAD_REQUEST,
+      );
+    }
     return this.membersService.findUserInProject(context.user._id, project);
   }
 

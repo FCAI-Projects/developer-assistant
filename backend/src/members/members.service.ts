@@ -43,7 +43,9 @@ export class MembersService {
     user: string,
     project: string,
   ): Promise<MemberDocument> {
+
     return (await this.memberModel.findOne({ user, project }))?.populate('role');
+
   }
 
   async update(

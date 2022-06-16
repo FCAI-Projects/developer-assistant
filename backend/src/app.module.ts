@@ -18,8 +18,9 @@ import { ProjectListsModule } from './project-lists/project-lists.module';
 import { ExpensesModule } from './expenses/expenses.module';
 import { TimeTrackingModule } from './time-tracking/time-tracking.module';
 import { VideoModule } from './video/video.module';
-
 import { UploadsModule } from './uploads/uploads.module';
+import { PaymentcallbackModule } from './paymentcallback/paymentcallback.module';
+import { PaymentModule } from './payment/payment.module';
 
 
 @Module({
@@ -46,7 +47,10 @@ import { UploadsModule } from './uploads/uploads.module';
     VideoModule,
     GroupsModule,
 
-    UploadsModule
+    UploadsModule,
+
+    PaymentcallbackModule,
+    PaymentModule
 
   ],
   controllers: [AppController],

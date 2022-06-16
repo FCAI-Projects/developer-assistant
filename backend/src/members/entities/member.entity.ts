@@ -14,15 +14,18 @@ export class Member {
   id: MongooseSchema.Types.ObjectId;
 
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Project' })
-  @Field(() => Project, { description: 'Projact ID' })
+  @Field(() => Project, { description: 'Projact ID', nullable: true })
   project: ProjectDocument;
 
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'User' })
-  @Field(() => User, { description: 'User ID' })
+  @Field(() => User, { description: 'User ID', nullable: true })
   user: UserDocument;
 
   @Prop({ nullable: true, type: MongooseSchema.Types.ObjectId, ref: 'Role' })
-  @Field(() => Role, { nullable: true, description: 'User role in project' })
+  @Field(() => Role, {
+    nullable: true,
+    description: 'User role in project',
+  })
   role: RoleDocument;
 
   // @Prop()
@@ -30,7 +33,7 @@ export class Member {
   // badges: string;
 
   @Prop({ enum: ['declined', 'joined', 'pending'], default: 'pending' })
-  @Field(() => String, { description: 'User Status' })
+  @Field(() => String, { description: 'User Status', nullable: true })
   status: string;
 }
 
