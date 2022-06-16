@@ -267,8 +267,6 @@ type TimeTracking {
   history: [TimeTrackingHistory!]
 }
 
-<<<<<<< HEAD
-=======
 type Payment {
   """Payment ID"""
   id: ID!
@@ -289,7 +287,6 @@ type Payment {
   paymentDate: DateTime!
 }
 
->>>>>>> 5011148b7e3b510215c94f452ecc2c5597f139a4
 type Query {
   users: [User!]!
   user(id: String!): User!
@@ -325,10 +322,7 @@ type Query {
 
   """Get all task time tracking for a user"""
   taskUserTimeTracking(task: String!): TimeTracking
-<<<<<<< HEAD
-=======
   findPayments(project: String!): [Payment!]!
->>>>>>> 5011148b7e3b510215c94f452ecc2c5597f139a4
 }
 
 input UpdateMemberInput {
@@ -390,10 +384,7 @@ type Mutation {
   startTimeTracking(task: String!): TimeTracking!
   stopTimeTracking(task: String!): TimeTracking!
   removeTimeTracking(id: String!): TimeTracking!
-<<<<<<< HEAD
-=======
   createPayment(createPaymentInput: CreatePaymentInput!): Payment!
->>>>>>> 5011148b7e3b510215c94f452ecc2c5597f139a4
 }
 
 input CreateUserInput {
