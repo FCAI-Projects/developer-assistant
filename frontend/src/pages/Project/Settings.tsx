@@ -111,8 +111,6 @@ export const ProjectSettings: React.FC = () => {
         <Button green type="submit" onClick={() => formik.handleSubmit()} loading={loading}>
           Save Changes
         </Button>
-        <AddGoogleAppPasswordModel />
-        <AddGitHubTokenModel />
       </div>
     </>
   );

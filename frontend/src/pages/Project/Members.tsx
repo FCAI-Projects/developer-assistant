@@ -45,15 +45,19 @@ export const ProjectMembers: React.FC = () => {
               <p>{member.role?.name}</p>
             </div>
             <div className="absolute right-0 flex gap-2">
-              <UpdateMemberModel
-                memberId={member.id}
-                roleId={member.role?.id}
-                roleName={member.role?.name}
-                refetch={refetch}
-              />
-              <Button lightRed onClick={() => handleDelete(member.id)} className="px-4 py-3" loading={loadingRemove}>
-                <FaTrash />
-              </Button>
+              {(role.admin || role.editMember) && (
+                <UpdateMemberModel
+                  memberId={member.id}
+                  roleId={member.role?.id}
+                  roleName={member.role?.name}
+                  refetch={refetch}
+                />
+              )}
+              {(role.admin || role.deleteMember) && (
+                <Button lightRed onClick={() => handleDelete(member.id)} className="px-4 py-3" loading={loadingRemove}>
+                  <FaTrash />
+                </Button>
+              )}
             </div>
           </div>
         ))}

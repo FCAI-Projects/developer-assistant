@@ -7,6 +7,8 @@ import { useRecoilValue } from "recoil";
 import * as Yup from "yup";
 import { Button } from "../components/Button";
 import { Input, Label } from "../components/forms";
+import { AddGitHubTokenModel } from "../components/modals/AddGitHubTokenModel";
+import { AddGoogleAppPasswordModel } from "../components/modals/AddGoogleAppPasswordModel";
 import { UpdatePassword } from "../components/modals/UpdatePasswordModal";
 import { UpdateUserDocument, UserDocument, useUserQuery } from "../graphql/generated/graphql";
 import { authState } from "../recoil";
@@ -15,7 +17,7 @@ export const Settings: React.FC = () => {
   const authToken = useRecoilValue(authState);
   const [id, setId] = useState("");
   const { data } = useUserQuery({ variables: { userId: id } });
-  const [updateUser, { loading: updateLoading}] = useMutation(UpdateUserDocument, {
+  const [updateUser, { loading: updateLoading }] = useMutation(UpdateUserDocument, {
     refetchQueries: [{ query: UserDocument, variables: { userId: id } }],
   });
 
@@ -39,7 +41,7 @@ export const Settings: React.FC = () => {
               fname: values.fname,
               lname: values.lname,
               email: values.email,
-            }
+            },
           },
         });
         toast.success("Successfully updated user");
@@ -100,8 +102,12 @@ export const Settings: React.FC = () => {
               />
             </div>
             <div className="flex flex-row-reverse gap-5">
-              <Button type="submit" loading={updateLoading}>Save Changes</Button>
+              <Button type="submit" loading={updateLoading}>
+                Save Changes
+              </Button>
               <UpdatePassword />
+              <AddGoogleAppPasswordModel />
+              <AddGitHubTokenModel />
             </div>
           </div>
         </div>

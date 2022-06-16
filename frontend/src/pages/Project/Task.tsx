@@ -2,6 +2,7 @@ import { useMutation } from "@apollo/client";
 import React, { useEffect, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useRecoilValue } from "recoil";
 import { Editable } from "../../components/Editable";
 import { Loader } from "../../components/Loader";
 import { AssignMember } from "../../components/TaskPage/AssignMember";
@@ -12,8 +13,10 @@ import { Docs } from "../../components/TaskPage/Docs";
 import { PrivateNote } from "../../components/TaskPage/PrivateNote";
 import { TimeTracking } from "../../components/TaskPage/TimeTracking";
 import { TaskByIdDocument, TaskDocument, UpdateTaskDocument, useTaskByIdQuery } from "../../graphql/generated/graphql";
+import { roleState } from "../../recoil";
 
 export const Task: React.FC = () => {
+  const role = useRecoilValue(roleState);
   const { taskId = "" } = useParams();
   const {
     data: taskData,
@@ -59,15 +62,23 @@ export const Task: React.FC = () => {
         <div className="flex basis-4/6 flex-col gap-5">
           <header>
             <h2 className="text-3xl font-bold">
-              <Editable value={taskData?.task.name} onChange={(value) => handleUpdateTask("name", value)} />
+              {role.admin || role.editTask ? (
+                <Editable value={taskData?.task.name} onChange={(value) => handleUpdateTask("name", value)} />
+              ) : (
+                taskData?.task.name
+              )}
             </h2>
           </header>
           <div>
-            <Editable
-              value={taskData?.task.description}
-              onChange={(value) => handleUpdateTask("description", value)}
-              tag="p"
-            />
+            {role.admin || role.editTask ? (
+              <Editable
+                value={taskData?.task.description}
+                onChange={(value) => handleUpdateTask("description", value)}
+                tag="p"
+              />
+            ) : (
+              taskData?.task.description
+            )}
           </div>
           <Docs handleUpdateTask={handleUpdateTask} docs={taskData?.task.docs} />
           <Comments />
