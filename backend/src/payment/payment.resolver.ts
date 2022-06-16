@@ -38,7 +38,7 @@ export class PaymentResolver {
     order.hash = generateKashierOrderHash(order);
     order.secret = paymentCon.HPPSecret;
 
-    let callbackUrl = encodeURI('http://localhost:3030/' + 'hppCallback');
+    let callbackUrl = encodeURI('http://localhost:3030/' + 'paymentcallback/callback');
 
     //Hosted payment page URL
     let paymentUrl = `${paymentCon.baseUrl}/payment?mid=${order.mid}&orderId=${order.merchantOrderId}&amount=${order.amount}&currency=${order.currency}&hash=${order.hash}&merchantRedirect=${callbackUrl}`;
@@ -52,7 +52,7 @@ export class PaymentResolver {
   }
 }
 
-const paymentConfig = {
+export const paymentConfig = {
   mode: 'live-test',
   // "live-live": {
   //   baseUrl: "https://iframe.kashier.io",
