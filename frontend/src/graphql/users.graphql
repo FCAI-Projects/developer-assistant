@@ -15,5 +15,18 @@ mutation Login($email: String!, $password: String!) {
 mutation UpdateUser($user: UpdateUserInput!) {
   updateUser(user: $user) {
     id
+    fname
+    lname
+    email
+    password
+  }
+}
+
+query User($userId: String!) {
+  user(id: $userId) {
+    id
+    fname
+    lname
+    email
   }
 }
