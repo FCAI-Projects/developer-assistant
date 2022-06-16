@@ -21,6 +21,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@golevelup/ts-jest": "^0.3.3",
     "@nestjs/apollo": "^10.0.7",
     "@nestjs/common": "^8.4.0",
     "@nestjs/core": "^8.4.0",
@@ -77,6 +78,9 @@
     "typescript": "^4.3.5"
   },
   "jest": {
+    "moduleNameMapper": {
+      "^src/(.*)$": "<rootDir>/$1"
+    },
     "moduleFileExtensions": [
       "js",
       "json",

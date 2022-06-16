@@ -22,16 +22,21 @@ import { UploadsModule } from './uploads/uploads.module';
 import { PaymentcallbackModule } from './paymentcallback/paymentcallback.module';
 import { PaymentModule } from './payment/payment.module';
 
+export const configDB = MongooseModule.forRoot(
+  'mongodb+srv://gp:gp123456@cluster0.fyzf3.mongodb.net/developer-assistant?retryWrites=true&w=majority',
+); 
+
+export const configGraphQL =  GraphQLModule.forRoot({
+  driver: ApolloDriver,
+  autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+});
+
+
 
 @Module({
   imports: [
-    MongooseModule.forRoot(
-      'mongodb+srv://gp:gp123456@cluster0.fyzf3.mongodb.net/developer-assistant?retryWrites=true&w=majority',
-    ),
-    GraphQLModule.forRoot({
-      driver: ApolloDriver,
-      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
-    }),
+    configDB,
+    configGraphQL,
     UsersModule,
     ProjectsModule,
     MembersModule,
@@ -57,3 +62,4 @@ import { PaymentModule } from './payment/payment.module';
   providers: [AppService],
 })
 export class AppModule {}
+
