@@ -9,8 +9,6 @@ import { CreateProjectDocument, ProjectsDocument } from "../../graphql/generated
 import { Input, Label } from "../forms";
 import { FaPlus } from "react-icons/fa";
 
-// TODO: Use the right query to save to database
-
 export const NewProjectModal: React.FC = () => {
   const [addProject, { loading, data, error }] = useMutation(CreateProjectDocument, {
     refetchQueries: [{query: ProjectsDocument}],

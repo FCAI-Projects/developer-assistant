@@ -14,25 +14,47 @@ import { Modal } from "./Base";
 interface UpdateRoleProps {
   id: string;
   name: string;
+  createList: boolean;
+  editList: boolean;
+  deleteList: boolean;
   createTask: boolean;
   deleteTask: boolean;
   editTask: boolean;
   assignTask: boolean;
+  unAssignTask: boolean;
+  editDocs: boolean;
+  canComment: boolean;
   editProject: boolean;
-  inviteToProject: boolean;
+  manageRoles: boolean;
+  manageExpenses: boolean;
+  sendMails: boolean;
+  managePayment: boolean;
+  inviteMember: boolean;
   deleteMember: boolean;
+  editMember: boolean;
 }
 
 export const UpdateRoleModel: React.FC<UpdateRoleProps> = ({
   id,
   name,
+  createList,
+  editList,
+  deleteList,
   createTask,
   deleteTask,
   editTask,
   assignTask,
+  unAssignTask,
+  editDocs,
+  canComment,
   editProject,
-  inviteToProject,
+  manageRoles,
+  manageExpenses,
+  sendMails,
+  managePayment,
+  inviteMember,
   deleteMember,
+  editMember,
 }) => {
   const ProjectId = useParams();
   const [isOpen, toggleModal] = useToggleModal();
@@ -42,13 +64,24 @@ export const UpdateRoleModel: React.FC<UpdateRoleProps> = ({
   const formik = useFormik({
     initialValues: {
       name: name,
+      createList: createList,
+      editList: editList,
+      deleteList: deleteList,
       createTask: createTask,
       deleteTask: deleteTask,
       editTask: editTask,
       assignTask: assignTask,
+      unAssignTask: unAssignTask,
+      editDocs: editDocs,
+      canComment: canComment,
       editProject: editProject,
-      inviteToProject: inviteToProject,
+      manageRoles: manageRoles,
+      manageExpenses: manageExpenses,
+      sendMails: sendMails,
+      managePayment: managePayment,
+      inviteMember: inviteMember,
       deleteMember: deleteMember,
+      editMember: editMember,
     },
     validationSchema: Yup.object({
       name: Yup.string().required("Required"),
@@ -61,13 +94,24 @@ export const UpdateRoleModel: React.FC<UpdateRoleProps> = ({
             updateRoleInput: {
               name: values.name,
               project: ProjectId.id,
+              createList: values.createList,
+              editList: values.editList,
+              deleteList: values.deleteList,
               createTask: values.createTask,
               deleteTask: values.deleteTask,
               editTask: values.editTask,
               assignTask: values.assignTask,
+              unAssignTask: values.unAssignTask,
+              editDocs: values.editDocs,
+              canComment: values.canComment,
               editProject: values.editProject,
-              inviteToProject: values.inviteToProject,
+              manageRoles: values.manageRoles,
+              manageExpenses: values.manageExpenses,
+              sendMails: values.sendMails,
+              managePayment: values.managePayment,
+              inviteMember: values.inviteMember,
               deleteMember: values.deleteMember,
+              editMember: values.editMember,
             },
           },
         });
@@ -99,23 +143,53 @@ export const UpdateRoleModel: React.FC<UpdateRoleProps> = ({
             </div>
             <h3>Permissions</h3>
             <div className="w-full">
+              <ToggleSwitch id="createList" defaultChecked={createList} {...formik.getFieldProps("createList")}>
+                Create List
+              </ToggleSwitch>
+            </div>
+            <div className="w-full">
+              <ToggleSwitch id="editList" defaultChecked={editList} {...formik.getFieldProps("editList")}>
+                edit List
+              </ToggleSwitch>
+            </div>
+            <div className="w-full">
+              <ToggleSwitch id="deleteList" defaultChecked={deleteList} {...formik.getFieldProps("deleteList")}>
+               Delete List
+              </ToggleSwitch>
+            </div>
+            <div className="w-full">
               <ToggleSwitch id="createTask" defaultChecked={createTask} {...formik.getFieldProps("createTask")}>
-                Create Tasks
+               Create Task
               </ToggleSwitch>
             </div>
             <div className="w-full">
               <ToggleSwitch id="deleteTask" defaultChecked={deleteTask} {...formik.getFieldProps("deleteTask")}>
-                Delete Tasks
+                Delete Task
               </ToggleSwitch>
             </div>
             <div className="w-full">
               <ToggleSwitch id="editTask" defaultChecked={editTask} {...formik.getFieldProps("editTask")}>
-                Edit Tasks
+                Edit Task
               </ToggleSwitch>
             </div>
             <div className="w-full">
               <ToggleSwitch id="assignTask" defaultChecked={assignTask} {...formik.getFieldProps("assignTask")}>
-                Assign Members to Tasks
+                Assign Task
+              </ToggleSwitch>
+            </div>
+            <div className="w-full">
+              <ToggleSwitch id="unAssignTask" defaultChecked={unAssignTask} {...formik.getFieldProps("unAssignTask")}>
+                UnAssign Task
+              </ToggleSwitch>
+            </div>
+            <div className="w-full">
+              <ToggleSwitch id="editDocs" defaultChecked={editDocs} {...formik.getFieldProps("editDocs")}>
+                Edit Docs
+              </ToggleSwitch>
+            </div>
+            <div className="w-full">
+              <ToggleSwitch id="canComment" defaultChecked={canComment} {...formik.getFieldProps("canComment")}>
+                Can Comment
               </ToggleSwitch>
             </div>
             <div className="w-full">
@@ -124,17 +198,38 @@ export const UpdateRoleModel: React.FC<UpdateRoleProps> = ({
               </ToggleSwitch>
             </div>
             <div className="w-full">
-              <ToggleSwitch
-                id="inviteToProject"
-                defaultChecked={inviteToProject}
-                {...formik.getFieldProps("inviteToProject")}
-              >
-                Invite To Project
+              <ToggleSwitch id="manageRoles" defaultChecked={manageRoles} {...formik.getFieldProps("manageRoles")}>
+                Manage Roles
+              </ToggleSwitch>
+            </div>
+            <div className="w-full">
+              <ToggleSwitch id="manageExpenses" defaultChecked={manageExpenses} {...formik.getFieldProps("manageExpenses")}>
+                Manage Expenses
+              </ToggleSwitch>
+            </div>
+            <div className="w-full">
+              <ToggleSwitch id="sendMails" defaultChecked={sendMails} {...formik.getFieldProps("sendMails")}>
+                Send Mails
+              </ToggleSwitch>
+            </div>
+            <div className="w-full">
+              <ToggleSwitch id="managePayment" defaultChecked={managePayment} {...formik.getFieldProps("managePayment")}>
+                Manage Payment
+              </ToggleSwitch>
+            </div>
+            <div className="w-full">
+              <ToggleSwitch id="inviteMember" defaultChecked={inviteMember} {...formik.getFieldProps("inviteMember")}>
+                Invite Member
               </ToggleSwitch>
             </div>
             <div className="w-full">
               <ToggleSwitch id="deleteMember" defaultChecked={deleteMember} {...formik.getFieldProps("deleteMember")}>
-                Delete Members
+                Delete Member
+              </ToggleSwitch>
+            </div>
+            <div className="w-full">
+              <ToggleSwitch id="editMember" defaultChecked={editMember} {...formik.getFieldProps("editMember")}>
+                Edit Member
               </ToggleSwitch>
             </div>
           </form>

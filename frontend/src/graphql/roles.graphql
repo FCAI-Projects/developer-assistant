@@ -1,14 +1,25 @@
 query Roles($project: String!) {
   roles(project: $project) {
+    id
     name
+    createList
+    editList
+    deleteList
     createTask
     deleteTask
     editTask
     assignTask
+    unAssignTask
+    editDocs
+    canComment
     editProject
-    inviteToProject
+    manageRoles
+    manageExpenses
+    sendMails
+    managePayment
+    inviteMember
     deleteMember
-    id
+    editMember
   }
 }
 
