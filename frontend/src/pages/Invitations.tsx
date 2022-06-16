@@ -1,11 +1,14 @@
 import { useMutation } from "@apollo/client";
 import { Button } from "../components/Button";
-import { UpdateMemberDocument, useInvitationsQuery } from "../graphql/generated/graphql";
+import { InvitationsDocument, RemoveMemberDocument, UpdateMemberDocument, useInvitationsQuery } from "../graphql/generated/graphql";
 
 export const Invitations: React.FC = () => {
-  const { data, error, loading } = useInvitationsQuery();
+  const { data } = useInvitationsQuery();
   const [updateMember, { loading: loadingUpdate} ] = useMutation (UpdateMemberDocument, {
-    refetchQueries: ["Invitations"]
+    refetchQueries: [{ query: InvitationsDocument}],
+  });
+  const [removeMember, { loading: loadingRemove} ] = useMutation (RemoveMemberDocument, {
+    refetchQueries: [{ query: InvitationsDocument}],
   });
 
   const handleAccept = (id: string) => {
@@ -19,12 +22,9 @@ export const Invitations: React.FC = () => {
     });
   }
   const handleDecline = (id: string) => {
-    updateMember({
+    removeMember({
       variables: {  
-        updateMemberId: id,
-        updateMemberInput: {
-          status: "declined" 
-        }
+        removeMemberId: id,
       }
     });
   }
@@ -61,7 +61,7 @@ export const Invitations: React.FC = () => {
                 <Button 
                   lightRed
                   onClick={() => handleDecline(invitation.id)}
-                  loading={loadingUpdate}
+                  loading={loadingRemove}
                 >
                   Decline
                 </Button>

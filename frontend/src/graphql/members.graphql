@@ -37,5 +37,22 @@ query MembersByProject($projectId: String!) {
       fname
       lname
     }
+    role {
+      id
+      name
+    }
   }
 }
+
+mutation RemoveMember($removeMemberId: String!) {
+  removeMember(id: $removeMemberId) {
+    id
+  }
+}
+
+mutation UpdateMember($updateMemberId: String!, $updateMemberInput: UpdateMemberInput!) {
+  updateMember(id: $updateMemberId, updateMemberInput: $updateMemberInput) {
+    id
+  }
+}
+

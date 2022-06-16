@@ -5,29 +5,30 @@ import { Button } from "../Button";
 import * as Yup from "yup";
 import { Modal } from "./Base";
 import { useMutation } from "@apollo/client";
-import { InvitedMemberDocument, InviteMemberDocument, useRolesQuery } from "../../graphql/generated/graphql";
-import { CustomSelect, Input, Label } from "../forms";
-import { FaPlus, FaUserPlus } from "react-icons/fa";
-import { useParams } from "react-router-dom";
+import { UpdateMemberDocument, useRolesQuery } from "../../graphql/generated/graphql";
+import { CustomSelect, Label } from "../forms";
+import { FaEdit } from "react-icons/fa";
 import { toast } from "react-toastify";
+import { useParams } from "react-router-dom";
 
-interface formikProps {
-  member: string;
-  role: { id: string; name: string };
+interface updateMemberProps {
+  memberId: string;
+  roleId: any;
+  roleName: any;
+  refetch: () => void;
 }
-export const InviteMemberModal: React.FC = () => {
+
+export const UpdateMemberModel: React.FC<updateMemberProps> = ({ memberId, roleId, roleName, refetch }) => {
   const params = useParams();
   const [rolesOptions, setRolesOptions] = useState<any>([]);
   const { data: Roles } = useRolesQuery({ variables: { project: params.id as string } });
-  const [InviteMember, { loading }] = useMutation(InviteMemberDocument);
+  const [updateMember, { loading: updateLoading}] = useMutation(UpdateMemberDocument);
   const [isOpen, toggleModal] = useToggleModal();
-  const formik = useFormik<formikProps>({
+  const formik = useFormik({
     initialValues: {
-      member: "",
-      role: { id: "0", name: "Choose Role" },
+      role: { id: roleId, name: roleName },
     },
     validationSchema: Yup.object({
-      member: Yup.string().email().required("Required"),
       role: Yup.object().required("Required"),
     }),
     onSubmit: async (values) => {
@@ -36,19 +37,19 @@ export const InviteMemberModal: React.FC = () => {
           toast.error("Please select a role");
           return;
         }
-        await InviteMember({
+        await updateMember({
           variables: {
-            inviteMemberInput: {
-              project: params.id,
-              user: values.member,
+            updateMemberId: memberId,
+            updateMemberInput: {
               role: values.role.id,
             },
           },
         });
-        toast.success("Member has been invited !");
+        toast.success("Role updated");
         toggleModal();
-      } catch (error: any) {
-        toast.error(error.message);
+        refetch();
+      } catch (error) {
+        console.log(error);
       }
     },
   });
@@ -62,19 +63,15 @@ export const InviteMemberModal: React.FC = () => {
         }))
       );
   }, [Roles]);
-  
+
   return (
     <>
-      <Button lightBlue className="flex items-center gap-2 px-3 py-2 text-xs" onClick={toggleModal}>
-        <FaUserPlus /> Invite Member
+      <Button lightYellow className="flex items-center gap-2 px-4 py-3" onClick={toggleModal}>
+        <FaEdit />
       </Button>
-      <Modal title="invite Member" isOpen={isOpen} handleClose={toggleModal}>
+      <Modal title="Update Member" isOpen={isOpen} handleClose={toggleModal}>
         <div className="my-5">
           <form className="flex flex-col gap-4">
-            <div className="w-full">
-              <Label htmlFor="member">Member Email</Label>
-              <Input id="member" type="email" placeholder="Member Email" {...formik.getFieldProps("member")} />
-            </div>
             <div className="w-full">
               <Label htmlFor="role">Role</Label>
               <CustomSelect
@@ -90,8 +87,8 @@ export const InviteMemberModal: React.FC = () => {
           </form>
         </div>
         <div className="flex flex-row-reverse gap-3">
-          <Button type="submit" green onClick={() => formik.handleSubmit()} loading={loading}>
-            Invite
+          <Button type="submit" green onClick={() => formik.handleSubmit()} loading={updateLoading}>
+            Send
           </Button>
           <Button type="submit" lightRed onClick={toggleModal}>
             Cancel
