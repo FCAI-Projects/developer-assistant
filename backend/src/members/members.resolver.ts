@@ -67,6 +67,15 @@ export class MembersResolver {
     return await this.membersService.findOne(id);
   }
 
+  @Query(() => Member, { name: 'memberInfo' })
+  @UseGuards(JwtAuthGuard)
+  async findUserRoleOfProject(
+    @Context('req') context: any,
+    @Args('project') project: string,
+  ): Promise<MemberDocument> {
+    return this.membersService.findUserInProject(context.user._id, project);
+  }
+
   @Mutation(() => Member)
   async updateMember(
     @Args('id') id: string,

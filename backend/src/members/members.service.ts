@@ -18,13 +18,18 @@ export class MembersService {
   }
 
   async filter(filter: UpdateMemberInput): Promise<MemberDocument[]> {
-    return this.memberModel.find({filter, status: "pending"}).populate('user').populate('project');
+    return this.memberModel
+      .find({ filter, status: 'pending' })
+      .populate('user')
+      .populate('project');
   }
 
   async findMembersByProject(projectId: string): Promise<MemberDocument[]> {
-    return this.memberModel.find({projectId, status: "joined"}).populate('user').populate('project');
+    return this.memberModel
+      .find({ projectId, status: 'joined' })
+      .populate('user')
+      .populate('project');
   }
-
 
   async findOne(id: string): Promise<MemberDocument> {
     return this.memberModel
@@ -37,7 +42,7 @@ export class MembersService {
     user: string,
     project: string,
   ): Promise<MemberDocument> {
-    return this.memberModel.findOne({ user, project });
+    return (await this.memberModel.findOne({ user, project })).populate('role');
   }
 
   async update(

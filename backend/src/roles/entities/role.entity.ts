@@ -22,6 +22,18 @@ export class Role {
 
   @Prop({ default: false })
   @Field(() => Boolean, { defaultValue: false })
+  createList: boolean;
+
+  @Prop({ default: false })
+  @Field(() => Boolean, { defaultValue: false })
+  editList: boolean;
+
+  @Prop({ default: false })
+  @Field(() => Boolean, { defaultValue: false })
+  deleteList: boolean;
+
+  @Prop({ default: false })
+  @Field(() => Boolean, { defaultValue: false })
   createTask: boolean;
 
   @Prop({ default: false })
@@ -38,15 +50,47 @@ export class Role {
 
   @Prop({ default: false })
   @Field(() => Boolean, { defaultValue: false })
+  unAssignTask: boolean;
+
+  @Prop({ default: false })
+  @Field(() => Boolean, { defaultValue: false })
+  editDocs: boolean;
+
+  @Prop({ default: false })
+  @Field(() => Boolean, { defaultValue: false })
+  canComment: boolean;
+
+  @Prop({ default: false })
+  @Field(() => Boolean, { defaultValue: false })
   editProject: boolean;
 
   @Prop({ default: false })
   @Field(() => Boolean, { defaultValue: false })
-  inviteToProject: boolean;
+  manageRoles: boolean;
+
+  @Prop({ default: false })
+  @Field(() => Boolean, { defaultValue: false })
+  manageExpenses: boolean;
+
+  @Prop({ default: false })
+  @Field(() => Boolean, { defaultValue: false })
+  sendMails: boolean;
+
+  @Prop({ default: false })
+  @Field(() => Boolean, { defaultValue: false })
+  managePayment: boolean;
+
+  @Prop({ default: false })
+  @Field(() => Boolean, { defaultValue: false })
+  inviteMember: boolean;
 
   @Prop({ default: false })
   @Field(() => Boolean, { defaultValue: false })
   deleteMember: boolean;
+
+  @Prop({ default: false })
+  @Field(() => Boolean, { defaultValue: false })
+  editMember: boolean;
 }
 
 export const RoleSchema = SchemaFactory.createForClass(Role);
