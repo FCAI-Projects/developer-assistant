@@ -9,6 +9,9 @@ query Projects {
     id
     name
     describtion
+    owner {
+      id
+    }
   }
 }
 

@@ -6,6 +6,8 @@ import { UpdateTaskInput } from './dto/update-task.input';
 import { ProjectListsService } from 'src/project-lists/project-lists.service';
 import { GraphQLUpload, FileUpload } from 'graphql-upload';
 import { createWriteStream, mkdirSync } from 'fs';
+import mongoose from 'mongoose';
+import { HttpException } from '@nestjs/common';
 
 @Resolver(() => Task)
 export class TasksResolver {
@@ -81,6 +83,9 @@ export class TasksResolver {
     @Args('id') id: string,
     @Args('member') member: string,
   ): Promise<TaskDocument> {
+    if (!mongoose.isValidObjectId(id) || !mongoose.isValidObjectId(member)) {
+      throw new HttpException('Invalid ID', 400);
+    }
     return await this.tasksService.updateModel(id, {
       $push: { assign: member },
     });

@@ -24,7 +24,7 @@ export class ProjectsService {
   }
 
   async findMyPorjects(owner: string): Promise<ProjectDocument[]> {
-    return this.projectModel.find({ owner });
+    return this.projectModel.find({ owner }).populate('owner');
   }
 
   async findOne(id: string): Promise<ProjectDocument> {

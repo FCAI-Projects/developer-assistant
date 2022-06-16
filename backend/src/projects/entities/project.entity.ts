@@ -28,7 +28,7 @@ export class Project {
   @Field(() => String, { description: 'Project describtion' })
   describtion: string;
 
-  @Prop( {default:0 })
+  @Prop({ default: 0 })
   @Field(() => Number, { description: 'Project Budget' })
   budget: number;
 }

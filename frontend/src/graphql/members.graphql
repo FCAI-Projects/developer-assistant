@@ -39,3 +39,30 @@ query MembersByProject($projectId: String!) {
     }
   }
 }
+
+query MemberInfo($project: String!) {
+  memberInfo(project: $project) {
+    role {
+      name
+      createList
+      editList
+      deleteList
+      createTask
+      deleteTask
+      editTask
+      assignTask
+      unAssignTask
+      editDocs
+      canComment
+      editProject
+      manageRoles
+      manageExpenses
+      sendMails
+      managePayment
+      inviteMember
+      deleteMember
+      editMember
+      id
+    }
+  }
+}
