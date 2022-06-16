@@ -18,7 +18,7 @@ export class PaymentService {
     return payment.save();
   }
 
-  findOne(projectId: string) {
-    return this.paymnetModel.findOne({projectId});
+  async findAll(project: string): Promise<PaymentDocument[]> {
+    return this.paymnetModel.find({ project }).populate('project');
   }
 }
