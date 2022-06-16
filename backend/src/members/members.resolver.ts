@@ -76,13 +76,8 @@ export class MembersResolver {
     @Args('project') project: string,
   ): Promise<any> {
     const projectRecord = await this.projectsService.findOne(project);
-    console.log(context.user._id, projectRecord.owner.toString());
-    if (context.user._id === projectRecord.owner.toString()) {
-      console.log('aa');
-      throw new HttpException(
-        "You're the owner of this project",
-        HttpStatus.BAD_REQUEST,
-      );
+    if (context.user._id.toString() === projectRecord.owner.toString()) {
+      return true;
     }
     return this.membersService.findUserInProject(context.user._id, project);
   }

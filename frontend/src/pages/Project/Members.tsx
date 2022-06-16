@@ -1,14 +1,18 @@
 import React from "react";
 import { FaEdit, FaTrash } from "react-icons/fa";
+import { useRecoilValue } from "recoil";
 import { Button } from "../../components/Button";
 import { InviteMemberModal } from "../../components/modals/InviteMemberModal";
+import { roleState } from "../../recoil";
 
 export const ProjectMembers: React.FC = () => {
+  const role = useRecoilValue(roleState);
+
   return (
     <div>
       <header className="mb-3 flex items-center justify-between">
         <h2 className="text-2xl font-bold">Project Members</h2>
-        <InviteMemberModal />
+        {(role.admin || role.inviteMember) && <InviteMemberModal />}
       </header>
       <div className="relative flex items-center gap-3 border-b border-slate-200 py-5">
         <div>
@@ -23,12 +27,16 @@ export const ProjectMembers: React.FC = () => {
           <p>Member</p>
         </div>
         <div className="absolute right-0 flex gap-2">
-          <Button lightYellow className="px-4 py-3">
-            <FaEdit />
-          </Button>
-          <Button lightRed className="px-4 py-3">
-            <FaTrash />
-          </Button>
+          {(role.admin || role.editMember) && (
+            <Button lightYellow className="px-4 py-3">
+              <FaEdit />
+            </Button>
+          )}
+          {(role.admin || role.deleteMember) && (
+            <Button lightRed className="px-4 py-3">
+              <FaTrash />
+            </Button>
+          )}
         </div>
       </div>
       {/** */}
