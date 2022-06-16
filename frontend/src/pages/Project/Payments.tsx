@@ -1,17 +1,17 @@
 import { useMutation } from "@apollo/client";
 import React, { useEffect, useMemo, useState } from "react";
-import { useToggleModal } from "../../hooks/useToggleModal";
 import { FaTrashAlt } from "react-icons/fa";
 import { useParams } from "react-router-dom";
 import { Button } from "../../components/Button";
 import { AddNewExpense } from "../../components/modals/AddNewExpenseModal";
+import { AddPaymentModel } from "../../components/modals/AddPaymentModel";
 import { Table } from "../../components/Table";
-import { ExpensesDocument, RemoveExpenseDocument, useExpensesQuery } from "../../graphql/generated/graphql";
+import { ExpensesDocument, RemoveExpenseDocument, useExpensesQuery, useFindPaymentsQuery } from "../../graphql/generated/graphql";
 
 export const ProjectPayments: React.FC = () => {
   const paramas = useParams();
   const [data, setData] = useState<any>([]);
-  const { data: expenses, refetch } = useExpensesQuery({ variables: { project: paramas.id as string } });
+  const { data: payments } = useFindPaymentsQuery({ variables: { project: paramas.id as string } });
 
   const column = useMemo(
     () => [
@@ -20,47 +20,51 @@ export const ProjectPayments: React.FC = () => {
         accessor: "id",
       },
       {
-        header: "Name",
-        accessor: "name",
-      },
-      {
         header: "Amount",
         accessor: "amount",
       },
       {
-        header: "Date",
-        accessor: "date",
+        header: "Status",
+        accessor: "status",
       },
       {
-        header: "",
-        accessor: "actions",
+        header: "Payment Date",
+        accessor: "paymentDate",
       },
+      {
+        header: "Created At",
+        accessor: "createdAt",
+      }
     ],
     []
   );
 
   useEffect(() => {
-    if (expenses)
+    if (payments)
       setData(
-        expenses.expenses.map((el: any) => ({
-          id: el.id,
-          name: el.name,
-          amount: el.amount,
-          date: new Date(el.date).toDateString(),
-          actions: (
-            <Button lightRed>
-              <FaTrashAlt />
-            </Button>
+        payments.findPayments.map((el: any) => ({
+          id: (
+          <a 
+            href={el.paymentUrl} 
+            target="blank"
+            className="text-blue-700 font-medium underline hover:text-blue-900"
+          >
+            {el.id}
+          </a>
           ),
+          amount: el.amount,
+          status: el.status,
+          paymentDate: el.paymentDate ? new Date(el.paymentDate).toDateString() : "",
+          createdAt: new Date(el.createdAt).toDateString(),          
         }))
       );
-  }, [expenses]);
+  }, [payments]);
 
   return (
     <div>
       <header className="mb-3 flex items-center justify-between">
         <h2 className="text-2xl font-bold">Project Payments</h2>
-        <AddNewExpense />
+        <AddPaymentModel />
       </header>
       <div className="py-3">
         <Table columns={column} data={data} />
@@ -68,3 +72,4 @@ export const ProjectPayments: React.FC = () => {
     </div>
   );
 };
+
