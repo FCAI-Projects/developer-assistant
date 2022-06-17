@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { MembersService } from './members.service';
 import { MembersResolver } from './members.resolver';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -15,8 +15,9 @@ import { ProjectsModule } from 'src/projects/projects.module';
       },
     ]),
     UsersModule,
-    ProjectsModule,
+    forwardRef(() => ProjectsModule),
   ],
   providers: [MembersResolver, MembersService],
+  exports: [MembersService],
 })
 export class MembersModule {}

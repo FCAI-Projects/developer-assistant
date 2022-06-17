@@ -6,12 +6,14 @@ import { UpdateProjectInput } from './dto/update-project.input';
 import { Req, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt.guard';
 import { RolesService } from 'src/roles/roles.service';
+import { MembersService } from 'src/members/members.service';
 
 @Resolver(() => Project)
 export class ProjectsResolver {
   constructor(
     private readonly projectsService: ProjectsService,
     private readonly rolesService: RolesService,
+    private readonly membersService: MembersService,
   ) {}
 
   @Mutation(() => Project)
@@ -59,7 +61,19 @@ export class ProjectsResolver {
   @Query(() => [Project], { name: 'projects' })
   @UseGuards(JwtAuthGuard)
   async findAll(@Context('req') context: any): Promise<ProjectDocument[]> {
-    return await this.projectsService.findMyPorjects(context.user._id);
+    const projects = await this.projectsService.findMyPorjects(
+      context.user._id,
+    );
+    const memberIn = await this.membersService.getUserProjects(
+      context.user._id,
+    );
+
+    memberIn.forEach((member) => {
+      projects.push(member.project);
+    });
+    console.log(projects);
+
+    return projects;
   }
 
   @Query(() => Project, { name: 'project' })

@@ -37,7 +37,7 @@ export const ProjectConfig: React.FC = () => {
     }
 
     return tabs;
-  }, []);
+  }, [role]);
 
   return (
     <div className="container mx-auto">
