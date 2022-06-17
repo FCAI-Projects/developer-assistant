@@ -6,6 +6,7 @@ import { UpdateProjectInput } from './dto/update-project.input';
 import { Req, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt.guard';
 import { RolesService } from 'src/roles/roles.service';
+import { resourceUsage } from 'process';
 
 @Resolver(() => Project)
 export class ProjectsResolver {
@@ -24,7 +25,7 @@ export class ProjectsResolver {
       createProjectInput,
       context.user._id,
     );
-
+    
     // Create base roles for project
     await this.rolesService.create({
       name: 'Admin',
