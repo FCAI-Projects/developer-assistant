@@ -8,7 +8,7 @@ import {
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { JwtService } from '@nestjs/jwt';
 import { compareSync } from 'bcrypt';
-import { JwtAuthGuard } from 'src/auth/jwt.guard';
+import { JwtAuthGuard } from '../auth/jwt.guard';
 import { CreateUserInput } from './dto/create-user.dto';
 import { UserResponse } from './dto/user-response.dto';
 import { UpdateUserInput } from './dto/update-user.dto';

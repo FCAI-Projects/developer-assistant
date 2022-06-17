@@ -6,7 +6,7 @@ export type UserDocument = User & Document;
 
 @Schema({ timestamps: true })
 @ObjectType()
-export class User extends Document {
+export class User {
   @Field(() => ID, { description: 'User ID' })
   id: MongooseSchema.Types.ObjectId;
 
