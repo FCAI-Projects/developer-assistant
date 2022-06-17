@@ -6,6 +6,7 @@ query Comments($taskId: String!) {
     user {
       fname
       lname
+      avatar
     }
     createdAt
     updatedAt

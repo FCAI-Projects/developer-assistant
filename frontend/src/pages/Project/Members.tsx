@@ -1,4 +1,5 @@
 import { useMutation } from "@apollo/client";
+import axios from "axios";
 import React, { useEffect } from "react";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { useParams } from "react-router-dom";
@@ -36,7 +37,7 @@ export const ProjectMembers: React.FC = () => {
             <div>
               <img
                 className="h-16 w-16 rounded-full object-cover"
-                src="https://images.pexels.com/photos/2955305/pexels-photo-2955305.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
+                src={axios.defaults.baseURL + "/uploads/avatars/" + member.user?.avatar}
                 alt="avatar"
               />
             </div>

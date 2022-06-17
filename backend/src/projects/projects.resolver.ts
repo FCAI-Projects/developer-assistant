@@ -102,6 +102,7 @@ export class ProjectsResolver {
   async sendMail(
     @Context('req') context: any,
     @Args('id') id: string,
+    @Args('title') title: string,
     @Args('message') message: string,
   ): Promise<boolean> {
     const project = await this.projectsService.findOne(id);
@@ -123,7 +124,7 @@ export class ProjectsResolver {
     const mailOptions = {
       from: user.email,
       to: project.clientEmail,
-      subject: 'Mail from project',
+      subject: title,
       text: message,
       html: `<p>${message}</p>`,
     };

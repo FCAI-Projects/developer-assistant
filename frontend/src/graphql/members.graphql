@@ -36,6 +36,7 @@ query MembersByProject($projectId: String!) {
       id
       fname
       lname
+      avatar
     }
     role {
       id
