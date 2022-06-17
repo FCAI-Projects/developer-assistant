@@ -8,15 +8,16 @@ query Projects {
   projects {
     id
     name
-    describtion
+    description
     owner {
       id
     }
+    gihubRepo
   }
 }
 
-mutation CreateProject($createProjectInput: CreateProjectInput!) {
-  createProject(createProjectInput: $createProjectInput) {
+mutation CreateProject($createProjectInput: CreateProjectInput!, $github: Boolean!) {
+  createProject(createProjectInput: $createProjectInput, github: $github) {
     id
   }
 }
@@ -25,7 +26,7 @@ mutation updateProject($updateProjectId: String!, $updateProjectInput: UpdatePro
   updateProject(id: $updateProjectId, updateProjectInput: $updateProjectInput) {
     name
     clientEmail
-    describtion
+    description
     budget
   }
 }
@@ -34,8 +35,9 @@ query ProjectById($projectId: String!) {
   project(id: $projectId) {
     id
     name
-    describtion
+    description
     clientEmail
     budget
+    gihubRepo
   }
 }

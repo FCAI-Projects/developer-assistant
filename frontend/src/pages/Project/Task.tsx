@@ -1,8 +1,10 @@
 import { useMutation } from "@apollo/client";
 import React, { useEffect, useMemo } from "react";
+import { FaTrash } from "react-icons/fa";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useRecoilValue } from "recoil";
+import { Button } from "../../components/Button";
 import { Editable } from "../../components/Editable";
 import { Loader } from "../../components/Loader";
 import { AssignMember } from "../../components/TaskPage/AssignMember";
@@ -86,9 +88,18 @@ export const Task: React.FC = () => {
         <div className="flex basis-2/6 flex-col gap-5">
           <TimeTracking taskId={taskId} />
           <Deadline handleUpdateTask={handleUpdateTask} deadline={taskData?.task.deadline} />
+          <Button green onClick={() => handleUpdateTask("status", "done")}>
+            Done
+          </Button>
           <AssignMember />
           <PrivateNote />
           <Attachments data={taskData?.task.attachments} id={taskId} refetchTask={refetchTask} />
+
+          {(role.admin || role.deleteTask) && (
+            <Button lightRed className="flex items-center justify-center gap-2">
+              <FaTrash /> Delete Task
+            </Button>
+          )}
         </div>
       </div>
     </div>

@@ -47,6 +47,8 @@ export class TasksResolver {
     @Args('id') id: string,
     @Args('updateTaskInput') updateTaskInput: UpdateTaskInput,
   ): Promise<TaskDocument> {
+    if (updateTaskInput.status === 'done')
+      updateTaskInput.finishedAt = new Date();
     return await this.tasksService.update(id, updateTaskInput);
   }
 

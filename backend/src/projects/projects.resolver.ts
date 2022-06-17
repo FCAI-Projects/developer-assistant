@@ -1,4 +1,12 @@
-import { Resolver, Query, Mutation, Args, Int, Context } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  Int,
+  Context,
+  Field,
+} from '@nestjs/graphql';
 import { ProjectsService } from './projects.service';
 import { Project, ProjectDocument } from './entities/project.entity';
 import { CreateProjectInput } from './dto/create-project.input';
@@ -9,6 +17,7 @@ import { RolesService } from 'src/roles/roles.service';
 import { MembersService } from 'src/members/members.service';
 import { UsersService } from 'src/users/users.service';
 import * as nodemailer from 'nodemailer';
+import * as axios from 'axios';
 
 @Resolver(() => Project)
 export class ProjectsResolver {
@@ -24,6 +33,7 @@ export class ProjectsResolver {
   async createProject(
     @Context('req') context: any,
     @Args('createProjectInput') createProjectInput: CreateProjectInput,
+    @Args('github') github: boolean,
   ): Promise<ProjectDocument> {
     const project = await this.projectsService.create(
       createProjectInput,
@@ -57,6 +67,10 @@ export class ProjectsResolver {
       name: 'Member',
       project: project._id,
     });
+
+    if (github) {
+      await this.createGithubRepo(project, context.user._id);
+    }
 
     return project;
   }
@@ -137,5 +151,29 @@ export class ProjectsResolver {
         }
       });
     });
+  }
+
+  private async createGithubRepo(project: ProjectDocument, userId: string) {
+    const user = await this.usersService.findOne(userId);
+    if (!user.connectedWihGithub)
+      throw new HttpException('You are not connected with github', 401);
+
+    const { data } = await axios.default.post(
+      'https://api.github.com/user/repos',
+      { name: project.name },
+      {
+        headers: {
+          Authorization: `token ${user.githubToken}`,
+          Accept: 'application/vnd.github.v3+json',
+        },
+      },
+    );
+
+    if (data)
+      await this.projectsService.update(project._id, {
+        gihubRepo: data.full_name,
+      });
+
+    console.log(data);
   }
 }

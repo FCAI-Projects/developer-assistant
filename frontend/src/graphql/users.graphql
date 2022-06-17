@@ -29,6 +29,8 @@ query User($userId: String!) {
     lname
     email
     avatar
+    connectedWihGoogle
+    connectedWihGithub
   }
 }
 

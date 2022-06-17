@@ -7,6 +7,8 @@ import { UsersService } from 'src/users/users.service';
 import { HttpException, HttpStatus, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt.guard';
 import { ProjectsService } from 'src/projects/projects.service';
+import { GroupsService } from 'src/groups/groups.service';
+import { TasksService } from 'src/tasks/tasks.service';
 
 @Resolver(() => Member)
 export class MembersResolver {
@@ -14,6 +16,8 @@ export class MembersResolver {
     private readonly membersService: MembersService,
     private readonly usersService: UsersService,
     private readonly projectsService: ProjectsService,
+    private readonly groupsService: GroupsService,
+    private readonly tasksService: TasksService,
   ) {}
 
   @Mutation(() => Member)
@@ -47,7 +51,10 @@ export class MembersResolver {
   async getUserInvitations(
     @Context('req') context: any,
   ): Promise<MemberDocument[]> {
-    return await this.membersService.filter({ user: context.user._id, status: 'pending' });
+    return await this.membersService.filter({
+      user: context.user._id,
+      status: 'pending',
+    });
   }
 
   @Query(() => [Member])
@@ -92,6 +99,8 @@ export class MembersResolver {
 
   @Mutation(() => Member)
   async removeMember(@Args('id') id: string): Promise<MemberDocument> {
+    await this.groupsService.removeMember(id);
+    await this.tasksService.removeMemberFromAssign(id);
     return await this.membersService.remove(id);
   }
 }

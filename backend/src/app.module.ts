@@ -21,6 +21,7 @@ import { VideoModule } from './video/video.module';
 import { UploadsModule } from './uploads/uploads.module';
 import { PaymentcallbackModule } from './paymentcallback/paymentcallback.module';
 import { PaymentModule } from './payment/payment.module';
+import { GithubModule } from './github/github.module';
 
 
 @Module({
@@ -50,7 +51,8 @@ import { PaymentModule } from './payment/payment.module';
     UploadsModule,
 
     PaymentcallbackModule,
-    PaymentModule
+    PaymentModule,
+    GithubModule
 
   ],
   controllers: [AppController],

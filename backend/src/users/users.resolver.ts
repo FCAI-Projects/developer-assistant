@@ -19,6 +19,7 @@ import { FileUpload, GraphQLUpload } from 'graphql-upload';
 import { createWriteStream, mkdirSync } from 'fs';
 import * as crypto from 'crypto';
 import * as fs from 'fs';
+import * as axios from 'axios';
 
 @Resolver(() => User)
 export class UsersResolver {
@@ -110,7 +111,7 @@ export class UsersResolver {
 
   @Mutation(() => User)
   @UseGuards(JwtAuthGuard)
-  updateUser(
+  async updateUser(
     @Context('req') context: any,
     @Args('user') user: UpdateUserInput,
   ): Promise<UserDocument> {
@@ -119,7 +120,18 @@ export class UsersResolver {
     }
 
     if (user.githubToken) {
-      user.githubToken = this.decryptData(user.githubToken, context.user._id);
+      const code = this.decryptData(user.githubToken, context.user._id);
+
+      const { data } = await axios.default.post(
+        `https://github.com/login/oauth/access_token?client_id=87f2214968a5f4152fb9&client_secret=dde7b294a83bab32628557524a71be8f615b054b&code=${code}`,
+        {},
+        {
+          headers: {
+            Accept: 'application/json',
+          },
+        },
+      );
+      user.githubToken = data.access_token;
     }
 
     if (user.googleAppPassword) {
@@ -128,8 +140,6 @@ export class UsersResolver {
         context.user._id,
       );
     }
-
-    console.log(user);
 
     return this.usersService.updateOne(context.user._id, user);
   }

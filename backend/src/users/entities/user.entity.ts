@@ -37,6 +37,14 @@ export class User extends Document {
   })
   googleAppPassword: string;
 
+  @Prop({ default: false })
+  @Field(() => String)
+  connectedWihGoogle: boolean;
+
+  @Prop({ default: false })
+  @Field(() => String)
+  connectedWihGithub: boolean;
+
   @Prop()
   @Field(() => String, { description: 'User GitHub Toekn', nullable: true })
   githubToken: string;

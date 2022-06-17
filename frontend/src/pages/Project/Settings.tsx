@@ -9,8 +9,7 @@ import { useFormik } from "formik";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Loader } from "../../components/Loader";
-import { FaKey } from "react-icons/fa";
-import { AddGitHubTokenModel } from "../../components/modals/AddGitHubTokenModel";
+import { FaKey, FaTrash } from "react-icons/fa";
 import { AddGoogleAppPasswordModel } from "../../components/modals/AddGoogleAppPasswordModel";
 
 export const ProjectSettings: React.FC = () => {
@@ -24,7 +23,7 @@ export const ProjectSettings: React.FC = () => {
     initialValues: {
       name: project?.project.name,
       clientEmail: project?.project.clientEmail,
-      description: project?.project.describtion,
+      description: project?.project.description,
       budget: project?.project.budget,
     },
     validationSchema: Yup.object({
@@ -42,7 +41,7 @@ export const ProjectSettings: React.FC = () => {
             updateProjectInput: {
               name: values.name,
               clientEmail: values.clientEmail,
-              describtion: values.description,
+              description: values.description,
               budget: values.budget,
             },
           },
@@ -110,6 +109,9 @@ export const ProjectSettings: React.FC = () => {
       <div className="mt-5 flex flex-row-reverse gap-3">
         <Button green type="submit" onClick={() => formik.handleSubmit()} loading={loading}>
           Save Changes
+        </Button>
+        <Button lightRed className="flex items-center gap-2">
+          <FaTrash /> Delete Project
         </Button>
       </div>
     </>

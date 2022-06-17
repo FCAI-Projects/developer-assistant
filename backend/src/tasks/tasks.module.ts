@@ -16,5 +16,6 @@ import { ProjectListsModule } from 'src/project-lists/project-lists.module';
     ProjectListsModule,
   ],
   providers: [TasksResolver, TasksService],
+  exports: [TasksService],
 })
 export class TasksModule {}

@@ -15,7 +15,7 @@ export const Projects: React.FC = () => {
                 key={project.id}
                 id={project.id}
                 name={project.name}
-                description={project.describtion}
+                description={project.description}
                 owner={project.owner.id}
                 link={"project/" + project.id}
                 className="w-full"

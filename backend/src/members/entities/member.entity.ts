@@ -10,7 +10,7 @@ export type MemberDocument = Member & Document;
 @Schema({ timestamps: true })
 @ObjectType()
 export class Member {
-  @Field(() => ID, { description: 'Member ID' })
+  @Field(() => ID, { description: 'Member ID', nullable: true })
   id: MongooseSchema.Types.ObjectId;
 
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Project' })

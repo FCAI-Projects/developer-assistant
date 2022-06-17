@@ -32,7 +32,7 @@ export class MembersService {
 
   async findMembersByProject(projectId: string): Promise<MemberDocument[]> {
     return await this.memberModel
-      .find({ projectId, status: 'joined' })
+      .find({ project: projectId, status: 'joined' })
       .populate('user')
       .populate('project')
       .populate('role');
@@ -43,6 +43,10 @@ export class MembersService {
       .findOne({ id })
       .populate('user')
       .populate('project');
+  }
+
+  async findAllByRole(id: string): Promise<MemberDocument[]> {
+    return await this.memberModel.find({ role: id });
   }
 
   async findUserInProject(

@@ -50,6 +50,14 @@ export class TasksService {
     return this.taskModel.findOneAndUpdate({ _id: id }, update);
   }
 
+  async removeMemberFromAssign(id: string): Promise<any> {
+    await this.taskModel.updateMany(
+      { assign: { $in: id } },
+      { assign: { $pull: id } },
+      { new: true },
+    );
+  }
+
   async update(
     id: string,
     updateTaskInput: UpdateTaskInput,

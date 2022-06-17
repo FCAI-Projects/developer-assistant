@@ -23,6 +23,8 @@ type User {
 
   """User Google App Password"""
   googleAppPassword: String
+  connectedWihGoogle: String!
+  connectedWihGithub: String!
 
   """User GitHub Toekn"""
   githubToken: String
@@ -49,11 +51,14 @@ type Project {
   """Project owner"""
   owner: User!
 
-  """Project describtion"""
-  describtion: String!
+  """Project description"""
+  description: String!
 
   """Project Budget"""
   budget: Float!
+
+  """GitHub Repo Full Name"""
+  gihubRepo: String
 }
 
 type Role {
@@ -87,7 +92,7 @@ type Role {
 
 type Member {
   """Member ID"""
-  id: ID!
+  id: ID
 
   """Projact ID"""
   project: Project
@@ -100,6 +105,23 @@ type Member {
 
   """User Status"""
   status: String
+}
+
+type Group {
+  """Group ID"""
+  id: ID!
+
+  """Group Project"""
+  project: Project!
+
+  """Group Name"""
+  name: String!
+
+  """Group Members"""
+  members: [User!]!
+
+  """Group Admin"""
+  admin: User!
 }
 
 type Task {
@@ -205,23 +227,6 @@ type Comment {
   updatedAt: DateTime!
 }
 
-type Group {
-  """Group ID"""
-  id: ID!
-
-  """Group Project"""
-  project: Project!
-
-  """Group Name"""
-  name: String!
-
-  """Group Members"""
-  members: [User!]!
-
-  """Group Admin"""
-  admin: User!
-}
-
 type Expense {
   """Expense ID"""
   id: ID!
@@ -308,6 +313,9 @@ type Query {
   membersByProject(projectId: String!): [Member!]!
   member(id: String!): Member!
   memberInfo(project: String!): Member!
+  groups: [Group!]!
+  group(id: String!): Group!
+  checkMemberGroup(id: String!): Group!
   tasks(project: String!): [Task!]!
   tasksByUserId(userId: String!): [Task!]!
   task(id: String!): Task!
@@ -317,9 +325,6 @@ type Query {
   filterNotes(filter: CreateNoteInput!): Note!
   comments(taskId: String!): [Comment!]!
   comment(id: String!): Comment!
-  groups: [Group!]!
-  group(id: String!): Group!
-  checkMemberGroup(id: String!): Group!
   expenses(project: String!): [Expense!]!
   expense(id: String!): Expense!
 
@@ -360,7 +365,7 @@ type Mutation {
   deleteUser(id: String!): User!
   updateUser(user: UpdateUserInput!): User!
   uploadAvatar(id: String!, avatar: Upload!): Boolean!
-  createProject(createProjectInput: CreateProjectInput!): Project!
+  createProject(createProjectInput: CreateProjectInput!, github: Boolean!): Project!
   updateProject(id: String!, updateProjectInput: UpdateProjectInput!): Project!
   removeProject(id: String!): Project!
   sendMail(id: String!, message: String!): Boolean!
@@ -370,6 +375,10 @@ type Mutation {
   inviteMember(inviteMemberInput: CreateMemberInput!): Member!
   updateMember(id: String!, updateMemberInput: UpdateMemberInput!): Member!
   removeMember(id: String!): Member!
+  createGroup(createGroupInput: CreateGroupInput!): Group!
+  inviteToGroup(groupId: String!, memberId: String!): Group!
+  updateGroup(updateGroupInput: UpdateGroupInput!): Group!
+  removeGroup(id: String!): Group!
   createTask(createTaskInput: CreateTaskInput!): Task!
   updateTask(id: String!, updateTaskInput: UpdateTaskInput!): Task!
   uploadAttachments(id: String!, attachment: Upload!): Boolean!
@@ -385,10 +394,6 @@ type Mutation {
   createComment(createCommentInput: CreateCommentInput!): Comment!
   updateComment(id: String!, updateCommentInput: UpdateCommentInput!): Comment!
   removeComment(id: String!): Comment!
-  createGroup(createGroupInput: CreateGroupInput!): Group!
-  inviteToGroup(groupId: String!, memberId: String!): Group!
-  updateGroup(updateGroupInput: UpdateGroupInput!): Group!
-  removeGroup(id: String!): Group!
   createExpense(createExpenseInput: CreateExpenseInput!): Expense!
   updateExpense(updateExpenseInput: UpdateExpenseInput!): Expense!
   removeExpense(id: String!): Expense!
@@ -445,7 +450,7 @@ input CreateProjectInput {
   clientEmail: String!
 
   """description of project"""
-  describtion: String!
+  description: String!
 
   """project budget"""
   budget: Float
@@ -459,10 +464,13 @@ input UpdateProjectInput {
   clientEmail: String
 
   """description of project"""
-  describtion: String
+  description: String
 
   """project budget"""
   budget: Float
+
+  """GitHub Repo Full Name"""
+  gihubRepo: String
 }
 
 input CreateRoleInput {
@@ -518,6 +526,29 @@ input CreateMemberInput {
 
   """Member Status"""
   status: String
+}
+
+input CreateGroupInput {
+  """Group Project"""
+  project: String!
+
+  """Group Name"""
+  name: String!
+
+  """Group Members"""
+  members: [String!]
+}
+
+input UpdateGroupInput {
+  """Group Project"""
+  project: String
+
+  """Group Name"""
+  name: String
+
+  """Group Members"""
+  members: [String!]
+  id: String!
 }
 
 input CreateTaskInput {
@@ -671,29 +702,6 @@ input UpdateCommentInput {
 
   """Comment Content"""
   content: String
-}
-
-input CreateGroupInput {
-  """Group Project"""
-  project: String!
-
-  """Group Name"""
-  name: String!
-
-  """Group Members"""
-  members: [String!]
-}
-
-input UpdateGroupInput {
-  """Group Project"""
-  project: String
-
-  """Group Name"""
-  name: String
-
-  """Group Members"""
-  members: [String!]
-  id: String!
 }
 
 input CreateExpenseInput {
