@@ -9,9 +9,14 @@ import { UpdateUserDocument } from "../../graphql/generated/graphql";
 import { Input, Label } from "../forms";
 import { FaKey } from "react-icons/fa";
 import { toast } from "react-toastify";
+import * as crypto from "crypto";
+import { useRecoilValue } from "recoil";
+import { authState } from "../../recoil";
+import { useRsaEncrypt } from "../../hooks/useRsaEncrypt";
 
 export const AddGitHubTokenModel: React.FC = () => {
   const [addGithubToken, { loading }] = useMutation(UpdateUserDocument);
+  const { encrypt } = useRsaEncrypt();
   const [isOpen, toggleModal] = useToggleModal();
   const formik = useFormik({
     initialValues: {
@@ -25,7 +30,7 @@ export const AddGitHubTokenModel: React.FC = () => {
         await addGithubToken({
           variables: {
             user: {
-              githubToken: values.token,
+              githubToken: encrypt(values.token),
             },
           },
         });
@@ -65,7 +70,7 @@ export const AddGitHubTokenModel: React.FC = () => {
         </div>
         <div className="flex flex-row-reverse gap-3">
           <Button green type="submit" onClick={() => formik.handleSubmit()} loading={loading}>
-            Add
+            Set
           </Button>
           <Button type="submit" lightRed onClick={toggleModal}>
             Cancel

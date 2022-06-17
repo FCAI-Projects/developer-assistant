@@ -17,6 +17,8 @@ import { UsersService } from './users.service';
 import mongoose from 'mongoose';
 import { FileUpload, GraphQLUpload } from 'graphql-upload';
 import { createWriteStream, mkdirSync } from 'fs';
+import * as crypto from 'crypto';
+import * as fs from 'fs';
 
 @Resolver(() => User)
 export class UsersResolver {
@@ -63,7 +65,9 @@ export class UsersResolver {
       );
     }
     const user = await this.usersService.createUser(createUserInput);
-    const token = this.createToken(user);
+    const publicKey = this.generateRSAKeys(user._id);
+    const token = this.createToken(user, publicKey);
+
     return { token, userId: user._id };
   }
 
@@ -92,7 +96,8 @@ export class UsersResolver {
         HttpStatus.UNAUTHORIZED,
       );
     }
-    const token = this.createToken(user);
+    const publicKey = this.generateRSAKeys(user._id);
+    const token = this.createToken(user, publicKey);
 
     return { token, userId: user.id };
   }
@@ -109,6 +114,23 @@ export class UsersResolver {
     @Context('req') context: any,
     @Args('user') user: UpdateUserInput,
   ): Promise<UserDocument> {
+    if (user.password) {
+      user.password = this.decryptData(user.password, context.user._id);
+    }
+
+    if (user.githubToken) {
+      user.githubToken = this.decryptData(user.githubToken, context.user._id);
+    }
+
+    if (user.googleAppPassword) {
+      user.googleAppPassword = this.decryptData(
+        user.googleAppPassword,
+        context.user._id,
+      );
+    }
+
+    console.log(user);
+
     return this.usersService.updateOne(context.user._id, user);
   }
 
@@ -140,7 +162,7 @@ export class UsersResolver {
     );
   }
 
-  private createToken(user: UserDocument): string {
+  private createToken(user: UserDocument, key: string): string {
     return this.jwtService.sign({
       ...user.toObject({
         transform: (_, ret) => {
@@ -148,6 +170,41 @@ export class UsersResolver {
           return ret;
         },
       }),
+      key,
     });
+  }
+
+  private generateRSAKeys(userId: string) {
+    const { publicKey, privateKey } = crypto.generateKeyPairSync('rsa', {
+      modulusLength: 2048,
+      publicKeyEncoding: {
+        type: 'spki',
+        format: 'pem',
+      },
+      privateKeyEncoding: {
+        type: 'pkcs8',
+        format: 'pem',
+      },
+    });
+    fs.writeFileSync(`./keys/${userId}.pem`, privateKey);
+
+    return publicKey;
+  }
+
+  private decryptData(data: string, userId: string) {
+    const privateKey = fs.readFileSync(`./keys/${userId}.pem`, 'utf8');
+    const decryptedData = crypto.privateDecrypt(
+      {
+        key: privateKey,
+        // In order to decrypt the data, we need to specify the
+        // same hashing function and padding scheme that we used to
+        // encrypt the data in the previous step
+        padding: crypto.constants.RSA_PKCS1_PADDING,
+      },
+      // We convert the data string to a buffer using `Buffer.from`
+      Buffer.from(data, 'base64'),
+    );
+
+    return decryptedData.toString();
   }
 }

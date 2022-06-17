@@ -9,10 +9,12 @@ import { LoginDocument, UpdateUserDocument } from "../../graphql/generated/graph
 import { Input, Label } from "../forms";
 import { FaKey } from "react-icons/fa";
 import { toast } from "react-toastify";
+import { useRsaEncrypt } from "../../hooks/useRsaEncrypt";
 
 export const AddGoogleAppPasswordModel: React.FC = () => {
   const [addGoogleAppPassword, { loading }] = useMutation(UpdateUserDocument);
   const [isOpen, toggleModal] = useToggleModal();
+  const { encrypt } = useRsaEncrypt();
   const formik = useFormik({
     initialValues: {
       password: "",
@@ -25,7 +27,7 @@ export const AddGoogleAppPasswordModel: React.FC = () => {
         await addGoogleAppPassword({
           variables: {
             user: {
-              googleAppPassword: values.password,
+              googleAppPassword: encrypt(values.password),
             },
           },
         });
@@ -65,7 +67,7 @@ export const AddGoogleAppPasswordModel: React.FC = () => {
         </div>
         <div className="flex flex-row-reverse gap-3">
           <Button green type="submit" onClick={() => formik.handleSubmit()} loading={loading}>
-            Add
+            Set
           </Button>
           <Button type="submit" lightRed onClick={toggleModal}>
             Cancel

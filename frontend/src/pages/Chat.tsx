@@ -8,12 +8,14 @@ import { authState } from "../recoil";
 import { decodeToken } from "react-jwt";
 import { NewGroupModel } from "../components/modals/NewGroupModel";
 import { Link } from "react-router-dom";
+import { useRsaEncrypt } from "../hooks/useRsaEncrypt";
 
 const socket = socketIOClient("http://localhost:3030");
 
 export const Chat: React.FC = () => {
   const authToken = useRecoilValue(authState);
   const [id, setId] = useState("");
+  const { encrypt } = useRsaEncrypt();
   const { data, loading } = useGroupsQuery();
   const [message, setMessage] = useState("");
   const [selectedGroup, setSelectedGroup] = useState<any>(null);
@@ -21,7 +23,7 @@ export const Chat: React.FC = () => {
 
   const sendMessage = async () => {
     const data = {
-      message: message,
+      message: encrypt(message),
       group: selectedGroup.id,
       sender: id,
     };
