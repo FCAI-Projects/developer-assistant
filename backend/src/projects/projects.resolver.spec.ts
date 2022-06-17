@@ -47,8 +47,8 @@ describe('ProjectsResolver', () => {
       // })
       .compile();
 
-    service = module.get(ProjectsService);
-    resolver = module.get(ProjectsResolver);
+    service = module.get<ProjectsService>(ProjectsService);
+    resolver = module.get<ProjectsResolver>(ProjectsResolver);
     jest.clearAllMocks();
   });
 
