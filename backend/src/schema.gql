@@ -368,7 +368,7 @@ type Mutation {
   createProject(createProjectInput: CreateProjectInput!, github: Boolean!): Project!
   updateProject(id: String!, updateProjectInput: UpdateProjectInput!): Project!
   removeProject(id: String!): Project!
-  sendMail(id: String!, message: String!): Boolean!
+  sendMail(id: String!, title: String!, message: String!): Boolean!
   createRole(createRoleInput: CreateRoleInput!): Role!
   updateRole(id: String!, updateRoleInput: UpdateRoleInput!): Role!
   removeRole(id: String!): Role!

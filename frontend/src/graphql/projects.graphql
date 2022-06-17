@@ -41,3 +41,7 @@ query ProjectById($projectId: String!) {
     gihubRepo
   }
 }
+
+mutation SendMail($sendMailId: String!, $message: String!, $title: String!) {
+  sendMail(id: $sendMailId, message: $message, title: $title)
+}

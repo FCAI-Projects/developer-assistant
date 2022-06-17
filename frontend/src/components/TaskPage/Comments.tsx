@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import { useRecoilValue } from "recoil";
 import { authState, roleState } from "../../recoil";
 import { decodeToken } from "react-jwt";
+import axios from "axios";
 
 interface CommentsProps {}
 
@@ -90,7 +91,7 @@ export const Comments: React.FC<CommentsProps> = () => {
               <div key={comment.id} className="flex flex-row gap-2 rounded-3xl rounded-br-none bg-slate-200 px-3 py-4">
                 <div className="flex-shrink-0">
                   <img
-                    src="https://images.unsplash.com/photo-1517841905240-472988babdf9"
+                    src={axios.defaults.baseURL + "/uploads/avatars/" + comment.user.avatar}
                     alt=""
                     className="h-12 w-12 rounded-full"
                   />
