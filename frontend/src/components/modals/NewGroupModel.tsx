@@ -4,7 +4,13 @@ import { useToggleModal } from "../../hooks/useToggleModal";
 import { Button } from "../Button";
 import * as Yup from "yup";
 import { Modal } from "./Base";
-import { CreateGroupDocument, GroupsDocument, useFilterMembersQuery, useGroupsQuery, useProjectsQuery } from "../../graphql/generated/graphql";
+import {
+  CreateGroupDocument,
+  GroupsDocument,
+  useFilterMembersQuery,
+  useGroupsQuery,
+  useProjectsQuery,
+} from "../../graphql/generated/graphql";
 import { CustomSelect, Input, Label, Multiselect } from "../forms";
 import { FaPlus } from "react-icons/fa";
 import { useMutation } from "@apollo/client";
@@ -17,7 +23,7 @@ interface formikProps {
 
 export const NewGroupModel: React.FC = () => {
   const [CreateGroup, { loading }] = useMutation(CreateGroupDocument, {
-    refetchQueries: [{query: GroupsDocument}],
+    refetchQueries: [{ query: GroupsDocument }],
   });
   const { data: projects } = useProjectsQuery();
   const { data: members, refetch: refetchMembers } = useFilterMembersQuery({
@@ -46,14 +52,14 @@ export const NewGroupModel: React.FC = () => {
               members: values.members.map((member) => member.id),
             },
           },
-        })
+        });
         formikApi.resetForm({
-          values:{
+          values: {
             name: "",
             project: { id: "", name: "" },
             members: [],
-          }
-        })
+          },
+        });
         toggleModal();
       } catch (error) {
         console.log(error);

@@ -12,7 +12,7 @@ import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
 
 interface updateMemberProps {
-  memberId: string;
+  memberId: string | null | undefined;
   roleId: any;
   roleName: any;
   refetch: () => void;
@@ -22,7 +22,7 @@ export const UpdateMemberModel: React.FC<updateMemberProps> = ({ memberId, roleI
   const params = useParams();
   const [rolesOptions, setRolesOptions] = useState<any>([]);
   const { data: Roles } = useRolesQuery({ variables: { project: params.id as string } });
-  const [updateMember, { loading: updateLoading}] = useMutation(UpdateMemberDocument);
+  const [updateMember, { loading: updateLoading }] = useMutation(UpdateMemberDocument);
   const [isOpen, toggleModal] = useToggleModal();
   const formik = useFormik({
     initialValues: {

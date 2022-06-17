@@ -109,19 +109,19 @@ type Member {
 
 type Group {
   """Group ID"""
-  id: ID!
+  id: ID
 
   """Group Project"""
-  project: Project!
+  project: Project
 
   """Group Name"""
-  name: String!
+  name: String
 
   """Group Members"""
-  members: [User!]!
+  members: [User!]
 
   """Group Admin"""
-  admin: User!
+  admin: User
 }
 
 type Task {

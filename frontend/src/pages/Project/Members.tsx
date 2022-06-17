@@ -16,7 +16,7 @@ export const ProjectMembers: React.FC = () => {
   const { data: members, refetch } = useMembersByProjectQuery({ variables: { projectId: params.id as string } });
   const [removeMember, { loading: loadingRemove }] = useMutation(RemoveMemberDocument);
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (id: string | null | undefined) => {
     await removeMember({
       variables: {
         removeMemberId: id,
@@ -55,7 +55,7 @@ export const ProjectMembers: React.FC = () => {
                 />
               )}
               {(role.admin || role.deleteMember) && (
-                <Button lightRed onClick={() => handleDelete(member.id)} className="px-4 py-3" loading={loadingRemove}>
+                <Button lightRed onClick={() => handleDelete(member.id)} className="psy-3 px-4" loading={loadingRemove}>
                   <FaTrash />
                 </Button>
               )}

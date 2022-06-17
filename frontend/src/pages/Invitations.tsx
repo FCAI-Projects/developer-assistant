@@ -16,7 +16,7 @@ export const Invitations: React.FC = () => {
     refetchQueries: [{ query: InvitationsDocument }],
   });
 
-  const handleAccept = (id: string) => {
+  const handleAccept = (id: string | null | undefined) => {
     updateMember({
       variables: {
         updateMemberId: id,
@@ -26,7 +26,7 @@ export const Invitations: React.FC = () => {
       },
     });
   };
-  const handleDecline = (id: string) => {
+  const handleDecline = (id: string | null | undefined) => {
     removeMember({
       variables: {
         removeMemberId: id,
