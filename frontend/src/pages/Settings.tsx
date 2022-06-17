@@ -1,4 +1,5 @@
 import { useMutation } from "@apollo/client";
+import axios from "axios";
 import { useFormik } from "formik";
 import React, { useEffect, useState } from "react";
 import { decodeToken } from "react-jwt";
@@ -10,7 +11,7 @@ import { Input, Label } from "../components/forms";
 import { AddGitHubTokenModel } from "../components/modals/AddGitHubTokenModel";
 import { AddGoogleAppPasswordModel } from "../components/modals/AddGoogleAppPasswordModel";
 import { UpdatePassword } from "../components/modals/UpdatePasswordModal";
-import { UpdateUserDocument, UserDocument, useUserQuery } from "../graphql/generated/graphql";
+import { UpdateUserDocument, UploadAvatarDocument, UserDocument, useUserQuery } from "../graphql/generated/graphql";
 import { authState } from "../recoil";
 
 export const Settings: React.FC = () => {
@@ -18,6 +19,9 @@ export const Settings: React.FC = () => {
   const [id, setId] = useState("");
   const { data } = useUserQuery({ variables: { userId: id } });
   const [updateUser, { loading: updateLoading }] = useMutation(UpdateUserDocument, {
+    refetchQueries: [{ query: UserDocument, variables: { userId: id } }],
+  });
+  const [uploadAvatar, { loading: uploadLoading }] = useMutation(UploadAvatarDocument, {
     refetchQueries: [{ query: UserDocument, variables: { userId: id } }],
   });
 
@@ -51,6 +55,17 @@ export const Settings: React.FC = () => {
     },
   });
 
+  const updateAvatar = async (e: any) => {
+    const file = e.target.files[0];
+    await uploadAvatar({
+      variables: {
+        id: id,
+        avatar: file,
+      },
+    });
+    toast.success("Successfully updated avatar");
+  };
+
   useEffect(() => {
     if (authToken) {
       const decode: any = decodeToken(authToken);
@@ -63,12 +78,16 @@ export const Settings: React.FC = () => {
       <form className="mx-auto my-10 flex max-w-5xl flex-col gap-4" onSubmit={formik.handleSubmit}>
         <h3 className="text-center text-3xl font-medium">Settings</h3>
         <div className="flex gap-10">
-          <div>
+          <div className="text-center">
             <img
               className="h-60 w-60 rounded-full object-cover"
-              src="https://images.pexels.com/photos/2955305/pexels-photo-2955305.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
+              src={axios.defaults.baseURL + "/uploads/avatars/" + data?.user.avatar}
               alt="avatar"
             />
+            <label className="mt-2 block cursor-pointer underline" htmlFor="avatar">
+              Update Avatar
+            </label>
+            <input type="file" id="avatar" className="hidden" onChange={updateAvatar} />
           </div>
           <div className="flex flex-1 flex-col gap-4">
             <div className="w-full">

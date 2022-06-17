@@ -5,6 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Project, ProjectSchema } from './entities/project.entity';
 import { RolesModule } from 'src/roles/roles.module';
 import { MembersModule } from 'src/members/members.module';
+import { UsersModule } from 'src/users/users.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { MembersModule } from 'src/members/members.module';
       },
     ]),
     RolesModule,
+    UsersModule,
     forwardRef(() => MembersModule),
   ],
   providers: [ProjectsResolver, ProjectsService],

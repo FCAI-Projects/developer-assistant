@@ -2,6 +2,9 @@ import { InputType, Field, PartialType } from '@nestjs/graphql';
 
 @InputType()
 export class CreateUserInput {
+  @Field(() => String, { description: 'User avatar', nullable: true })
+  avatar?: string;
+
   @Field(() => String, { description: 'First Name of the user' })
   fname: string;
 

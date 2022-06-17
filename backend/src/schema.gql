@@ -6,6 +6,9 @@ type User {
   """User ID"""
   id: ID!
 
+  """User avatar"""
+  avatar: String!
+
   """User first name"""
   fname: String!
 
@@ -22,7 +25,7 @@ type User {
   googleAppPassword: String
 
   """User GitHub Toekn"""
-  githubToekn: String
+  githubToken: String
 }
 
 type UserResponse {
@@ -356,9 +359,11 @@ type Mutation {
   login(email: String!, password: String!): UserResponse!
   deleteUser(id: String!): User!
   updateUser(user: UpdateUserInput!): User!
+  uploadAvatar(id: String!, avatar: Upload!): Boolean!
   createProject(createProjectInput: CreateProjectInput!): Project!
   updateProject(id: String!, updateProjectInput: UpdateProjectInput!): Project!
   removeProject(id: String!): Project!
+  sendMail(id: String!, message: String!): Boolean!
   createRole(createRoleInput: CreateRoleInput!): Role!
   updateRole(id: String!, updateRoleInput: UpdateRoleInput!): Role!
   removeRole(id: String!): Role!
@@ -394,6 +399,9 @@ type Mutation {
 }
 
 input CreateUserInput {
+  """User avatar"""
+  avatar: String
+
   """First Name of the user"""
   fname: String!
 
@@ -408,6 +416,9 @@ input CreateUserInput {
 }
 
 input UpdateUserInput {
+  """User avatar"""
+  avatar: String
+
   """First Name of the user"""
   fname: String
 
@@ -420,8 +431,11 @@ input UpdateUserInput {
   """Password of the user"""
   password: String
   googleAppPassword: String
-  githubToekn: String
+  githubToken: String
 }
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
 
 input CreateProjectInput {
   """project name"""
@@ -587,9 +601,6 @@ input UpdateTaskInput {
   """List ID"""
   list: String
 }
-
-"""The `Upload` scalar type represents a file upload."""
-scalar Upload
 
 input CreateProjectListsInput {
   """Status Project ID"""

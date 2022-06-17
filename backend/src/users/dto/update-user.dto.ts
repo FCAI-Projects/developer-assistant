@@ -5,8 +5,8 @@ import { CreateUserInput } from './create-user.dto';
 @InputType()
 export class UpdateUserInput extends PartialType(CreateUserInput) {
   @Field(() => String, { nullable: true })
-  googleAppPassword: string;
+  googleAppPassword?: string;
 
   @Field(() => String, { nullable: true })
-  githubToekn: string;
+  githubToken?: string;
 }

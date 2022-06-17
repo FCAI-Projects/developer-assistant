@@ -15,6 +15,8 @@ import { UpdateUserInput } from './dto/update-user.dto';
 import { User, UserDocument } from './entities/user.entity';
 import { UsersService } from './users.service';
 import mongoose from 'mongoose';
+import { FileUpload, GraphQLUpload } from 'graphql-upload';
+import { createWriteStream, mkdirSync } from 'fs';
 
 @Resolver(() => User)
 export class UsersResolver {
@@ -108,6 +110,34 @@ export class UsersResolver {
     @Args('user') user: UpdateUserInput,
   ): Promise<UserDocument> {
     return this.usersService.updateOne(context.user._id, user);
+  }
+
+  @Mutation(() => Boolean)
+  async uploadAvatar(
+    @Args('id') id: string,
+    @Args({ name: 'avatar', type: () => GraphQLUpload })
+    { createReadStream, filename }: FileUpload,
+  ): Promise<boolean> {
+    mkdirSync(`./uploads/avatars`, { recursive: true });
+    const newFileName = `${id}-${new Date().getTime()}-${filename.replace(
+      /\s/g,
+      '-',
+    )}`;
+
+    return new Promise(async (resolve, reject) =>
+      createReadStream()
+        .pipe(createWriteStream(`./uploads/avatars/${newFileName}`))
+        .on('finish', async () => {
+          await this.usersService.updateOne(id, {
+            avatar: newFileName,
+          });
+          resolve(true);
+        })
+        .on('error', (error) => {
+          console.log('error', error);
+          reject(false);
+        }),
+    );
   }
 
   private createToken(user: UserDocument): string {

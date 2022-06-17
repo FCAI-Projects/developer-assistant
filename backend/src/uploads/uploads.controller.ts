@@ -8,4 +8,9 @@ export class UploadsController {
   seeUploadedFile(@Param('name') name, @Res() res: any) {
     return res.sendFile(name, { root: './uploads/attachments' });
   }
+
+  @Get('/avatars/:name')
+  seeAvatarImage(@Param('name') name, @Res() res: any) {
+    return res.sendFile(name, { root: './uploads/avatars' });
+  }
 }

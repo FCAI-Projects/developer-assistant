@@ -3,16 +3,19 @@ import { ProjectsService } from './projects.service';
 import { Project, ProjectDocument } from './entities/project.entity';
 import { CreateProjectInput } from './dto/create-project.input';
 import { UpdateProjectInput } from './dto/update-project.input';
-import { Req, UseGuards } from '@nestjs/common';
+import { HttpException, Req, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt.guard';
 import { RolesService } from 'src/roles/roles.service';
 import { MembersService } from 'src/members/members.service';
+import { UsersService } from 'src/users/users.service';
+import * as nodemailer from 'nodemailer';
 
 @Resolver(() => Project)
 export class ProjectsResolver {
   constructor(
     private readonly projectsService: ProjectsService,
     private readonly rolesService: RolesService,
+    private readonly usersService: UsersService,
     private readonly membersService: MembersService,
   ) {}
 
@@ -92,5 +95,47 @@ export class ProjectsResolver {
   @Mutation(() => Project)
   async removeProject(@Args('id') id: string) {
     return await this.projectsService.remove(id);
+  }
+
+  @Mutation(() => Boolean)
+  @UseGuards(JwtAuthGuard)
+  async sendMail(
+    @Context('req') context: any,
+    @Args('id') id: string,
+    @Args('message') message: string,
+  ): Promise<boolean> {
+    const project = await this.projectsService.findOne(id);
+    const user = await this.usersService.findOne(context.user._id);
+
+    if (!user.googleAppPassword) {
+      throw new HttpException("You don't have a google app password", 401);
+    }
+    console.log();
+
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: user.email,
+        pass: user.googleAppPassword,
+      },
+    });
+
+    const mailOptions = {
+      from: user.email,
+      to: project.clientEmail,
+      subject: 'Mail from project',
+      text: message,
+      html: `<p>${message}</p>`,
+    };
+
+    return new Promise((resolve, reject) => {
+      transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+          reject(false);
+        } else {
+          resolve(true);
+        }
+      });
+    });
   }
 }

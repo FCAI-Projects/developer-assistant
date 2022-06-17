@@ -25,14 +25,14 @@ export const AddGitHubTokenModel: React.FC = () => {
         await addGithubToken({
           variables: {
             user: {
-              githubToekn: values.token,
+              githubToken: values.token,
             },
           },
         });
-        formikApi.resetForm({ 
-          values: { 
-            token: "" 
-          } 
+        formikApi.resetForm({
+          values: {
+            token: "",
+          },
         });
         toggleModal();
         toast.success("GitHub Token Added successfully");
