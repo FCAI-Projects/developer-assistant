@@ -88,7 +88,6 @@ export class ProjectsResolver {
     memberIn.forEach((member) => {
       projects.push(member.project);
     });
-    console.log(projects);
 
     return projects;
   }
