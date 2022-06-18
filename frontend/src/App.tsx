@@ -22,6 +22,7 @@ import { Statistics } from "./pages/Statistics";
 import {  onMessageListener } from "./firebaseInit";
 import ReactNotificationComponent from "./components/Notifications/ReactNotification";
 import Notifications from "./components/Notifications/Notifications";
+import { toast } from "react-toastify";
 
 export const App: React.FC = () => {
   const [show, setShow] = useState(false);
@@ -40,30 +41,21 @@ export const App: React.FC = () => {
 
   onMessageListener()
     .then((payload) => {
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/firebase-messaging-sw.js', {
-          scope: '/',
-        });
-      }
+     
       setShow(true);
       setNotification({
         title: payload.notification.title,
         body: payload.notification.body,
       });
+      toast.info(payload.notification.body);
       console.log(payload);
+      
     })
     .catch((err) => console.log("failed: ", err));
 
   return (
     <div className="min-h-screen bg-slate-50">
-      {show ? (
-        <ReactNotificationComponent
-          title={notification.title}
-          body={notification.body}
-        />
-      ) : (
-        <></>
-      )}
+     
       <Notifications />
       <Routes>
         <Route path="/">
@@ -98,5 +90,4 @@ export const App: React.FC = () => {
     </div>
   );
 };
-
 

@@ -1,6 +1,6 @@
-import firebase from 'firebase/compat/app';
-import 'firebase/compat/auth';
-import 'firebase/compat/firestore';
+import firebase from "firebase/compat/app";
+import "firebase/compat/auth";
+import "firebase/compat/firestore";
 import "firebase/compat/messaging";
 
 const firebaseConfig = {
@@ -10,7 +10,7 @@ const firebaseConfig = {
   storageBucket: "developer-assistant-ee82e.appspot.com",
   messagingSenderId: "611396494704",
   appId: "1:611396494704:web:2da91173cdae7a0a395bb5",
-  measurementId: "G-Q9LJT2K27X"
+  measurementId: "G-Q9LJT2K27X",
 };
 
 // Initialize Firebase
@@ -46,13 +46,3 @@ export const onMessageListener = () =>
       resolve(payload);
     });
   });
-
-  export const backgroundMessageListener = () => {
-    new Promise((resolve) => {
-      messaging.backgroundMessageListener((payload) => {
-        resolve(payload);
-      });
-    });
-  }
-
- 

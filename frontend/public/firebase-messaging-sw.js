@@ -21,10 +21,7 @@ firebase.initializeApp(firebaseConfig);
 // eslint-disable-next-line no-undef
 const messaging = firebase.messaging();
 
-
-
 messaging.onBackgroundMessage(function (payload) {
-  console.log("Received background message ", payload);
  
 
   const notificationTitle = payload.notification.title;
@@ -32,17 +29,13 @@ messaging.onBackgroundMessage(function (payload) {
     body: payload.notification.body,
     icon: "/logo192.png",
   };
-
-  
   // eslint-disable-next-line no-restricted-globals
-   self.registration.showNotification(
+  //  self.registration.showNotification(
 
-    notificationTitle,
-    notificationOptions
-  ).then(res => {
-    console.log(res);
-  }).catch(err => {
-    console.log(err);
-    
-  })
+  //   notificationTitle,
+  //   notificationOptions
+  // );
+
 });
+
+ 
