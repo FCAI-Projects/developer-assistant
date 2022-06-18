@@ -32,6 +32,17 @@ export class MembersResolver {
     }
     inviteMemberInput.user = user._id;
 
+    const project = await this.projectsService.findOne(
+      inviteMemberInput.project,
+    );
+
+    if (project.owner.toString() === inviteMemberInput.user.toString()) {
+      throw new HttpException(
+        'You can not invite yourself to the project',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
     const userInProject = await this.membersService.findUserInProject(
       inviteMemberInput.user,
       inviteMemberInput.project,
