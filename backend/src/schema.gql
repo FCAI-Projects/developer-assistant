@@ -2,6 +2,14 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type UserResponse {
+  """Token of the user"""
+  token: String!
+
+  """userId of the user"""
+  userId: String!
+}
+
 type User {
   """User ID"""
   id: ID!
@@ -28,14 +36,6 @@ type User {
 
   """User GitHub Toekn"""
   githubToken: String
-}
-
-type UserResponse {
-  """Token of the user"""
-  token: String!
-
-  """userId of the user"""
-  userId: String!
 }
 
 type Project {
@@ -89,6 +89,7 @@ type Role {
   deleteMember: Boolean!
   editMember: Boolean!
 }
+
 
 type Member {
   """Member ID"""
@@ -170,6 +171,7 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+
 type ProjectLists {
   """List ID"""
   id: ID!
@@ -244,6 +246,7 @@ type Expense {
   date: DateTime!
 }
 
+
 type TimeTrackingHistory {
   """History Start"""
   start: DateTime
@@ -254,6 +257,11 @@ type TimeTrackingHistory {
   """History Duration"""
   duration: Float
 }
+
+
+type Query {
+  users: [User!]!
+  user(id: String!): User!
 
 type TimeTracking {
   """Time Tracking ID"""
@@ -357,6 +365,7 @@ input CreateNoteInput {
 
   """Task Note"""
   note: String
+
 }
 
 type Mutation {
@@ -364,6 +373,8 @@ type Mutation {
   login(email: String!, password: String!): UserResponse!
   deleteUser(id: String!): User!
   updateUser(user: UpdateUserInput!): User!
+
+
   uploadAvatar(id: String!, avatar: Upload!): Boolean!
   createProject(createProjectInput: CreateProjectInput!, github: Boolean!): Project!
   updateProject(id: String!, updateProjectInput: UpdateProjectInput!): Project!
@@ -401,6 +412,7 @@ type Mutation {
   stopTimeTracking(task: String!): TimeTracking!
   removeTimeTracking(id: String!): TimeTracking!
   createPayment(createPaymentInput: CreatePaymentInput!): Payment!
+
 }
 
 input CreateUserInput {
@@ -436,6 +448,9 @@ input UpdateUserInput {
   """Password of the user"""
   password: String
   googleAppPassword: String
+
+  githubToekn: String
+
   githubToken: String
 }
 
@@ -736,4 +751,5 @@ input UpdateExpenseInput {
 input CreatePaymentInput {
   amount: Int!
   project: String!
+
 }

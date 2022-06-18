@@ -14,10 +14,14 @@ import { UpdateProjectInput } from './dto/update-project.input';
 import { HttpException, Req, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt.guard';
 import { RolesService } from 'src/roles/roles.service';
+
+import { resourceUsage } from 'process';
+
 import { MembersService } from 'src/members/members.service';
 import { UsersService } from 'src/users/users.service';
 import * as nodemailer from 'nodemailer';
 import * as axios from 'axios';
+
 
 @Resolver(() => Project)
 export class ProjectsResolver {
@@ -39,7 +43,7 @@ export class ProjectsResolver {
       createProjectInput,
       context.user._id,
     );
-
+    
     // Create base roles for project
     await this.rolesService.create({
       name: 'Admin',

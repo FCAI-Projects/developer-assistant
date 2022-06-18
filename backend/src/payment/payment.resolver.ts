@@ -66,7 +66,7 @@ export const paymentConfig = {
   // },
   'live-test': {
     baseUrl: 'https://test-iframe.kashier.io',
-    iFrameSecret: 'f331d514-91ca-45b0-8f0f-2c60a5eac35e',
+    iFrameSecret: 'cc4de943-3c29-403b-821a-3fe7a7f9ae3d',
     HPPSecret:
       '47aa477eb1b7ac0a292f648c7e364ac8$78b62a60c5644cb12b25b700e4a80725212ed0c8a091a2694b2c106b600d2af260d060f0ce5ec4ab2987fa9f71ae563d',
     mid: 'MID-7198-380',

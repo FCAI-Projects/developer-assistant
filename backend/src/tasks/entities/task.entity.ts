@@ -8,7 +8,7 @@ export type TaskDocument = Task & Document;
 
 @Schema({ timestamps: true })
 @ObjectType()
-export class Task extends Document {
+export class Task  {
   @Field(() => ID, { description: 'Task ID' })
   id: MongooseSchema.Types.ObjectId;
 
