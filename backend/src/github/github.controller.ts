@@ -16,9 +16,10 @@ export class GithubController {
     if (!project.gihubRepo) {
       throw new HttpException('Github repo not found', 404);
     }
+    console.log(project.gihubRepo);
     const user = await this.usersService.findOne(project.owner.toString());
     const { data } = await axios.default.get(
-      `https://api.github.com/${project.gihubRepo}/REPO/pulls`,
+      `https://api.github.com/repos/${project.gihubRepo}/pulls`,
       {
         headers: {
           Authorization: `token ${user.githubToken}`,
@@ -26,6 +27,7 @@ export class GithubController {
         },
       },
     );
+    console.log(data);
     return data;
   }
 }
