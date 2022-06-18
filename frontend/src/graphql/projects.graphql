@@ -45,3 +45,9 @@ query ProjectById($projectId: String!) {
 mutation SendMail($sendMailId: String!, $message: String!, $title: String!) {
   sendMail(id: $sendMailId, message: $message, title: $title)
 }
+
+mutation RemoveProject($removeProjectId: String!) {
+  removeProject(id: $removeProjectId) {
+    id
+  }
+}

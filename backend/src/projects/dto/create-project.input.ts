@@ -11,9 +11,6 @@ export class CreateProjectInput {
   @Field(() => String, { description: 'description of project' })
   description: string;
 
-  @Field(() => Number, {
-    description: 'project budget',
-    nullable: true,
-  })
+  @Field(() => Number, { description: 'project budget', nullable: true})
   budget: number;
 }

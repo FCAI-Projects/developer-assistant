@@ -5,14 +5,13 @@ import { Button } from "../Button";
 import * as Yup from "yup";
 import { Modal } from "./Base";
 import {
-  CreateGroupDocument,
   GroupsDocument,
+  UpdateGroupDocument,
   useFilterMembersQuery,
-  useGroupsQuery,
   useProjectsQuery,
 } from "../../graphql/generated/graphql";
 import { CustomSelect, Input, Label, Multiselect } from "../forms";
-import { FaPlus } from "react-icons/fa";
+import { FaEdit } from "react-icons/fa";
 import { useMutation } from "@apollo/client";
 import { toast } from "react-toastify";
 
@@ -22,8 +21,15 @@ interface formikProps {
   members: { id: string; name: string }[] | [];
 }
 
-export const NewGroupModel: React.FC = () => {
-  const [CreateGroup, { loading }] = useMutation(CreateGroupDocument, {
+interface UpdateGroupProps {
+  groupId: string;
+  name: string;
+  projectInGroup: { id: string; name: string };
+  membersInGroup: { id: string; name: string }[] | [];
+}
+
+export const UpdateGroupModel: React.FC<UpdateGroupProps> = ({ groupId, name, projectInGroup, membersInGroup }) => {
+  const [updateGroup, { loading }] = useMutation(UpdateGroupDocument, {
     refetchQueries: [{ query: GroupsDocument }],
   });
   const { data: projects } = useProjectsQuery();
@@ -33,11 +39,12 @@ export const NewGroupModel: React.FC = () => {
   const [projectOptions, setProjectOptions] = useState<any>([]);
   const [membersOptions, setMembersOptions] = useState<any>([]);
   const [isOpen, toggleModal] = useToggleModal();
+
   const formik = useFormik<formikProps>({
     initialValues: {
-      name: "",
-      project: { id: "", name: "" },
-      members: [],
+      name: name,
+      project: projectInGroup,
+      members: membersInGroup,
     },
     validationSchema: Yup.object({
       name: Yup.string().required("Required"),
@@ -45,24 +52,18 @@ export const NewGroupModel: React.FC = () => {
     }),
     onSubmit: async (values, formikApi) => {
       try {
-        CreateGroup({
+        updateGroup({
           variables: {
-            createGroupInput: {
+            updateGroupInput: {
+              id: groupId,
               name: values.name,
               project: values.project.id,
               members: values.members.map((member) => member.id),
             },
           },
         });
-        formikApi.resetForm({
-          values: {
-            name: "",
-            project: { id: "", name: "" },
-            members: [],
-          },
-        });
         toggleModal();
-        toast.success("Group created successfully");
+        toast.success("Group updated successfully");
       } catch (error) {
         console.log(error);
       }
@@ -92,13 +93,10 @@ export const NewGroupModel: React.FC = () => {
 
   return (
     <>
-      <button
-        className="mx-auto mt-auto mb-5 flex h-10 w-10 items-center justify-center rounded-full bg-slate-600 text-white"
-        onClick={toggleModal}
-      >
-        <FaPlus />
-      </button>
-      <Modal title="Create New Group" isOpen={isOpen} handleClose={toggleModal}>
+      <Button lightYellow className="flex items-center gap-2 ml-3 px-2 py-1 text-xl" onClick={toggleModal}>
+        <FaEdit />
+      </Button>
+      <Modal title="Update Group" isOpen={isOpen} handleClose={toggleModal}>
         <div className="my-5">
           <form className="flex flex-col gap-4">
             <div className="w-full">
@@ -140,7 +138,7 @@ export const NewGroupModel: React.FC = () => {
         </div>
         <div className="flex flex-row-reverse gap-3">
           <Button type="submit" onClick={() => formik.handleSubmit()} loading={loading}>
-            Add
+            Submit
           </Button>
           <Button type="submit" lightRed onClick={toggleModal}>
             Cancel

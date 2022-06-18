@@ -143,9 +143,20 @@ export const Settings: React.FC = () => {
             </div>
             <div className="flex w-full items-center justify-between">
               <Label>Connect With GitHub</Label>
-              <Button light className="flex items-center gap-2" onClick={connectWithGitHub}>
-                <FaGithub /> Connect With GitHub
-              </Button>
+              {
+                data?.user.connectedWihGithub === "true" ? (
+                  <>
+                  <div className="text-white bg-green-600 mr-4 px-3 py-1.5 font-semibold rounded-md">
+                    Connected
+                  </div>
+                  </>
+                ) : (
+                  <Button light className="flex items-center gap-2" onClick={connectWithGitHub}>
+                    <FaGithub /> Connect With GitHub
+                  </Button>
+                )
+              }
+              
             </div>
             <div className="flex flex-row-reverse gap-5">
               <Button type="submit" loading={updateLoading}>

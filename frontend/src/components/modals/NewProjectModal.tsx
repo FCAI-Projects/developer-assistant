@@ -6,8 +6,9 @@ import * as Yup from "yup";
 import { Modal } from "./Base";
 import { useMutation } from "@apollo/client";
 import { CreateProjectDocument, ProjectsDocument } from "../../graphql/generated/graphql";
-import { Input, Label } from "../forms";
+import { Input, Label, ToggleSwitch } from "../forms";
 import { FaPlus } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 export const NewProjectModal: React.FC = () => {
   const [addProject, { loading, data, error }] = useMutation(CreateProjectDocument, {
@@ -19,13 +20,14 @@ export const NewProjectModal: React.FC = () => {
       name: "",
       clientEmail: "",
       description: "",
+      github: false,
     },
     validationSchema: Yup.object({
       name: Yup.string().required("Required"),
       clientEmail: Yup.string().email("Invalid email address").required("Required"),
       description: Yup.string().max(255, "Must be 255 characters or less").required("Required"),
     }),
-    onSubmit: async (values) => {
+    onSubmit: async (values, formikApi) => {
       try {
         await addProject({
           variables: {
@@ -34,10 +36,19 @@ export const NewProjectModal: React.FC = () => {
               clientEmail: values.clientEmail,
               description: values.description,
             },
+            github: values.github,
+          },
+        });
+        formikApi.resetForm({
+          values: {
+            name: "",
+            clientEmail: "",
+            description: "",
             github: false,
           },
         });
         toggleModal();
+        toast.success("Project created successfully");
       } catch (error) {
         console.log(error);
       }
@@ -80,6 +91,11 @@ export const NewProjectModal: React.FC = () => {
                 {...formik.getFieldProps("description")}
                 error={formik.touched.description ? formik.errors.description : ""}
               />
+            </div>
+            <div className="w-full">
+              <ToggleSwitch id="github" {...formik.getFieldProps("github")}>
+                GitHub Repository
+              </ToggleSwitch>
             </div>
           </form>
         </div>

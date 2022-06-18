@@ -3,20 +3,22 @@ import { Button } from "../../components/Button";
 import { Input, Label } from "../../components/forms";
 import * as Yup from "yup";
 import { useMutation } from "@apollo/client";
-import { Project } from ".";
-import { UpdateProjectDocument, useProjectByIdQuery } from "../../graphql/generated/graphql";
+import { ProjectsDocument, RemoveProjectDocument, UpdateProjectDocument, useProjectByIdQuery } from "../../graphql/generated/graphql";
 import { useFormik } from "formik";
-import { useParams } from "react-router-dom";
+import { useNavigate , useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Loader } from "../../components/Loader";
-import { FaKey, FaTrash } from "react-icons/fa";
-import { AddGoogleAppPasswordModel } from "../../components/modals/AddGoogleAppPasswordModel";
+import { FaTrash } from "react-icons/fa";
 
 export const ProjectSettings: React.FC = () => {
-  const [updateProject, { loading, data, error }] = useMutation(UpdateProjectDocument);
   const { id } = useParams();
+  const navigate = useNavigate();
+  const [updateProject, { loading, data, error }] = useMutation(UpdateProjectDocument);
   const { data: project, loading: projectLoading } = useProjectByIdQuery({
     variables: { projectId: id as string },
+  });
+  const [deleteProject, { loading: deleteLoading }] = useMutation(RemoveProjectDocument,{
+    refetchQueries: [{ query: ProjectsDocument }]
   });
 
   const formik = useFormik({
@@ -110,7 +112,27 @@ export const ProjectSettings: React.FC = () => {
         <Button green type="submit" onClick={() => formik.handleSubmit()} loading={loading}>
           Save Changes
         </Button>
-        <Button lightRed className="flex items-center gap-2">
+        <Button 
+          lightRed 
+          className="flex items-center gap-2"
+          loading={deleteLoading}
+          onClick={ async () => {
+            try {
+              if (window.confirm("Are you sure you want to delete this project?")) {
+                await deleteProject({
+                  variables: {
+                    removeProjectId: id,
+                  },
+                });
+              }
+              toast.success("Project deleted successfully");
+              navigate("/app");
+            } catch (error) {
+              console.log(error);
+              toast.error("Can't delete project");
+            }
+          }}
+        >
           <FaTrash /> Delete Project
         </Button>
       </div>

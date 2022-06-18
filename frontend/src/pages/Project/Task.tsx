@@ -1,7 +1,7 @@
 import { useMutation } from "@apollo/client";
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect } from "react";
 import { FaTrash } from "react-icons/fa";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useRecoilValue } from "recoil";
 import { Button } from "../../components/Button";
@@ -14,12 +14,14 @@ import { Deadline } from "../../components/TaskPage/Deadline";
 import { Docs } from "../../components/TaskPage/Docs";
 import { PrivateNote } from "../../components/TaskPage/PrivateNote";
 import { TimeTracking } from "../../components/TaskPage/TimeTracking";
-import { TaskByIdDocument, TaskDocument, UpdateTaskDocument, useTaskByIdQuery } from "../../graphql/generated/graphql";
+import { ProjectListsDocument, RemoveTaskDocument, TaskByIdDocument, TaskDocument, UpdateTaskDocument, useTaskByIdQuery } from "../../graphql/generated/graphql";
 import { roleState } from "../../recoil";
 
 export const Task: React.FC = () => {
-  const role = useRecoilValue(roleState);
+  const navigate = useNavigate();
   const { taskId = "" } = useParams();
+  const projectId = useParams();
+  const role = useRecoilValue(roleState);
   const {
     data: taskData,
     loading: taskLoading,
@@ -28,7 +30,10 @@ export const Task: React.FC = () => {
   const [updateTask, { error: updateError }] = useMutation(UpdateTaskDocument, {
     refetchQueries: [{ query: TaskByIdDocument, variables: { taskId: taskId } }],
   });
-
+  const [deleteTask, { error: deletError }] = useMutation(RemoveTaskDocument, {
+    refetchQueries: [{ query: ProjectListsDocument, variables: { project: projectId.id } }],
+  });
+  
   const handleUpdateTask = async (field: string, value: string) => {
     await updateTask({
       variables: {
@@ -88,15 +93,38 @@ export const Task: React.FC = () => {
         <div className="flex basis-2/6 flex-col gap-5">
           <TimeTracking taskId={taskId} />
           <Deadline handleUpdateTask={handleUpdateTask} deadline={taskData?.task.deadline} />
-          <Button green onClick={() => handleUpdateTask("status", "done")}>
-            Done
-          </Button>
+          {
+            !taskData?.task.status && (
+              <Button 
+                green 
+                onClick={() => handleUpdateTask("status", "done")}
+              >
+                Done
+              </Button>
+            )
+          }
           <AssignMember />
           <PrivateNote />
           <Attachments data={taskData?.task.attachments} id={taskId} refetchTask={refetchTask} />
 
           {(role.admin || role.deleteTask) && (
-            <Button lightRed className="flex items-center justify-center gap-2">
+            <Button 
+              lightRed 
+              className="flex items-center justify-center gap-2"
+              onClick={async () => {
+                try {
+                  await deleteTask({
+                    variables: {
+                      removeTaskId: taskId,
+                    },
+                  });
+                  toast.success("Task deleted");
+                  navigate("/app/project/" + projectId.id);
+                } catch (error) {
+                  toast.error("Can't delete task");
+                }
+              }}
+            >
               <FaTrash /> Delete Task
             </Button>
           )}
