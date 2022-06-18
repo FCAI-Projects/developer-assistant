@@ -9,10 +9,12 @@ import { UpdateUserDocument } from "../../graphql/generated/graphql";
 import { Input, Label } from "../forms";
 import { FaKey } from "react-icons/fa";
 import { toast } from "react-toastify";
+import { useRsaEncrypt } from "../../hooks/useRsaEncrypt";
 
 export const UpdatePassword: React.FC = () => {
-  const [updateUser, { loading: updateLoading}] = useMutation(UpdateUserDocument);
+  const [updateUser, { loading: updateLoading }] = useMutation(UpdateUserDocument);
   const [isOpen, toggleModal] = useToggleModal();
+  const { encrypt } = useRsaEncrypt();
   const formik = useFormik({
     initialValues: {
       password: "",
@@ -25,15 +27,15 @@ export const UpdatePassword: React.FC = () => {
         await updateUser({
           variables: {
             user: {
-              password: values.password,
-            }
+              password: encrypt(values.password),
+            },
           },
         });
         formikApi.resetForm({
           values: {
             password: "",
           },
-        })
+        });
         toggleModal();
         toast.success("Successfully updated password");
       } catch (error) {

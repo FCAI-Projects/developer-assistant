@@ -26,12 +26,16 @@ export class Project {
   owner: MongooseSchema.Types.ObjectId;
 
   @Prop()
-  @Field(() => String, { description: 'Project describtion' })
-  describtion: string;
+  @Field(() => String, { description: 'Project description' })
+  description: string;
 
-  @Prop( {default:0 })
+  @Prop({ default: 0 })
   @Field(() => Number, { description: 'Project Budget' })
   budget: number;
+
+  @Prop()
+  @Field(() => String, { description: 'GitHub Repo Full Name', nullable: true })
+  gihubRepo: string;
 }
 
 export const ProjectSchema = SchemaFactory.createForClass(Project);

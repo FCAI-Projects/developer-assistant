@@ -28,11 +28,9 @@ export class Comment {
   @Field(() => String, { description: 'Comment Content' })
   content: String;
 
-  @Prop()
   @Field(() => Date, { description: 'Created At' })
   createdAt?: Date
 
-  @Prop()
   @Field(() => Date, { description: 'Updated At' })
   updatedAt?: Date
 }

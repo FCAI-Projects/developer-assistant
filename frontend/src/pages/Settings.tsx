@@ -1,21 +1,31 @@
 import { useMutation } from "@apollo/client";
+import axios from "axios";
 import { useFormik } from "formik";
 import React, { useEffect, useState } from "react";
+import { FaGithub } from "react-icons/fa";
 import { decodeToken } from "react-jwt";
 import { toast } from "react-toastify";
 import { useRecoilValue } from "recoil";
 import * as Yup from "yup";
 import { Button } from "../components/Button";
 import { Input, Label } from "../components/forms";
+import { AddGoogleAppPasswordModel } from "../components/modals/AddGoogleAppPasswordModel";
 import { UpdatePassword } from "../components/modals/UpdatePasswordModal";
-import { UpdateUserDocument, UserDocument, useUserQuery } from "../graphql/generated/graphql";
+import { UpdateUserDocument, UploadAvatarDocument, UserDocument, useUserQuery } from "../graphql/generated/graphql";
 import { authState } from "../recoil";
+import { useSearchParams } from "react-router-dom";
+import { useRsaEncrypt } from "../hooks/useRsaEncrypt";
 
 export const Settings: React.FC = () => {
   const authToken = useRecoilValue(authState);
   const [id, setId] = useState("");
+  const { encrypt } = useRsaEncrypt();
+  let [searchParams, setSearchParams] = useSearchParams();
   const { data } = useUserQuery({ variables: { userId: id } });
-  const [updateUser, { loading: updateLoading}] = useMutation(UpdateUserDocument, {
+  const [updateUser, { loading: updateLoading }] = useMutation(UpdateUserDocument, {
+    refetchQueries: [{ query: UserDocument, variables: { userId: id } }],
+  });
+  const [uploadAvatar, { loading: uploadLoading }] = useMutation(UploadAvatarDocument, {
     refetchQueries: [{ query: UserDocument, variables: { userId: id } }],
   });
 
@@ -39,7 +49,7 @@ export const Settings: React.FC = () => {
               fname: values.fname,
               lname: values.lname,
               email: values.email,
-            }
+            },
           },
         });
         toast.success("Successfully updated user");
@@ -48,6 +58,34 @@ export const Settings: React.FC = () => {
       }
     },
   });
+
+  const updateAvatar = async (e: any) => {
+    const file = e.target.files[0];
+    await uploadAvatar({
+      variables: {
+        id: id,
+        avatar: file,
+      },
+    });
+    toast.success("Successfully updated avatar");
+  };
+
+  const connectWithGitHub = async () => {
+    window.location.href = "https://github.com/login/oauth/authorize?client_id=87f2214968a5f4152fb9";
+  };
+
+  useEffect(() => {
+    const code = searchParams.get("code");
+    if (code) {
+      updateUser({
+        variables: {
+          user: {
+            githubToken: encrypt(code),
+          },
+        },
+      });
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     if (authToken) {
@@ -61,12 +99,16 @@ export const Settings: React.FC = () => {
       <form className="mx-auto my-10 flex max-w-5xl flex-col gap-4" onSubmit={formik.handleSubmit}>
         <h3 className="text-center text-3xl font-medium">Settings</h3>
         <div className="flex gap-10">
-          <div>
+          <div className="text-center">
             <img
               className="h-60 w-60 rounded-full object-cover"
-              src="https://images.pexels.com/photos/2955305/pexels-photo-2955305.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
+              src={axios.defaults.baseURL + "/uploads/avatars/" + data?.user.avatar}
               alt="avatar"
             />
+            <label className="mt-2 block cursor-pointer underline" htmlFor="avatar">
+              Update Avatar
+            </label>
+            <input type="file" id="avatar" className="hidden" onChange={updateAvatar} />
           </div>
           <div className="flex flex-1 flex-col gap-4">
             <div className="w-full">
@@ -99,9 +141,18 @@ export const Settings: React.FC = () => {
                 error={formik.touched.email ? formik.errors.email : ""}
               />
             </div>
+            <div className="flex w-full items-center justify-between">
+              <Label>Connect With GitHub</Label>
+              <Button light className="flex items-center gap-2" onClick={connectWithGitHub}>
+                <FaGithub /> Connect With GitHub
+              </Button>
+            </div>
             <div className="flex flex-row-reverse gap-5">
-              <Button type="submit" loading={updateLoading}>Save Changes</Button>
+              <Button type="submit" loading={updateLoading}>
+                Save Changes
+              </Button>
               <UpdatePassword />
+              <AddGoogleAppPasswordModel />
             </div>
           </div>
         </div>

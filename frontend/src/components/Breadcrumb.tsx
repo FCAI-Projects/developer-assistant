@@ -18,10 +18,7 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = ({ list, className }) => {
     <nav className="flex" aria-label="Breadcrumb">
       <ol className={`inline-flex items-center space-x-1 md:space-x-3 ${className}`}>
         <li className="inline-flex items-center">
-          <a
-            href={list[0].link}
-            className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-gray-900"
-          >
+          <a href={list[0].link} className="inline-flex items-center font-medium text-gray-700 hover:text-gray-900">
             <HomeIcon />
             {/* {list[0].name} */}
           </a>
@@ -33,7 +30,7 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = ({ list, className }) => {
             <li key={index}>
               <div className="flex items-center">
                 <Icon />
-                <a href={item.link} className="ml-1 text-sm font-medium text-gray-700 hover:text-gray-900 md:ml-2">
+                <a href={item.link} className="ml-1 font-medium text-gray-700 hover:text-gray-900 md:ml-2">
                   {item.name}
                 </a>
               </div>

@@ -11,7 +11,7 @@ import { FaPlus } from "react-icons/fa";
 
 export const NewProjectModal: React.FC = () => {
   const [addProject, { loading, data, error }] = useMutation(CreateProjectDocument, {
-    refetchQueries: [{query: ProjectsDocument}],
+    refetchQueries: [{ query: ProjectsDocument }],
   });
   const [isOpen, toggleModal] = useToggleModal();
   const formik = useFormik({
@@ -32,8 +32,9 @@ export const NewProjectModal: React.FC = () => {
             createProjectInput: {
               name: values.name,
               clientEmail: values.clientEmail,
-              describtion: values.description,
+              description: values.description,
             },
+            github: false,
           },
         });
         toggleModal();
@@ -83,7 +84,7 @@ export const NewProjectModal: React.FC = () => {
           </form>
         </div>
         <div className="flex flex-row-reverse gap-3">
-          <Button type="submit"  onClick={() => formik.handleSubmit()} loading={loading}>
+          <Button type="submit" onClick={() => formik.handleSubmit()} loading={loading}>
             Create
           </Button>
           <Button type="submit" lightRed onClick={toggleModal}>

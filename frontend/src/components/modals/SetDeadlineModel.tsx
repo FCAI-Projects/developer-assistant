@@ -20,7 +20,7 @@ export const SetDeadlineModel: React.FC<SetDeadlineModelProps> = ({ handleUpdate
   const [isOpen, toggleModal] = useToggleModal();
   const formik = useFormik({
     initialValues: {
-      date: deadline.slice(0, 19),
+      date: deadline?.slice(0, 19),
     },
     validationSchema: Yup.object({
       date: Yup.string().required("Required"),

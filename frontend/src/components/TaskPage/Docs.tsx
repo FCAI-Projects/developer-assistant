@@ -3,6 +3,8 @@ import { FaGreaterThanEqual } from "react-icons/fa";
 import { UpdateDocsModel } from "../modals/UpdateDocsModel";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { useRecoilValue } from "recoil";
+import { roleState } from "../../recoil";
 
 interface DocsProps {
   docs: string | null | undefined;
@@ -10,6 +12,7 @@ interface DocsProps {
 }
 
 export const Docs: React.FC<DocsProps> = ({ docs, handleUpdateTask }) => {
+  const role = useRecoilValue(roleState);
   return (
     <div>
       <header className="flex items-center justify-between">
@@ -17,7 +20,7 @@ export const Docs: React.FC<DocsProps> = ({ docs, handleUpdateTask }) => {
           <FaGreaterThanEqual className="text-sm" />
           Docs
         </h6>
-        <UpdateDocsModel handleUpdateTask={handleUpdateTask} value={docs} />
+        {(role.admin || role.editDocs) && <UpdateDocsModel handleUpdateTask={handleUpdateTask} value={docs} />}
       </header>
       <div className="prose prose-sm">
         {docs && <ReactMarkdown children={docs} remarkPlugins={[remarkGfm]} />}{" "}

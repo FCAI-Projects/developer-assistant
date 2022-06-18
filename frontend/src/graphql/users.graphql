@@ -1,13 +1,13 @@
 mutation CreateUser($createUserInput: CreateUserInput!) {
   createUser(createUserInput: $createUserInput) {
-    token,
+    token
     userId
   }
 }
 
 mutation Login($email: String!, $password: String!) {
   login(email: $email, password: $password) {
-    token,
+    token
     userId
   }
 }
@@ -28,5 +28,12 @@ query User($userId: String!) {
     fname
     lname
     email
+    avatar
+    connectedWihGoogle
+    connectedWihGithub
   }
+}
+
+mutation UploadAvatar($id: String!, $avatar: Upload!) {
+  uploadAvatar(id: $id, avatar: $avatar)
 }

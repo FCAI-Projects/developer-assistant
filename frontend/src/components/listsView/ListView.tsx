@@ -3,8 +3,10 @@ import React from "react";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 import { FaTrash } from "react-icons/fa";
 import { toast } from "react-toastify";
+import { useRecoilValue } from "recoil";
 import { ProjectListsDocument, RemoveProjectListsDocument } from "../../graphql/generated/graphql";
 import { list } from "../../pages/Project";
+import { roleState } from "../../recoil";
 import { Editable } from "../Editable";
 import { NewTaskModal } from "../modals/NewTaskModal";
 import { Card } from "./Card";
@@ -18,6 +20,7 @@ interface ListProps {
 }
 
 export const ListView: React.FC<ListProps> = ({ list, index, projectId, refetchTasks, updateListName }) => {
+  const role = useRecoilValue(roleState);
   const [removeList, { loading }] = useMutation(RemoveProjectListsDocument, {
     refetchQueries: [{ query: ProjectListsDocument, variables: { project: projectId } }],
   });
@@ -37,33 +40,39 @@ export const ListView: React.FC<ListProps> = ({ list, index, projectId, refetchT
                 <div ref={provided.innerRef} {...provided.droppableProps} className="flex-1">
                   <header className="mb-5 flex w-full items-center justify-between">
                     <h3 className="text-lg font-bold text-slate-900">
-                      <Editable value={list.name} onChange={(value) => updateListName(list.id, value)} />
+                      {role.admin || role.editList ? (
+                        <Editable value={list.name} onChange={(value) => updateListName(list.id, value)} />
+                      ) : (
+                        list.name
+                      )}
                     </h3>
-                    <button 
-                      className="text-sm p-1 text-slate-600 hover:text-red-600"
-                      onClick={() => {
-                        if (list.tasks.length === 0) {
-                          console.log(list.tasks.length);
-                          removeList({
-                            variables: {
-                              removeProjectListsId: list.id,
-                            },
-                          });
-                        } else {
-                          toast.error("Plese remove all tasks from this list before deleting it");
-                        }
-                      }}
-                      disabled={loading}
-                    >
-                      <FaTrash />
-                    </button>
+                    {(role.admin || role.deleteList) && (
+                      <button
+                        className="p-1 text-sm text-slate-600 hover:text-red-600"
+                        onClick={() => {
+                          if (list.tasks.length === 0) {
+                            console.log(list.tasks.length);
+                            removeList({
+                              variables: {
+                                removeProjectListsId: list.id,
+                              },
+                            });
+                          } else {
+                            toast.error("Plese remove all tasks from this list before deleting it");
+                          }
+                        }}
+                        disabled={loading}
+                      >
+                        <FaTrash />
+                      </button>
+                    )}
                   </header>
                   {list.tasks.map((task, index) => (
                     <Card key={task.id} task={task} index={index} listId={list.id} />
                   ))}
                   {provided.placeholder}
 
-                  <NewTaskModal listId={list.id} refetchTasks={refetchTasks} />
+                  {(role.admin || role.createTask) && <NewTaskModal listId={list.id} refetchTasks={refetchTasks} />}
                 </div>
               )}
             </Droppable>
@@ -73,4 +82,3 @@ export const ListView: React.FC<ListProps> = ({ list, index, projectId, refetchT
     </div>
   );
 };
-

@@ -3,18 +3,21 @@ import React, { useEffect } from "react";
 import { FaGreaterThanEqual, FaTrash } from "react-icons/fa";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useRecoilValue } from "recoil";
 import {
   AssignMemberDocument,
   RemoveAssignMemberDocument,
   TaskDocument,
   useTaskQuery,
 } from "../../graphql/generated/graphql";
+import { roleState } from "../../recoil";
 import { Button } from "../Button";
 import { TaskAssignModal } from "../modals/TaskAssignModel";
 
 interface AssignMemberProps {}
 
 export const AssignMember: React.FC<AssignMemberProps> = () => {
+  const role = useRecoilValue(roleState);
   const { taskId = "" } = useParams();
   const { data: taskData, loading: taskLoading } = useTaskQuery({ variables: { taskId } });
   const [deleteMember, { loading: deleteMemberLoading }] = useMutation(RemoveAssignMemberDocument, {
@@ -45,7 +48,9 @@ export const AssignMember: React.FC<AssignMemberProps> = () => {
           <FaGreaterThanEqual className="text-sm" />
           Assign Member
         </h6>
-        <TaskAssignModal taskData={taskData} assignMember={assignMember} assignMemberLoading={assignMemberLoading} />
+        {(role.admin || role.assignTask) && (
+          <TaskAssignModal taskData={taskData} assignMember={assignMember} assignMemberLoading={assignMemberLoading} />
+        )}
       </header>
       <div className="flex flex-col gap-4">
         {taskData?.task &&
@@ -57,14 +62,16 @@ export const AssignMember: React.FC<AssignMemberProps> = () => {
                 className="h-8 w-8 rounded-full"
               />
               <h6 className="text-l font-medium">{member.fname + " " + member.lname}</h6>
-              <Button
-                lightRed
-                className="ml-auto px-2 py-2 text-xs"
-                onClick={() => handelDelete(member.id)}
-                loading={deleteMemberLoading}
-              >
-                <FaTrash />
-              </Button>
+              {(role.admin || role.unAssignTask) && (
+                <Button
+                  lightRed
+                  className="ml-auto px-2 py-2 text-xs"
+                  onClick={() => handelDelete(member.id)}
+                  loading={deleteMemberLoading}
+                >
+                  <FaTrash />
+                </Button>
+              )}
             </div>
           ))}
       </div>

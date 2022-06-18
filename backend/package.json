@@ -22,7 +22,11 @@
     "test:e2e:watch": "jest --config ./test/jest-e2e.json --watchAll"
   },
   "dependencies": {
+
     "@golevelup/ts-jest": "^0.3.3",
+
+    "@nestjs-modules/mailer": "^1.6.1",
+
     "@nestjs/apollo": "^10.0.7",
     "@nestjs/common": "^8.4.0",
     "@nestjs/core": "^8.4.0",
@@ -36,12 +40,14 @@
     "@nestjs/websockets": "^8.4.5",
     "apollo-server-express": "^3.6.4",
     "async": "^3.2.3",
+    "axios": "^0.27.2",
     "bcrypt": "^5.0.1",
     "crypto-js": "^4.1.1",
     "graphql": "^16.3.0",
     "graphql-upload": "^13.0.0",
     "hbs": "^4.2.0",
     "mongoose": "^6.2.6",
+    "nodemailer": "^6.7.5",
     "passport": "^0.5.2",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
@@ -59,6 +65,7 @@
     "@types/graphql-upload": "^8.0.11",
     "@types/jest": "27.0.2",
     "@types/node": "^16.0.0",
+    "@types/nodemailer": "^6.4.4",
     "@types/passport-jwt": "^3.0.6",
     "@types/passport-local": "^1.0.34",
     "@types/supertest": "^2.0.11",

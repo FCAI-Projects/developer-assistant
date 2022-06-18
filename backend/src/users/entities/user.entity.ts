@@ -10,6 +10,10 @@ export class User {
   @Field(() => ID, { description: 'User ID' })
   id: MongooseSchema.Types.ObjectId;
 
+  @Prop({ default: 'default.webp' })
+  @Field(() => String, { description: 'User avatar' })
+  avatar: string;
+
   @Prop({ required: true })
   @Field(() => String, { description: 'User first name' })
   fname: string;
@@ -27,12 +31,23 @@ export class User {
   password: string;
 
   @Prop()
-  @Field(() => String, { description: 'User Google App Password', nullable: true })
+  @Field(() => String, {
+    description: 'User Google App Password',
+    nullable: true,
+  })
   googleAppPassword: string;
+
+  @Prop({ default: false })
+  @Field(() => String)
+  connectedWihGoogle: boolean;
+
+  @Prop({ default: false })
+  @Field(() => String)
+  connectedWihGithub: boolean;
 
   @Prop()
   @Field(() => String, { description: 'User GitHub Toekn', nullable: true })
-  githubToekn: string;
+  githubToken: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

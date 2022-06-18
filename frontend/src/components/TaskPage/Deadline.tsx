@@ -1,4 +1,6 @@
 import React from "react";
+import { useRecoilValue } from "recoil";
+import { roleState } from "../../recoil";
 import { Button } from "../Button";
 import { SetDeadlineModel } from "../modals/SetDeadlineModel";
 
@@ -8,6 +10,7 @@ interface DeadlineProps {
 }
 
 export const Deadline: React.FC<DeadlineProps> = ({ handleUpdateTask, deadline }) => {
+  const role = useRecoilValue(roleState);
   const getLeftTime = () => {
     if (new Date(deadline).getTime() > new Date().getTime()) {
       const ms = new Date(deadline).getTime() - new Date().getTime();
@@ -49,7 +52,7 @@ export const Deadline: React.FC<DeadlineProps> = ({ handleUpdateTask, deadline }
           </p>
         </div>
       )}
-      <SetDeadlineModel handleUpdateTask={handleUpdateTask} deadline={deadline} />
+      {(role.admin || role.editTask) && <SetDeadlineModel handleUpdateTask={handleUpdateTask} deadline={deadline} />}
     </>
   );
 };

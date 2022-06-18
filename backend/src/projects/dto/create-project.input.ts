@@ -9,7 +9,7 @@ export class CreateProjectInput {
   clientEmail: string;
 
   @Field(() => String, { description: 'description of project' })
-  describtion: string;
+  description: string;
 
   @Field(() => Number, {
     description: 'project budget',

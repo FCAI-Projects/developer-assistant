@@ -14,6 +14,9 @@ type User {
   """User ID"""
   id: ID!
 
+  """User avatar"""
+  avatar: String!
+
   """User first name"""
   fname: String!
 
@@ -28,9 +31,11 @@ type User {
 
   """User Google App Password"""
   googleAppPassword: String
+  connectedWihGoogle: String!
+  connectedWihGithub: String!
 
   """User GitHub Toekn"""
-  githubToekn: String
+  githubToken: String
 }
 
 type Project {
@@ -46,11 +51,14 @@ type Project {
   """Project owner"""
   owner: User!
 
-  """Project describtion"""
-  describtion: String!
+  """Project description"""
+  description: String!
 
   """Project Budget"""
   budget: Float!
+
+  """GitHub Repo Full Name"""
+  gihubRepo: String
 }
 
 type Role {
@@ -80,6 +88,41 @@ type Role {
   inviteMember: Boolean!
   deleteMember: Boolean!
   editMember: Boolean!
+}
+
+
+type Member {
+  """Member ID"""
+  id: ID
+
+  """Projact ID"""
+  project: Project
+
+  """User ID"""
+  user: User
+
+  """User role in project"""
+  role: Role
+
+  """User Status"""
+  status: String
+}
+
+type Group {
+  """Group ID"""
+  id: ID
+
+  """Group Project"""
+  project: Project
+
+  """Group Name"""
+  name: String
+
+  """Group Members"""
+  members: [User!]
+
+  """Group Admin"""
+  admin: User
 }
 
 type Task {
@@ -128,6 +171,82 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+
+type ProjectLists {
+  """List ID"""
+  id: ID!
+
+  """List Project ID"""
+  project: Project!
+
+  """Status name"""
+  name: String!
+
+  """Status Tasks ID"""
+  tasks: [Task!]!
+
+  """Status Color"""
+  color: String!
+
+  """Status Index"""
+  index: Int!
+}
+
+type Note {
+  """Note ID"""
+  id: ID
+
+  """Task Id"""
+  task: Task
+
+  """User Id"""
+  user: User
+
+  """Task Note"""
+  note: String
+}
+
+type Comment {
+  """Comment ID"""
+  id: ID!
+
+  """Relay to comment"""
+  replayTo: String!
+
+  """User ID"""
+  user: User!
+
+  """Task ID"""
+  task: String!
+
+  """Comment Content"""
+  content: String!
+
+  """Created At"""
+  createdAt: DateTime!
+
+  """Updated At"""
+  updatedAt: DateTime!
+}
+
+type Expense {
+  """Expense ID"""
+  id: ID!
+
+  """Expense Project"""
+  project: Project!
+
+  """Expense Name"""
+  name: String!
+
+  """Expense Amount"""
+  amount: Int!
+
+  """Expense Date"""
+  date: DateTime!
+}
+
+
 type TimeTrackingHistory {
   """History Start"""
   start: DateTime
@@ -139,9 +258,114 @@ type TimeTrackingHistory {
   duration: Float
 }
 
+
 type Query {
   users: [User!]!
   user(id: String!): User!
+
+type TimeTracking {
+  """Time Tracking ID"""
+  id: ID
+
+  """Task ID"""
+  task: Task
+
+  """Time Tracking of User"""
+  user: User
+
+  """Time Tracking Started & Not Finished Yet"""
+  start: DateTime
+
+  """Time Tracking Duration"""
+  duration: String
+
+  """Time Tracking History"""
+  history: [TimeTrackingHistory!]
+}
+
+type Payment {
+  """Payment ID"""
+  id: ID!
+
+  """payment Project ID"""
+  project: Project!
+
+  """payment url"""
+  paymentUrl: String!
+
+  """payment amount"""
+  amount: Int!
+
+  """payment status"""
+  status: String!
+
+  """payment date done"""
+  paymentDate: DateTime
+
+  """Created At"""
+  createdAt: DateTime!
+
+  """Updated At"""
+  updatedAt: DateTime!
+}
+
+type Query {
+  users: [User!]!
+  user(id: String!): User!
+  projects: [Project!]!
+  project(id: String!): Project!
+  roles(project: String!): [Role!]!
+  role(id: String!): Role!
+  invitations: [Member!]!
+  filterMembers(filter: UpdateMemberInput!): [Member!]!
+  membersByProject(projectId: String!): [Member!]!
+  member(id: String!): Member!
+  memberInfo(project: String!): Member!
+  groups: [Group!]!
+  group(id: String!): Group!
+  checkMemberGroup(id: String!): Group!
+  tasks(project: String!): [Task!]!
+  tasksByUserId(userId: String!): [Task!]!
+  task(id: String!): Task!
+  projectLists(project: String!): [ProjectLists!]!
+  projectListsById(id: String!): ProjectLists!
+  note(id: String!): Note!
+  filterNotes(filter: CreateNoteInput!): Note!
+  comments(taskId: String!): [Comment!]!
+  comment(id: String!): Comment!
+  expenses(project: String!): [Expense!]!
+  expense(id: String!): Expense!
+
+  """Get all time tracking for user"""
+  userTimeTracking(user: String!): [TimeTracking!]!
+
+  """Get all time tracking for a task"""
+  taskTimeTracking(task: String!): [TimeTracking!]!
+
+  """Get all task time tracking for a user"""
+  taskUserTimeTracking(task: String!): TimeTracking
+  findPayments(project: String!): [Payment!]!
+}
+
+input UpdateMemberInput {
+  project: String
+  user: String
+  role: String
+
+  """Member Status"""
+  status: String
+}
+
+input CreateNoteInput {
+  """Task Id"""
+  task: String!
+
+  """User Id"""
+  user: String!
+
+  """Task Note"""
+  note: String
+
 }
 
 type Mutation {
@@ -149,9 +373,52 @@ type Mutation {
   login(email: String!, password: String!): UserResponse!
   deleteUser(id: String!): User!
   updateUser(user: UpdateUserInput!): User!
+
+
+  uploadAvatar(id: String!, avatar: Upload!): Boolean!
+  createProject(createProjectInput: CreateProjectInput!, github: Boolean!): Project!
+  updateProject(id: String!, updateProjectInput: UpdateProjectInput!): Project!
+  removeProject(id: String!): Project!
+  sendMail(id: String!, title: String!, message: String!): Boolean!
+  createRole(createRoleInput: CreateRoleInput!): Role!
+  updateRole(id: String!, updateRoleInput: UpdateRoleInput!): Role!
+  removeRole(id: String!): Role!
+  inviteMember(inviteMemberInput: CreateMemberInput!): Member!
+  updateMember(id: String!, updateMemberInput: UpdateMemberInput!): Member!
+  removeMember(id: String!): Member!
+  createGroup(createGroupInput: CreateGroupInput!): Group!
+  inviteToGroup(groupId: String!, memberId: String!): Group!
+  updateGroup(updateGroupInput: UpdateGroupInput!): Group!
+  removeGroup(id: String!): Group!
+  createTask(createTaskInput: CreateTaskInput!): Task!
+  updateTask(id: String!, updateTaskInput: UpdateTaskInput!): Task!
+  uploadAttachments(id: String!, attachment: Upload!): Boolean!
+  assignMember(id: String!, member: String!): Task!
+  RemoveAssignMember(id: String!, member: String!): Task!
+  removeTask(id: String!): Task!
+  createProjectLists(createProjectListsInput: CreateProjectListsInput!): ProjectLists!
+  updateProjectLists(updateProjectListsInput: UpdateProjectListsInput!): ProjectLists!
+  removeProjectLists(id: String!): ProjectLists!
+  createNote(createNoteInput: CreateNoteInput!): Note!
+  updateNote(id: String!, updateNoteInput: UpdateNoteInput!): Note!
+  removeNote(id: String!): Note!
+  createComment(createCommentInput: CreateCommentInput!): Comment!
+  updateComment(id: String!, updateCommentInput: UpdateCommentInput!): Comment!
+  removeComment(id: String!): Comment!
+  createExpense(createExpenseInput: CreateExpenseInput!): Expense!
+  updateExpense(updateExpenseInput: UpdateExpenseInput!): Expense!
+  removeExpense(id: String!): Expense!
+  startTimeTracking(task: String!): TimeTracking!
+  stopTimeTracking(task: String!): TimeTracking!
+  removeTimeTracking(id: String!): TimeTracking!
+  createPayment(createPaymentInput: CreatePaymentInput!): Payment!
+
 }
 
 input CreateUserInput {
+  """User avatar"""
+  avatar: String
+
   """First Name of the user"""
   fname: String!
 
@@ -166,6 +433,9 @@ input CreateUserInput {
 }
 
 input UpdateUserInput {
+  """User avatar"""
+  avatar: String
+
   """First Name of the user"""
   fname: String
 
@@ -178,5 +448,308 @@ input UpdateUserInput {
   """Password of the user"""
   password: String
   googleAppPassword: String
+
   githubToekn: String
+
+  githubToken: String
+}
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
+
+input CreateProjectInput {
+  """project name"""
+  name: String!
+
+  """client email"""
+  clientEmail: String!
+
+  """description of project"""
+  description: String!
+
+  """project budget"""
+  budget: Float
+}
+
+input UpdateProjectInput {
+  """project name"""
+  name: String
+
+  """client email"""
+  clientEmail: String
+
+  """description of project"""
+  description: String
+
+  """project budget"""
+  budget: Float
+
+  """GitHub Repo Full Name"""
+  gihubRepo: String
+}
+
+input CreateRoleInput {
+  name: String!
+  project: String!
+  createList: Boolean = false
+  editList: Boolean = false
+  deleteList: Boolean = false
+  createTask: Boolean = false
+  deleteTask: Boolean = false
+  editTask: Boolean = false
+  assignTask: Boolean = false
+  unAssignTask: Boolean = false
+  editDocs: Boolean = false
+  canComment: Boolean = false
+  editProject: Boolean = false
+  manageRoles: Boolean = false
+  manageExpenses: Boolean = false
+  sendMails: Boolean = false
+  managePayment: Boolean = false
+  inviteMember: Boolean = false
+  deleteMember: Boolean = false
+  editMember: Boolean = false
+}
+
+input UpdateRoleInput {
+  name: String
+  project: String
+  createList: Boolean = false
+  editList: Boolean = false
+  deleteList: Boolean = false
+  createTask: Boolean = false
+  deleteTask: Boolean = false
+  editTask: Boolean = false
+  assignTask: Boolean = false
+  unAssignTask: Boolean = false
+  editDocs: Boolean = false
+  canComment: Boolean = false
+  editProject: Boolean = false
+  manageRoles: Boolean = false
+  manageExpenses: Boolean = false
+  sendMails: Boolean = false
+  managePayment: Boolean = false
+  inviteMember: Boolean = false
+  deleteMember: Boolean = false
+  editMember: Boolean = false
+}
+
+input CreateMemberInput {
+  project: String!
+  user: String!
+  role: String!
+
+  """Member Status"""
+  status: String
+}
+
+input CreateGroupInput {
+  """Group Project"""
+  project: String!
+
+  """Group Name"""
+  name: String!
+
+  """Group Members"""
+  members: [String!]
+}
+
+input UpdateGroupInput {
+  """Group Project"""
+  project: String
+
+  """Group Name"""
+  name: String
+
+  """Group Members"""
+  members: [String!]
+  id: String!
+}
+
+input CreateTaskInput {
+  """Task Project ID"""
+  project: String!
+
+  """Task name"""
+  name: String!
+
+  """Task description"""
+  description: String!
+
+  """Task assigned to"""
+  assign: String
+
+  """Task attachments"""
+  attachments: [String!]
+
+  """Task status"""
+  status: String
+
+  """Task periority"""
+  periority: String
+
+  """Task tags"""
+  tags: [String!]
+
+  """Task started at"""
+  startedAt: DateTime
+
+  """Task finished at"""
+  finishedAt: DateTime
+
+  """Task deadline"""
+  deadline: DateTime
+
+  """Task docs"""
+  docs: String
+
+  """List ID"""
+  list: String!
+}
+
+input UpdateTaskInput {
+  """Task Project ID"""
+  project: String
+
+  """Task name"""
+  name: String
+
+  """Task description"""
+  description: String
+
+  """Task assigned to"""
+  assign: String
+
+  """Task attachments"""
+  attachments: [String!]
+
+  """Task status"""
+  status: String
+
+  """Task periority"""
+  periority: String
+
+  """Task tags"""
+  tags: [String!]
+
+  """Task started at"""
+  startedAt: DateTime
+
+  """Task finished at"""
+  finishedAt: DateTime
+
+  """Task deadline"""
+  deadline: DateTime
+
+  """Task docs"""
+  docs: String
+
+  """List ID"""
+  list: String
+}
+
+input CreateProjectListsInput {
+  """Status Project ID"""
+  project: String!
+
+  """Status name"""
+  name: String!
+
+  """Status tasks ID"""
+  tasks: [String!]!
+
+  """Status Color"""
+  color: String!
+}
+
+input UpdateProjectListsInput {
+  """Status Project ID"""
+  project: String
+
+  """Status name"""
+  name: String
+
+  """Status tasks ID"""
+  tasks: [String!]
+
+  """Status Color"""
+  color: String
+  id: String!
+
+  """Status Index"""
+  index: Int
+}
+
+input UpdateNoteInput {
+  """Task Id"""
+  task: String
+
+  """User Id"""
+  user: String
+
+  """Task Note"""
+  note: String
+}
+
+input CreateCommentInput {
+  """Comment ID"""
+  replayTo: String
+
+  """User ID"""
+  user: String!
+
+  """Task ID"""
+  task: String!
+
+  """Comment Content"""
+  content: String!
+}
+
+input UpdateCommentInput {
+  """Comment ID"""
+  replayTo: String
+
+  """User ID"""
+  user: String
+
+  """Task ID"""
+  task: String
+
+  """Comment Content"""
+  content: String
+}
+
+input CreateExpenseInput {
+  """Expense Project"""
+  project: String!
+
+  """Expense Name"""
+  name: String!
+
+  """Expense Amount"""
+  amount: Int!
+
+  """Expense Date"""
+  date: DateTime!
+}
+
+input UpdateExpenseInput {
+  """Expense Project"""
+  project: String
+
+  """Expense Name"""
+  name: String
+
+  """Expense Amount"""
+  amount: Int
+
+  """Expense Date"""
+  date: DateTime
+  id: String!
+}
+
+input CreatePaymentInput {
+  amount: Int!
+  project: String!
+
 }

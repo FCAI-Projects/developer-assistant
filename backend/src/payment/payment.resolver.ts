@@ -2,6 +2,7 @@ import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 import { PaymentService } from './payment.service';
 import { Payment, PaymentDocument } from './entities/payment.entity';
 import { CreatePaymentInput } from './dto/create-payment.input';
+import { UpdatePaymentInput } from './dto/update-payment.input';
 import { createHmac } from 'crypto';
 import { CreatePaymentUrlInput } from './dto/create-payment-url';
 import { JwtAuthGuard } from 'src/auth/jwt.guard';
@@ -13,8 +14,9 @@ export class PaymentResolver {
 
   @Query(() => [Payment], { name: 'findPayments' })
   @UseGuards(JwtAuthGuard)
-  async findPayments(@Args('project') project: string): Promise<PaymentDocument[]> {
-    
+  async findPayments(
+    @Args('project') project: string,
+  ): Promise<PaymentDocument[]> {
     return await this.paymentService.findAll(project);
   }
 
@@ -38,7 +40,9 @@ export class PaymentResolver {
     order.hash = generateKashierOrderHash(order);
     order.secret = paymentCon.HPPSecret;
 
-    let callbackUrl = encodeURI('http://localhost:3030/' + 'paymentcallback/callback');
+    let callbackUrl = encodeURI(
+      'http://localhost:3030/' + 'paymentcallback/callback',
+    );
 
     //Hosted payment page URL
     let paymentUrl = `${paymentCon.baseUrl}/payment?mid=${order.mid}&orderId=${order.merchantOrderId}&amount=${order.amount}&currency=${order.currency}&hash=${order.hash}&merchantRedirect=${callbackUrl}`;

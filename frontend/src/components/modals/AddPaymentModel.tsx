@@ -5,37 +5,44 @@ import { Button } from "../Button";
 import * as Yup from "yup";
 import { Modal } from "./Base";
 import { useMutation } from "@apollo/client";
-import { UpdateUserDocument } from "../../graphql/generated/graphql";
+import { CreatePaymentDocument, FindPaymentsDocument } from "../../graphql/generated/graphql";
 import { Input, Label } from "../forms";
-import { FaKey } from "react-icons/fa";
+import { FaDollarSign } from "react-icons/fa";
 import { toast } from "react-toastify";
+import { useParams } from "react-router-dom";
 
-export const AddGitHubTokenModel: React.FC = () => {
-  const [addGithubToken, { loading }] = useMutation(UpdateUserDocument);
+export const AddPaymentModel: React.FC = () => {
+  const params = useParams();
+  const [addPayment, { data, loading }] = useMutation(CreatePaymentDocument, {
+    refetchQueries:  [{ query: FindPaymentsDocument, variables: { project: params.id } }],
+  });
   const [isOpen, toggleModal] = useToggleModal();
   const formik = useFormik({
     initialValues: {
-      token: "",
+      amount: 0,
     },
     validationSchema: Yup.object({
-      token: Yup.string().required("Required"),
+      amount: Yup.number().required("Required"),
     }),
     onSubmit: async (values, formikApi) => {
       try {
-        await addGithubToken({
+       const res =  await addPayment({
           variables: {
-            user: {
-              githubToekn: values.token,
+            createPaymentInput: {
+              project: params.id,
+              amount: values.amount,
             },
           },
         });
         formikApi.resetForm({ 
           values: { 
-            token: "" 
+            amount: 0
           } 
         });
+        await navigator.clipboard.writeText(res.data.createPayment.paymentUrl); 
         toggleModal();
-        toast.success("GitHub Token Added successfully");
+        toast.success("Payment Added and Link copied to clipboard");
+        console.log(data);
       } catch (error) {
         console.log(error);
       }
@@ -44,21 +51,21 @@ export const AddGitHubTokenModel: React.FC = () => {
 
   return (
     <>
-      <Button lightRed className="flex items-center gap-2" onClick={toggleModal}>
-        <FaKey />
-        Set GitHub Token
+      <Button lightBlue className="flex items-center gap-2" onClick={toggleModal}>
+        <FaDollarSign />
+        Add Payment
       </Button>
-      <Modal title="Set GitHub Token" isOpen={isOpen} handleClose={toggleModal}>
+      <Modal title="Add Payment" isOpen={isOpen} handleClose={toggleModal}>
         <div className="my-5">
           <form className="flex flex-col gap-4">
             <div className="w-full">
-              <Label htmlFor="token">GitHub Token</Label>
+              <Label htmlFor="amount">Amount</Label>
               <Input
-                type="text"
-                id="token"
-                placeholder="Token"
-                {...formik.getFieldProps("token")}
-                error={formik.touched.token ? formik.errors.token : ""}
+                type="number"
+                id="amount"
+                placeholder="Amount"
+                {...formik.getFieldProps("amount")}
+                error={formik.touched.amount ? formik.errors.amount : ""}
               />
             </div>
           </form>

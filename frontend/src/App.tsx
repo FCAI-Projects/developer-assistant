@@ -18,6 +18,7 @@ import { Calendar } from "./pages/Calendar";
 import { Task } from "./pages/Project/Task";
 import { Invitations } from "./pages/Invitations";
 import { Video } from "./pages/Video";
+import { Statistics } from "./pages/Statistics";
 
 export const App: React.FC = () => {
   const authToken = useRecoilValue(authState);
@@ -43,6 +44,7 @@ export const App: React.FC = () => {
           </Route>
         </Route>
         <Route path="/app" element={<RedirectToLogin />}>
+          <Route path="statistics" element={<Statistics />} />
           <Route element={<AppLayout />}>
             <Route index element={<Projects />} />
             <Route path="settings" element={<Settings />} />

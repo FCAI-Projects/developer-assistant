@@ -3,12 +3,16 @@ import { RolesService } from './roles.service';
 import { Role, RoleDocument } from './entities/role.entity';
 import { CreateRoleInput } from './dto/create-role.input';
 import { UpdateRoleInput } from './dto/update-role.input';
-import { UseGuards } from '@nestjs/common';
+import { HttpException, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt.guard';
+import { MembersService } from 'src/members/members.service';
 
 @Resolver(() => Role)
 export class RolesResolver {
-  constructor(private readonly rolesService: RolesService) {}
+  constructor(
+    private readonly rolesService: RolesService,
+    private readonly membersService: MembersService,
+  ) {}
 
   @Mutation(() => Role)
   async createRole(
@@ -37,6 +41,13 @@ export class RolesResolver {
 
   @Mutation(() => Role)
   async removeRole(@Args('id') id: string): Promise<RoleDocument> {
+    const members = await this.membersService.findAllByRole(id);
+    if (members.length > 0) {
+      throw new HttpException(
+        'Cannot remove role because it is assigned to members',
+        403,
+      );
+    }
     return this.rolesService.remove(id);
   }
 }

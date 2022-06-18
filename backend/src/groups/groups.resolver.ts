@@ -41,7 +41,6 @@ export class GroupsResolver {
   @Query(() => Group || null, { name: 'checkMemberGroup' })
   @UseGuards(JwtAuthGuard)
   async CheckMemberGroup(@Args('id', { type: () => String }) id: string) {
-
     return await this.groupsService.findOne(id);
   }
 

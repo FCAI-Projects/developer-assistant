@@ -14,47 +14,60 @@ export class MembersService {
 
   async create(createMemberInput: CreateMemberInput): Promise<MemberDocument> {
     const createdMember = new this.memberModel(createMemberInput);
-    return createdMember.save();
+    return await createdMember.save();
   }
 
   async filter(filter: UpdateMemberInput): Promise<MemberDocument[]> {
-    return this.memberModel
-      .find({ filter, status: 'pending' })
+    return await this.memberModel
+      .find(filter)
       .populate('user')
       .populate('project');
+  }
+
+  async getUserProjects(user: string): Promise<MemberDocument[]> {
+    return await this.memberModel
+      .find({ user, status: 'joined' })
+      .populate({ path: 'project', populate: { path: 'owner' } });
   }
 
   async findMembersByProject(projectId: string): Promise<MemberDocument[]> {
-    return this.memberModel
-      .find({ projectId, status: 'joined' })
+    return await this.memberModel
+      .find({ project: projectId, status: 'joined' })
+      .populate('user')
+      .populate('project')
+      .populate('role');
+  }
+
+  async findOne(id: string): Promise<MemberDocument> {
+    return await this.memberModel
+      .findOne({ id })
       .populate('user')
       .populate('project');
   }
 
-  async findOne(id: string): Promise<MemberDocument> {
-    return this.memberModel
-      .findOne({ id })
-      .populate('user')
-      .populate('project');
+  async findAllByRole(id: string): Promise<MemberDocument[]> {
+    return await this.memberModel.find({ role: id });
   }
 
   async findUserInProject(
     user: string,
     project: string,
   ): Promise<MemberDocument> {
-    return (await this.memberModel.findOne({ user, project })).populate('role');
+    return await (
+      await this.memberModel.findOne({ user, project })
+    )?.populate('role');
   }
 
   async update(
     id: string,
     updateMemberInput: UpdateMemberInput,
   ): Promise<MemberDocument> {
-    return this.memberModel.findByIdAndUpdate(id, updateMemberInput, {
+    return await this.memberModel.findByIdAndUpdate(id, updateMemberInput, {
       new: true,
     });
   }
 
   async remove(id: string): Promise<MemberDocument> {
-    return this.memberModel.findByIdAndRemove(id);
+    return await this.memberModel.findByIdAndRemove(id);
   }
 }

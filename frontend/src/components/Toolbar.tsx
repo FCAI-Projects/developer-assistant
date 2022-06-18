@@ -1,8 +1,8 @@
 import React from "react";
 import { FaCogs, FaDoorOpen } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { useSetRecoilState } from "recoil";
-import { authState } from "../recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { authState, roleState } from "../recoil";
 import { Breadcrumb } from "./Breadcrumb";
 import { Button } from "./Button";
 import { InviteMemberModal } from "./modals/InviteMemberModal";
@@ -26,6 +26,7 @@ export const Toolbar: React.FC<IProps> = ({
   logoutButton,
 }) => {
   const setToken = useSetRecoilState(authState);
+  const role = useRecoilValue(roleState);
   const handleLogout = () => {
     localStorage.removeItem("token");
     setToken(null);

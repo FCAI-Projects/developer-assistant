@@ -6,12 +6,18 @@ import { UpdateMemberInput } from './dto/update-member.input';
 import { UsersService } from 'src/users/users.service';
 import { HttpException, HttpStatus, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt.guard';
+import { ProjectsService } from 'src/projects/projects.service';
+import { GroupsService } from 'src/groups/groups.service';
+import { TasksService } from 'src/tasks/tasks.service';
 
 @Resolver(() => Member)
 export class MembersResolver {
   constructor(
     private readonly membersService: MembersService,
     private readonly usersService: UsersService,
+    private readonly projectsService: ProjectsService,
+    private readonly groupsService: GroupsService,
+    private readonly tasksService: TasksService,
   ) {}
 
   @Mutation(() => Member)
@@ -25,6 +31,17 @@ export class MembersResolver {
       throw new HttpException('User Not Found', HttpStatus.NOT_FOUND);
     }
     inviteMemberInput.user = user._id;
+
+    const project = await this.projectsService.findOne(
+      inviteMemberInput.project,
+    );
+
+    if (project.owner.toString() === inviteMemberInput.user.toString()) {
+      throw new HttpException(
+        'You can not invite yourself to the project',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
 
     const userInProject = await this.membersService.findUserInProject(
       inviteMemberInput.user,
@@ -45,7 +62,10 @@ export class MembersResolver {
   async getUserInvitations(
     @Context('req') context: any,
   ): Promise<MemberDocument[]> {
-    return await this.membersService.filter({ user: context.user._id });
+    return await this.membersService.filter({
+      user: context.user._id,
+      status: 'pending',
+    });
   }
 
   @Query(() => [Member])
@@ -72,7 +92,11 @@ export class MembersResolver {
   async findUserRoleOfProject(
     @Context('req') context: any,
     @Args('project') project: string,
-  ): Promise<MemberDocument> {
+  ): Promise<any> {
+    const projectRecord = await this.projectsService.findOne(project);
+    if (context.user._id.toString() === projectRecord.owner.toString()) {
+      return true;
+    }
     return this.membersService.findUserInProject(context.user._id, project);
   }
 
@@ -86,6 +110,8 @@ export class MembersResolver {
 
   @Mutation(() => Member)
   async removeMember(@Args('id') id: string): Promise<MemberDocument> {
+    await this.groupsService.removeMember(id);
+    await this.tasksService.removeMemberFromAssign(id);
     return await this.membersService.remove(id);
   }
 }

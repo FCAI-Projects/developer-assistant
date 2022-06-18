@@ -50,6 +50,14 @@ export class GroupsService {
     );
   }
 
+  async removeMember(id: string): Promise<any> {
+    await this.groupModel.updateMany(
+      { members: { $in: id } },
+      { members: { $pull: id } },
+      { new: true },
+    );
+  }
+
   async remove(id: string): Promise<GroupDocument> {
     return await this.groupModel.findByIdAndRemove(id);
   }
