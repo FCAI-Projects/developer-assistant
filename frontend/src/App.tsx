@@ -1,5 +1,5 @@
 import { Routes, Route, Navigate, useNavigate, Outlet } from "react-router-dom";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Home } from "./pages/Home";
 import { Login } from "./pages/Login";
 import { Register } from "./pages/Regsiter";
@@ -19,8 +19,13 @@ import { Task } from "./pages/Project/Task";
 import { Invitations } from "./pages/Invitations";
 import { Video } from "./pages/Video";
 import { Statistics } from "./pages/Statistics";
+import {  onMessageListener } from "./firebaseInit";
+import ReactNotificationComponent from "./components/Notifications/ReactNotification";
+import Notifications from "./components/Notifications/Notifications";
 
 export const App: React.FC = () => {
+  const [show, setShow] = useState(false);
+  const [notification, setNotification] = useState({ title: "", body: "" });
   const authToken = useRecoilValue(authState);
 
   const RedirectToLogin: React.FC = () => {
@@ -33,8 +38,33 @@ export const App: React.FC = () => {
     return <Outlet />;
   };
 
+  onMessageListener()
+    .then((payload) => {
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/firebase-messaging-sw.js', {
+          scope: '/',
+        });
+      }
+      setShow(true);
+      setNotification({
+        title: payload.notification.title,
+        body: payload.notification.body,
+      });
+      console.log(payload);
+    })
+    .catch((err) => console.log("failed: ", err));
+
   return (
     <div className="min-h-screen bg-slate-50">
+      {show ? (
+        <ReactNotificationComponent
+          title={notification.title}
+          body={notification.body}
+        />
+      ) : (
+        <></>
+      )}
+      <Notifications />
       <Routes>
         <Route path="/">
           <Route index element={<Home />} />
@@ -69,11 +99,4 @@ export const App: React.FC = () => {
   );
 };
 
-/**
- * 1- open project page
- * 2- get user role of this project (if user is admin, he can see all the project optioins and store recoil state is set to true)
- * 3- store it in recoil state
- * 4- use it authorize user to access project
- * 5- if user is not authorized, hide them
- 
- */
+

@@ -19,6 +19,7 @@
     "apollo-upload-client": "^17.0.0",
     "async": "^3.2.3",
     "axios": "^0.26.1",
+    "firebase": "^9.8.3",
     "formik": "^2.2.9",
     "graphql": "^16.4.0",
     "jsencrypt": "^3.2.1",
