@@ -12,8 +12,10 @@ import "react-toastify/dist/ReactToastify.css";
 import { setContext } from "@apollo/client/link/context";
 import adapter from "webrtc-adapter";
 import axios from "axios";
+import { QueryClient, QueryClientProvider } from "react-query";
 
 axios.defaults.baseURL = "http://localhost:3030";
+axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem("token")}`;
 
 const httpLink = createUploadLink({
   uri: "http://localhost:3030/graphql",
@@ -36,15 +38,19 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
+const queryClient = new QueryClient();
+
 ReactDOM.render(
   <React.StrictMode>
     <RecoilRoot>
-      <ApolloProvider client={client}>
-        <BrowserRouter>
-          <App />
-          <ToastContainer />
-        </BrowserRouter>
-      </ApolloProvider>
+      <QueryClientProvider client={queryClient}>
+        <ApolloProvider client={client}>
+          <BrowserRouter>
+            <App />
+            <ToastContainer />
+          </BrowserRouter>
+        </ApolloProvider>
+      </QueryClientProvider>
     </RecoilRoot>
   </React.StrictMode>,
   document.getElementById("root")

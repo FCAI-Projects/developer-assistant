@@ -6,6 +6,8 @@ import { join } from 'path';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  app.enableCors();
+
   app.use(graphqlUploadExpress({ maxFileSize: 2 * 1000 * 1000 }));
   app.setBaseViewsDir(join(__dirname, '..', 'src/views'));
   app.setViewEngine('hbs');
