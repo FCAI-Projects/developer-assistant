@@ -14,5 +14,6 @@ import {
     ]),
   ],
   providers: [TimeTrackingResolver, TimeTrackingService],
+  exports: [TimeTrackingService],
 })
 export class TimeTrackingModule {}

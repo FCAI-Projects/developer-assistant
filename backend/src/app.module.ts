@@ -22,6 +22,7 @@ import { UploadsModule } from './uploads/uploads.module';
 import { PaymentcallbackModule } from './paymentcallback/paymentcallback.module';
 import { PaymentModule } from './payment/payment.module';
 import { GithubModule } from './github/github.module';
+import { StatisticsModule } from './statistics/statistics.module';
 
 export const configDB = MongooseModule.forRoot(
   'mongodb+srv://gp:gp123456@cluster0.fyzf3.mongodb.net/developer-assistant?retryWrites=true&w=majority',
@@ -57,7 +58,8 @@ export const configGraphQL =  GraphQLModule.forRoot({
 
     PaymentcallbackModule,
     PaymentModule,
-    GithubModule
+    GithubModule,
+    StatisticsModule
 
   ],
   controllers: [AppController],

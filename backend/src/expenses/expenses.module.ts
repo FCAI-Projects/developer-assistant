@@ -9,5 +9,6 @@ import { Expense, ExpenseSchema } from './entities/expense.entity';
     MongooseModule.forFeature([{ name: Expense.name, schema: ExpenseSchema }]),
   ],
   providers: [ExpensesResolver, ExpensesService],
+  exports: [ExpensesService],
 })
 export class ExpensesModule {}

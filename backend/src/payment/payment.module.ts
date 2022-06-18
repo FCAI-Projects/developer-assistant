@@ -13,6 +13,7 @@ import { MongooseModule } from '@nestjs/mongoose';
       },
     ]),
   ],
-  providers: [PaymentResolver, PaymentService]
+  providers: [PaymentResolver, PaymentService],
+  exports: [PaymentService],
 })
 export class PaymentModule {}
