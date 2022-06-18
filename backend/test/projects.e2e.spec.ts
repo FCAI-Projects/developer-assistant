@@ -20,18 +20,19 @@ describe('ProjectsController (e2e)', () => {
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [ProjectsModule, configDB, configGraphQL],
-     
-    }).overrideGuard(JwtAuthGuard)
+    })
+      .overrideGuard(JwtAuthGuard)
       .useValue({
         canActivate: (context: ExecutionContext) => {
           const ctx = GqlExecutionContext.create(context);
           ctx.getContext().req.user = { _id: '62a1ec12fe3c40e2b58a7259' }; // Your user object
           return true;
         },
-      }).compile();
+      })
+      .compile();
 
     app = moduleFixture.createNestApplication();
-   
+
     await app.init();
     jest.clearAllMocks();
   });
@@ -47,12 +48,11 @@ describe('ProjectsController (e2e)', () => {
                 name
                 id
                 budget
-                describtion
+                description
                 clientEmail,
                
             }
           }`,
-        
       })
       .expect(200)
       .expect((res) => {
@@ -67,27 +67,27 @@ describe('ProjectsController (e2e)', () => {
         query: `mutation Mutation($createProjectInput: CreateProjectInput!) {
             createProject(createProjectInput: $createProjectInput) {
               budget
-              describtion
+              description
               clientEmail
               name
               id
             }
           }`,
-          variables: {
-            "createProjectInput": {
-                "name": projects.name,
-                "clientEmail": projects.clientEmail,
-                "describtion": projects.describtion,
-                "budget": projects.budget
-              }
+        variables: {
+          createProjectInput: {
+            name: projects.name,
+            clientEmail: projects.clientEmail,
+            description: projects.description,
+            budget: projects.budget,
           },
+        },
       })
       .expect(200)
       .expect((res) => {
         expect(res.body.data.createProject).toEqual(projects);
       });
   });
- 
+
   test('/ find projects by id', () => {
     return request(app.getHttpServer())
       .post(gql)
@@ -97,13 +97,13 @@ describe('ProjectsController (e2e)', () => {
               id
               name
               clientEmail
-              describtion
+              description
               budget
             }
           }`,
-          variables: {
-            "projectId": projects.id
-          },
+        variables: {
+          projectId: projects.id,
+        },
       })
       .expect(200)
       .expect((res) => {
@@ -120,19 +120,19 @@ describe('ProjectsController (e2e)', () => {
               id
               name
               clientEmail
-              describtion
+              description
               budget
             }
           }`,
-          variables: {
-            "updateProjectId": projects.id,
-            "updateProjectInput": {
-                "name": projects.name,
-                "clientEmail": projects.clientEmail,
-                "describtion": projects.describtion,
-                "budget": projects.budget
-            }
+        variables: {
+          updateProjectId: projects.id,
+          updateProjectInput: {
+            name: projects.name,
+            clientEmail: projects.clientEmail,
+            description: projects.description,
+            budget: projects.budget,
           },
+        },
       })
       .expect(200)
       .expect((res) => {

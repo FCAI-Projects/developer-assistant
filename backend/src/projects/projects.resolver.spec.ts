@@ -21,7 +21,6 @@ describe('ProjectsResolver', () => {
   let resolver: ProjectsResolver;
   let service: ProjectsService;
 
-  
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
@@ -52,7 +51,6 @@ describe('ProjectsResolver', () => {
     jest.clearAllMocks();
   });
 
-
   const mockExecutionContext = createMock<ExecutionContext>();
   describe('get owner projects', () => {
     describe('when get owner projects', () => {
@@ -63,7 +61,6 @@ describe('ProjectsResolver', () => {
       });
 
       test('call project services', () => {
-        
         expect(service.findMyPorjects).toHaveBeenCalled();
       });
       test('return projects', () => {
@@ -74,8 +71,7 @@ describe('ProjectsResolver', () => {
 
   describe('createProject', () => {
     describe('when createProject is called', () => {
-      
-      let createProjectInput: CreateProjectInput
+      let createProjectInput: CreateProjectInput;
       let project: Project;
 
       beforeEach(async () => {
@@ -83,26 +79,27 @@ describe('ProjectsResolver', () => {
           name: projectStub().name,
           budget: projectStub().budget,
           clientEmail: projectStub().clientEmail,
-          describtion: projectStub().describtion
-        }
-        project = await resolver.createProject(mockExecutionContext.switchToHttp(), createProjectInput);
-        
-      })
+          description: projectStub().description,
+        };
+        project = await resolver.createProject(
+          mockExecutionContext.switchToHttp(),
+          createProjectInput,
+        );
+      });
 
       test('then it should call projectsService', () => {
         expect(service.create).toHaveBeenCalled();
-      })
+      });
 
       test('then it should return a project', () => {
-        expect(project).toEqual(projectStub())
-      })
-    })
-  })
+        expect(project).toEqual(projectStub());
+      });
+    });
+  });
 
   describe('updateProject', () => {
     describe('when updateProject is called', () => {
-      
-      let updateProjectInput: UpdateProjectInput
+      let updateProjectInput: UpdateProjectInput;
       let project: Project;
 
       beforeEach(async () => {
@@ -110,19 +107,21 @@ describe('ProjectsResolver', () => {
           name: projectStub().name,
           budget: projectStub().budget,
           clientEmail: projectStub().clientEmail,
-          describtion: projectStub().describtion
-        }
-        project = await resolver.updateProject(projectStub().id.toString(), updateProjectInput);
-        
-      })
+          description: projectStub().description,
+        };
+        project = await resolver.updateProject(
+          projectStub().id.toString(),
+          updateProjectInput,
+        );
+      });
 
       test('then it should call projectsService', () => {
         expect(service.update).toHaveBeenCalled();
-      })
+      });
 
       test('then it should return a project', () => {
-        expect(project).toEqual(projectStub())
-      })
-    })
-  })
+        expect(project).toEqual(projectStub());
+      });
+    });
+  });
 });

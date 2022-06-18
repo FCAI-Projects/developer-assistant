@@ -449,7 +449,7 @@ input UpdateUserInput {
   password: String
   googleAppPassword: String
 
-  githubToekn: String
+  githubToken: String
 
   githubToken: String
 }

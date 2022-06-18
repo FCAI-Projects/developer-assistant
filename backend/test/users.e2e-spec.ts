@@ -15,9 +15,8 @@ describe('UsersController (e2e)', () => {
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [UsersModule, configDB, configGraphQL],
-     
     })
-    .overrideGuard(JwtAuthGuard)
+      .overrideGuard(JwtAuthGuard)
       .useValue({
         canActivate: (context: ExecutionContext) => {
           const ctx = GqlExecutionContext.create(context);
@@ -32,22 +31,20 @@ describe('UsersController (e2e)', () => {
     jest.clearAllMocks();
   });
   const gql = '/graphql';
-//   let tasks = {
-//     id: '62ab3cc271449c781378ee24' as unknown as ObjectId,
-//     name: 'Task 1',
-//     description: 'Task 1 description',
+  //   let tasks = {
+  //     id: '62ab3cc271449c781378ee24' as unknown as ObjectId,
+  //     name: 'Task 1',
+  //     description: 'Task 1 description',
 
-//     attachments: [],
-//     status: 'todo',
-//     periority: 'medium',
-//     tags: [],
-//     startedAt: '2022-06-17T15:06:21.365Z',
-//     finishedAt: '2022-06-17T15:06:21.365Z',
-//     deadline: '2022-06-17T15:06:21.365Z',
-//     docs: '',
-//   }
-
-
+  //     attachments: [],
+  //     status: 'todo',
+  //     periority: 'medium',
+  //     tags: [],
+  //     startedAt: '2022-06-17T15:06:21.365Z',
+  //     finishedAt: '2022-06-17T15:06:21.365Z',
+  //     deadline: '2022-06-17T15:06:21.365Z',
+  //     docs: '',
+  //   }
 
   test('/ get all users', () => {
     return request(app.getHttpServer())
@@ -61,13 +58,13 @@ describe('UsersController (e2e)', () => {
               email
               password
               googleAppPassword
-              githubToekn
+              githubToken
             }
           }`,
       })
       .expect(200)
       .expect((res) => {
-        expect(res.body.data.users).toEqual([usersStub()]); 
+        expect(res.body.data.users).toEqual([usersStub()]);
       });
   });
 
@@ -81,21 +78,18 @@ describe('UsersController (e2e)', () => {
               token
             }
           }`,
-          variables: {
-            "createUserInput": {
-                "fname": usersStub().fname,
-                "lname": usersStub().lname,
-                "email": usersStub().email,
-                "password": usersStub().password
-              }
-            
+        variables: {
+          createUserInput: {
+            fname: usersStub().fname,
+            lname: usersStub().lname,
+            email: usersStub().email,
+            password: usersStub().password,
           },
+        },
       })
       .expect(200)
       .expect((res) => {
         expect(res.body).not.toEqual(null);
       });
   });
-
-
 });
