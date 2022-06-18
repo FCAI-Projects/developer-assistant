@@ -22,7 +22,6 @@ import { UsersService } from 'src/users/users.service';
 import * as nodemailer from 'nodemailer';
 import * as axios from 'axios';
 
-
 @Resolver(() => Project)
 export class ProjectsResolver {
   constructor(
@@ -43,7 +42,7 @@ export class ProjectsResolver {
       createProjectInput,
       context.user._id,
     );
-    
+
     // Create base roles for project
     await this.rolesService.create({
       name: 'Admin',
@@ -162,7 +161,9 @@ export class ProjectsResolver {
     if (!user.connectedWihGithub)
       throw new HttpException('You are not connected with github', 401);
 
-    const { data } = await axios.default.post(
+    console.log(user.githubToken);
+
+    const { data, headers } = await axios.default.post(
       'https://api.github.com/user/repos',
       { name: project.name },
       {
@@ -172,12 +173,11 @@ export class ProjectsResolver {
         },
       },
     );
-
     if (data)
       await this.projectsService.update(project._id, {
         gihubRepo: data.full_name,
       });
 
-    console.log(data);
+    console.log(headers);
   }
 }
