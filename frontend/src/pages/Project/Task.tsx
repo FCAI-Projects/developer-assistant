@@ -13,6 +13,7 @@ import { Comments } from "../../components/TaskPage/Comments";
 import { Deadline } from "../../components/TaskPage/Deadline";
 import { Docs } from "../../components/TaskPage/Docs";
 import { PrivateNote } from "../../components/TaskPage/PrivateNote";
+import { StartDate } from "../../components/TaskPage/StartDate";
 import { TimeTracking } from "../../components/TaskPage/TimeTracking";
 import {
   ProjectListsDocument,
@@ -99,6 +100,7 @@ export const Task: React.FC = () => {
         </div>
         <div className="flex basis-2/6 flex-col gap-5">
           <TimeTracking taskId={taskId} />
+          <StartDate handleUpdateTask={handleUpdateTask} startDate={taskData?.task.startedAt} />
           <Deadline handleUpdateTask={handleUpdateTask} deadline={taskData?.task.deadline} />
           {taskData?.task.status === "done" && (
             <div className="flex items-center justify-between">
