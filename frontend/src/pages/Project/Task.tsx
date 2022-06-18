@@ -14,7 +14,14 @@ import { Deadline } from "../../components/TaskPage/Deadline";
 import { Docs } from "../../components/TaskPage/Docs";
 import { PrivateNote } from "../../components/TaskPage/PrivateNote";
 import { TimeTracking } from "../../components/TaskPage/TimeTracking";
-import { ProjectListsDocument, RemoveTaskDocument, TaskByIdDocument, TaskDocument, UpdateTaskDocument, useTaskByIdQuery } from "../../graphql/generated/graphql";
+import {
+  ProjectListsDocument,
+  RemoveTaskDocument,
+  TaskByIdDocument,
+  TaskDocument,
+  UpdateTaskDocument,
+  useTaskByIdQuery,
+} from "../../graphql/generated/graphql";
 import { roleState } from "../../recoil";
 
 export const Task: React.FC = () => {
@@ -33,7 +40,7 @@ export const Task: React.FC = () => {
   const [deleteTask, { error: deletError }] = useMutation(RemoveTaskDocument, {
     refetchQueries: [{ query: ProjectListsDocument, variables: { project: projectId.id } }],
   });
-  
+
   const handleUpdateTask = async (field: string, value: string) => {
     await updateTask({
       variables: {
@@ -93,23 +100,31 @@ export const Task: React.FC = () => {
         <div className="flex basis-2/6 flex-col gap-5">
           <TimeTracking taskId={taskId} />
           <Deadline handleUpdateTask={handleUpdateTask} deadline={taskData?.task.deadline} />
-          {
-            !taskData?.task.status && (
-              <Button 
-                green 
-                onClick={() => handleUpdateTask("status", "done")}
-              >
-                Done
+          {taskData?.task.status === "done" && (
+            <div className="flex items-center justify-between">
+              <p>This Task is done</p>
+              <Button lightYellow onClick={() => handleUpdateTask("status", "todo")}>
+                Reset
               </Button>
-            )
-          }
+            </div>
+          )}
+          {taskData?.task.status === "todo" && (
+            <Button yellow onClick={() => handleUpdateTask("status", "doing")}>
+              Doing
+            </Button>
+          )}
+          {taskData?.task.status === "doing" && (
+            <Button green onClick={() => handleUpdateTask("status", "done")}>
+              Done
+            </Button>
+          )}
           <AssignMember />
           <PrivateNote />
           <Attachments data={taskData?.task.attachments} id={taskId} refetchTask={refetchTask} />
 
           {(role.admin || role.deleteTask) && (
-            <Button 
-              lightRed 
+            <Button
+              lightRed
               className="flex items-center justify-center gap-2"
               onClick={async () => {
                 try {
