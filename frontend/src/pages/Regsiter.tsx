@@ -47,8 +47,8 @@ export const Register: React.FC = () => {
 
   useEffect(() => {
     if (data) {
-      localStorage.setItem("token", data.login.token);
-      setToken(data.login.token);
+      setToken(data.createUser.token);
+      localStorage.setItem("token", data.createUser.token);
     }
   }, [data]);
 

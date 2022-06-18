@@ -9,4 +9,10 @@ export class UpdateUserInput extends PartialType(CreateUserInput) {
 
   @Field(() => String, { nullable: true })
   githubToken?: string;
+
+  @Field(() => Boolean, { nullable: true })
+  connectedWihGoogle?: boolean;
+
+  @Field(() => Boolean, { nullable: true })
+  connectedWihGithub?: boolean;
 }

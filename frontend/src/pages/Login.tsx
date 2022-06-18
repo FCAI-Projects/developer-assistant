@@ -43,8 +43,6 @@ export const Login: React.FC = () => {
     if (data) {
       setToken(data.login.token);
       localStorage.setItem("token", data.login.token);
-      console.log(data);
-      localStorage.setItem("id", data.login.userId);
     }
   }, [data]);
 

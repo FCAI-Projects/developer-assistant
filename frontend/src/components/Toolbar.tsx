@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { FaCogs, FaDoorOpen } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { authState, roleState } from "../recoil";
 import { Breadcrumb } from "./Breadcrumb";
@@ -31,11 +31,29 @@ export const Toolbar: React.FC<IProps> = ({
     localStorage.removeItem("token");
     setToken(null);
   };
+  const [links, setLinks] = React.useState<any[]>([{ name: "Home", link: "/app" }]);
+  const location = useLocation();
+  const path = location.pathname;
+
+  useEffect(() => {
+    const linksArr = path.split("/").filter((item) => item !== "" && item !== "app");
+    const linksTemp = [{ name: "Home", link: "/app" }];
+    linksArr.map((item, index) => {
+      if (item === "project") {
+        linksTemp.push({ name: "Project", link: `/app/project/${linksArr[index + 1]}` });
+      } else if (item === "settings") {
+        linksTemp.push({ name: "Settings", link: `/app/project/${linksArr[index - 1]}/settings` });
+      } else if (item === "task") {
+        linksTemp.push({ name: "Task", link: `/app/project/${linksArr[index - 1]}/task/${linksArr[index + 1]}` });
+      }
+    });
+    setLinks(linksTemp);
+  }, [path]);
 
   return (
     <div className="flex items-center justify-between border-b p-2.5">
       <div>
-        <Breadcrumb list={[{ name: "Home", link: "/app" }]} />
+        <Breadcrumb list={links} />
       </div>
       <div className="flex items-center gap-2">
         {newProjectModal && <NewProjectModal />}

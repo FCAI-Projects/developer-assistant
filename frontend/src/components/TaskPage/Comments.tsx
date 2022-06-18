@@ -102,7 +102,7 @@ export const Comments: React.FC<CommentsProps> = () => {
                     <h6 className="font-medium">{comment.user.fname + " " + comment.user.lname}</h6>
                     <div className="flex items-center">
                       <p className="text-xs">{new Date(comment.createdAt).toLocaleString("en-us")}</p>
-                      <Button
+                      {/* <Button
                         lightRed
                         className="ml-2 px-2 py-2 text-xs"
                         onClick={() => {
@@ -111,7 +111,7 @@ export const Comments: React.FC<CommentsProps> = () => {
                         disabled={DeleteLoding}
                       >
                         <FaTrash />
-                      </Button>
+                      </Button> */}
                     </div>
                   </header>
                   <p className="text-slate-600">{comment.content}</p>
