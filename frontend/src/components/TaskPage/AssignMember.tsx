@@ -1,4 +1,5 @@
 import { useMutation } from "@apollo/client";
+import axios from "axios";
 import React, { useEffect } from "react";
 import { FaGreaterThanEqual, FaTrash } from "react-icons/fa";
 import { useParams } from "react-router-dom";
@@ -57,7 +58,7 @@ export const AssignMember: React.FC<AssignMemberProps> = () => {
           taskData?.task.assign?.map((member) => (
             <div key={member.id} className="flex items-center gap-2">
               <img
-                src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80"
+                src={axios.defaults.baseURL + "/uploads/avatars/" + member.avatar}
                 alt="Image"
                 className="h-8 w-8 rounded-full"
               />

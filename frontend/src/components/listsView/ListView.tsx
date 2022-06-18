@@ -51,7 +51,6 @@ export const ListView: React.FC<ListProps> = ({ list, index, projectId, refetchT
                         className="p-1 text-sm text-slate-600 hover:text-red-600"
                         onClick={() => {
                           if (list.tasks.length === 0) {
-                            console.log(list.tasks.length);
                             removeList({
                               variables: {
                                 removeProjectListsId: list.id,

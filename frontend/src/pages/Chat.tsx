@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { FaAngleRight, FaVideo } from "react-icons/fa";
+import { FaAngleRight, FaTrash, FaVideo } from "react-icons/fa";
 import socketIOClient from "socket.io-client";
-import { useGroupsQuery } from "../graphql/generated/graphql";
+import { GroupsDocument, RemoveGroupDocument, useGroupsQuery } from "../graphql/generated/graphql";
 import { Loader } from "../components/Loader";
 import { useRecoilValue } from "recoil";
 import { authState } from "../recoil";
@@ -9,6 +9,10 @@ import { decodeToken } from "react-jwt";
 import { NewGroupModel } from "../components/modals/NewGroupModel";
 import { Link } from "react-router-dom";
 import { useRsaEncrypt } from "../hooks/useRsaEncrypt";
+import { UpdateGroupModel } from "../components/modals/UpdateGroupModel";
+import { Button } from "../components/Button";
+import { useMutation } from "@apollo/client";
+import { toast } from "react-toastify";
 
 const socket = socketIOClient("http://localhost:3030");
 
@@ -17,9 +21,25 @@ export const Chat: React.FC = () => {
   const [id, setId] = useState("");
   const { encrypt } = useRsaEncrypt();
   const { data, loading } = useGroupsQuery();
+  const [deleteGroup, { loading: DeleteLoding }] = useMutation(RemoveGroupDocument, {
+    refetchQueries: [{ query: GroupsDocument }],
+  });
   const [message, setMessage] = useState("");
   const [selectedGroup, setSelectedGroup] = useState<any>(null);
   const [messages, setMessages] = useState<any>([]);
+
+  const handelDeleteGroup = async (id: string) => {
+    try {
+      await deleteGroup({
+        variables: {
+          removeGroupId: id,
+        },
+      }); 
+      toast.success("Group deleted successfully");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const sendMessage = async () => {
     const data = {
@@ -91,10 +111,31 @@ export const Chat: React.FC = () => {
                   ))}
                 </p>
               </div>
-              <div>
+              <div className="flex justify-between items-center">
                 <Link to={"/app/chat/video/" + selectedGroup.id} target="_blank">
-                  <FaVideo className="cursor-pointer text-xl text-slate-600" />
+                  <Button
+                    lightBlue
+                    className="px-2 py-1 text-xs"
+                  >
+                    <FaVideo className="cursor-pointer text-xl" />
+                  </Button>
                 </Link>
+                <UpdateGroupModel 
+                  groupId={selectedGroup.id} 
+                  name={selectedGroup.name}
+                  projectInGroup={selectedGroup.project}
+                  membersInGroup={selectedGroup.members}
+                />
+                <Button
+                  lightRed
+                  className="ml-3 px-2 py-2 text-l cursor-pointer"
+                  onClick={() => {
+                    handelDeleteGroup(selectedGroup.id);
+                  }}
+                  disabled={DeleteLoding}
+                >
+                  <FaTrash />
+                </Button>
               </div>
             </header>
             <div className="mb-1 flex max-h-screen flex-col items-baseline gap-5 overflow-auto p-5 scrollbar-thin scrollbar-track-slate-200 scrollbar-thumb-slate-500">

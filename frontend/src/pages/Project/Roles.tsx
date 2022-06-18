@@ -2,6 +2,7 @@ import { useMutation } from "@apollo/client";
 import React from "react";
 import { FaTrash } from "react-icons/fa";
 import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import { Button } from "../../components/Button";
 import { NewRoleModel } from "../../components/modals/NewRoleModel";
 import { UpdateRoleModel } from "../../components/modals/UpdateRoleModel";
@@ -54,12 +55,17 @@ export const ProjectRoles: React.FC = () => {
                 <Button
                   lightRed
                   className="px-3 py-3 text-xs"
-                  onClick={() => {
-                    deleteRole({
-                      variables: {
-                        removeRoleId: role.id,
-                      },
-                    });
+                  onClick={ async ()  =>  {
+                    try {
+                      await deleteRole({
+                        variables: {
+                          removeRoleId: role.id,
+                        },
+                      });
+                      toast.success("Role Deleted");
+                    } catch (error: any) {
+                      toast.error(error.message);
+                    }
                   }}
                   disabled={loading}
                 >

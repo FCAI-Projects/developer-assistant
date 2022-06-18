@@ -34,3 +34,15 @@ query Query($checkMemberGroupId: String!) {
     }
   }
 }
+
+mutation UpdateGroup($updateGroupInput: UpdateGroupInput!) {
+  updateGroup(updateGroupInput: $updateGroupInput) {
+    id
+  }
+}
+
+mutation RemoveGroup($removeGroupId: String!) {
+  removeGroup(id: $removeGroupId) {
+    id
+  }
+}
