@@ -9,5 +9,6 @@ export const projectStub = (): Project => {
     clientEmail: 'emohamef733@gmail.com',
     budget: 100,
     owner: '62a1e8c94eb35edfc37ba122' as unknown as ObjectId,
+    gihubRepo : undefined,
   };
 };

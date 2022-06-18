@@ -86,7 +86,6 @@
     "typescript": "^4.3.5"
   },
   "jest": {
-    "modulePaths": ["<rootDir>"],
     "moduleNameMapper": {
       "^src/(.*)$": "<rootDir>/$1"
     },
@@ -95,8 +94,7 @@
       "json",
       "ts"
     ],
-    "moduleDirectories": ["node_modules", "./"],
-    "rootDir": "./",
+    "rootDir": "src",
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"

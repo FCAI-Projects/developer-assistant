@@ -64,8 +64,8 @@ describe('ProjectsController (e2e)', () => {
     return request(app.getHttpServer())
       .post(gql)
       .send({
-        query: `mutation Mutation($createProjectInput: CreateProjectInput!) {
-            createProject(createProjectInput: $createProjectInput) {
+        query: `mutation Mutation($createProjectInput: CreateProjectInput!, $github: Boolean!) {
+            createProject(createProjectInput: $createProjectInput, , github: $github) {
               budget
               description
               clientEmail
@@ -80,6 +80,7 @@ describe('ProjectsController (e2e)', () => {
             description: projects.description,
             budget: projects.budget,
           },
+          github: false
         },
       })
       .expect(200)

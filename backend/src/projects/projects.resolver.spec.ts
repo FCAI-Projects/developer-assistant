@@ -1,5 +1,5 @@
 import { ApolloDriver } from '@nestjs/apollo';
-import { ExecutionContext } from '@nestjs/common';
+import { ExecutionContext, forwardRef } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
 import { configDB, configGraphQL } from 'src/app.module';
@@ -13,6 +13,8 @@ import { ProjectsService } from './projects.service';
 import { CreateProjectInput } from './dto/create-project.input';
 import { projectStub } from './stubs/projects.stub';
 import { UpdateProjectInput } from './dto/update-project.input';
+import { UsersModule } from 'src/users/users.module';
+import { MembersModule } from 'src/members/members.module';
 
 jest.mock('./projects.service');
 jest.mock('../roles/roles.service');
@@ -27,6 +29,8 @@ describe('ProjectsResolver', () => {
         configDB,
         configGraphQL,
         RolesModule,
+        UsersModule,
+        forwardRef(() => MembersModule),
         MongooseModule.forFeature([
           {
             name: Project.name,
@@ -84,6 +88,7 @@ describe('ProjectsResolver', () => {
         project = await resolver.createProject(
           mockExecutionContext.switchToHttp(),
           createProjectInput,
+          false
         );
       });
 

@@ -46,6 +46,11 @@ describe('UsersController (e2e)', () => {
   //     docs: '',
   //   }
 
+  let users = usersStub();
+  users.avatar = undefined;
+  users.connectedWihGithub = undefined;
+  users.connectedWihGoogle = undefined;
+
   test('/ get all users', () => {
     return request(app.getHttpServer())
       .post(gql)

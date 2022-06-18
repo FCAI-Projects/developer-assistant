@@ -10,5 +10,8 @@ export const usersStub = (): User => {
     password: 'dksajk321ujkjdlsda',
     googleAppPassword: '62a1e8c94eb35edfc37ba122',
     githubToken: '62a1e8c94eb35edfc37ba122',
+    avatar: undefined,
+    connectedWihGoogle: undefined,
+    connectedWihGithub: undefined,
   };
 };
