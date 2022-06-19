@@ -57,7 +57,12 @@ export const NewProjectModal: React.FC = () => {
 
   return (
     <>
-      <Button lightBlue className="flex items-center gap-2 px-3 py-2 text-xs" onClick={toggleModal}>
+      <Button
+        lightBlue
+        className="flex items-center gap-2 px-3 py-2 text-xs"
+        onClick={toggleModal}
+        data-test="create-project"
+      >
         <FaPlus /> Create Project
       </Button>
       <Modal title="Create New Project" isOpen={isOpen} handleClose={toggleModal}>
