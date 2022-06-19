@@ -24,14 +24,17 @@ export class PaymentResolver {
   async createPayment(
     @Args('createPaymentInput') createPaymentInput: CreatePaymentInput,
   ) {
+
+    const paymentDB =  await this.paymentService.create(createPaymentInput);
+
     const paymentCon = paymentConfig[paymentConfig.mode];
 
     let order = {
       amount: createPaymentInput.amount,
       currency: 'EGP',
-      merchantOrderId: createPaymentInput.project,
+      merchantOrderId: paymentDB.id,
       mid: paymentCon.mid,
-      orderId: createPaymentInput.project,
+      orderId:  paymentDB.id,
       secret: paymentCon.iFrameSecret,
       baseUrl: paymentCon.baseUrl,
       hash: '',
@@ -43,16 +46,20 @@ export class PaymentResolver {
     let callbackUrl = encodeURI(
       'http://localhost:3030/' + 'paymentcallback/callback',
     );
-
+  
     //Hosted payment page URL
     let paymentUrl = `${paymentCon.baseUrl}/payment?mid=${order.mid}&orderId=${order.merchantOrderId}&amount=${order.amount}&currency=${order.currency}&hash=${order.hash}&merchantRedirect=${callbackUrl}`;
 
-    const createPaymentUrlInput: CreatePaymentUrlInput = {
-      ...createPaymentInput,
-      paymentUrl,
-    };
+    const updatePaymentInput: UpdatePaymentInput = {
+      paymentUrl: paymentUrl
+    }
 
-    return await this.paymentService.create(createPaymentUrlInput);
+    const updateRes = await this.paymentService.update(paymentDB.id, updatePaymentInput)
+    return {
+      id: paymentDB.id,
+      ...updateRes,
+      paymentUrl: paymentUrl
+    };
   }
 }
 

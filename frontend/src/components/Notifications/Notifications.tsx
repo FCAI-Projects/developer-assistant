@@ -19,7 +19,6 @@ const Notifications:  React.FC  = (props) => {
       setId(decode._id);
     }
   }, [authToken]);
-  console.log("Token found", isTokenFound);
 
   // To load once
   useEffect(() => {

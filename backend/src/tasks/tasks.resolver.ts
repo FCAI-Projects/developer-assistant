@@ -58,7 +58,11 @@ export class TasksResolver {
     @Args('id') id: string,
     @Args('updateTaskInput') updateTaskInput: UpdateTaskInput,
   ): Promise<TaskDocument> {
-    if(updateTaskInput.deadline) {
+    const task = await this.tasksService.findOne(id);
+    if(updateTaskInput.startedAt) {
+      this.deadlineNotifications(`${task.name} Task`, `${task.name} has been started`, id);
+    }
+    if (updateTaskInput.deadline) {
       this.createCronJob(id, updateTaskInput.deadline);
     }
     if (updateTaskInput.status === 'done')
@@ -167,50 +171,74 @@ export class TasksResolver {
 
   //2022-06-19T04:40:00.000+00:00
   private async createCronJob(id: string, date: Date): Promise<CronJob> {
-    
+    const task = await this.tasksService.findOne(id);
+
+    // handle if hours between deadline and current time less then 6 hours send notification now
+      const ms = new Date(date).getTime() - new Date().getTime();
+      const days = Math.floor(ms / (24 * 60 * 60 * 1000));
+      const daysms = ms % (24 * 60 * 60 * 1000);
+      const hours = Math.floor(daysms / (60 * 60 * 1000));
+    if(days === 0 && hours <= 6) {
+      this.deadlineNotifications(`Deadline ${task.name}`, `Deadline ${task.name} Task after ${hours} hours`, id);
+      return;
+    }
+
+    // if greater then 6 hours create cron job
     date.setHours(date.getHours() - 6);
-   
-    const job = new CronJob(
-      `${date.getSeconds()} ${
-        date.getMinutes()
-      } ${date.getHours()} ${date.getDate()} * *`,
-      async () => {
-        const task = await this.tasksService.findOne(id);
-        const project = task.project as unknown  as Project;
-        const user = await this.usersService.findOne(project.owner.toString());
-        console.log(user.firebaseToken);
-        // send notification to project owner
-        const notificationFirebase = {
-          notification: {
-            title: `Deadline ${task.name}`,
-            body: `Deadline ${task.name} Task after 6 hours`,
-          },
-          data: {
-            title: `Deadline ${task.name}`,
-            body: `Deadline ${task.name} Task after 6 hours`,
-          },
-        };
+    try {
+      if(this.schedulerRegistry.doesExist('cron', id)) this.schedulerRegistry.deleteCronJob(id);
+      
+    } catch (error) {
+      console.log(error);
+    }
 
-        this.firebaseService.sendNotification(
-          user.firebaseToken,
-          notificationFirebase,
-        );
+    try {
+      const job = new CronJob(
+        `${date.getSeconds()} ${date.getMinutes()} ${date.getHours()} ${date.getDate()} * *`,
+        async () => {
+          this.deadlineNotifications(`Deadline ${task.name}`, `Deadline ${task.name} Task after 6 hours`,id);
+          this.schedulerRegistry.deleteCronJob(id);
+        },
+      );
 
-        // send notification to project members
-        task.assign.forEach(async (member) => {
-          const user = member as unknown as User;
-          console.log(user.firebaseToken);
-          this.firebaseService.sendNotification(
-            user.firebaseToken,
-            notificationFirebase,
-          );
-        });
-        this.schedulerRegistry.deleteCronJob(id);
+      this.schedulerRegistry.addCronJob(id, job);
+      job.start();
+      return job;
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  // send notification to assgined users and project owner
+  private async deadlineNotifications(title: string, body: string,id: string) {
+    const task = await this.tasksService.findOne(id);
+    const project = task.project as unknown as Project;
+    const user = await this.usersService.findOne(project.owner.toString());
+
+    // send notification to project owner
+    const notificationFirebase = {
+      notification: {
+        title: title,
+        body: body
       },
+      data: {
+        title: title,
+        body: body
+      },
+    };
+
+    this.firebaseService.sendNotification(
+      user.firebaseToken,
+      notificationFirebase,
     );
 
-    this.schedulerRegistry.addCronJob(id, job);
-    job.start();
-    return job;
+    // send notification to project members
+    task.assign.forEach(async (member) => {
+      const user = member as unknown as User;
+      this.firebaseService.sendNotification(
+        user.firebaseToken,
+        notificationFirebase,
+      );
+    });
   }
 }

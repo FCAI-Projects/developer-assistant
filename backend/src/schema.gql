@@ -286,7 +286,7 @@ type Payment {
   project: Project!
 
   """payment url"""
-  paymentUrl: String!
+  paymentUrl: String
 
   """payment amount"""
   amount: Int!
