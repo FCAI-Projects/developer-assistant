@@ -56,28 +56,26 @@ export const ProjectMembers: React.FC = () => {
                 />
               )}
               {(role.admin || role.deleteMember) && (
-                <Button 
-                  lightRed 
+                <Button
+                  lightRed
                   onClick={() => {
                     Swal.fire({
-                      title: 'Are you sure delete member?',
-                      icon: 'warning',
+                      title: "Are you sure delete member?",
+                      icon: "warning",
                       showCancelButton: true,
-                      confirmButtonColor: '#3085d6',
-                      cancelButtonColor: '#d33',
-                      confirmButtonText: 'Yes, delete it !'
+                      confirmButtonColor: "#3085d6",
+                      cancelButtonColor: "#d33",
+                      confirmButtonText: "Yes, delete it !",
                     }).then(async (result) => {
                       if (result.isConfirmed) {
                         await handleDelete(member.id);
-                        Swal.fire(
-                          'Deleted!',
-                          'Member has been deleted.',
-                          'success'
-                        )
+                        Swal.fire("Deleted!", "Member has been deleted.", "success");
                       }
-                    })
-                  }} 
-                  className="psy-3 px-4" loading={loadingRemove}>
+                    });
+                  }}
+                  className="psy-3 px-4"
+                  loading={loadingRemove}
+                >
                   <FaTrash />
                 </Button>
               )}
