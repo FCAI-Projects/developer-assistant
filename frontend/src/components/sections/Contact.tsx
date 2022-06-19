@@ -5,7 +5,7 @@ import { Input, Label, Textarea } from "../forms";
 export const Contact: React.FC = () => {
   return (
     <div className="container mx-auto px-10" id="contact">
-      <p className="mt-6 mb-8 flex justify-center text-2xl font-semibold">Contact Us</p>
+      <p className="mt-6 mb-8 flex justify-center text-3xl font-bold text-cyan-800">Contact Us</p>
 
       <div className="mb-[80px]">
         <div className="grid gap-8 sm:grid-cols-1 md:grid-cols-2">

@@ -35,27 +35,28 @@ export const Navbar: React.FC = () => {
           >
             <ul className="flex flex-col items-center justify-center gap-6 bg-cyan-800 text-white md:flex-row md:items-center md:pt-0 md:text-sm md:font-medium">
               <li>
-                <NavLink className="block text-white hover:bg-cyan-700 md:border-0 md:hover:bg-transparent" to="/">
+                <a 
+                  className="block text-white hover:bg-cyan-700 md:border-0 md:hover:bg-transparent" 
+                  href=""
+                >
                   Home
-                </NavLink>
+                </a>
               </li>
               <li>
-                <NavLink className="block text-white hover:bg-cyan-700 md:border-0 md:hover:bg-transparent" to="/">
+                <a 
+                  className="block text-white hover:bg-cyan-700 md:border-0 md:hover:bg-transparent" 
+                  href="#features"
+                >
                   Features
-                </NavLink>
+                </a>
               </li>
               <li>
-                <NavLink className="block text-white hover:bg-cyan-700 md:border-0 md:hover:bg-transparent" to="/">
-                  Plans
-                </NavLink>
-              </li>
-              <li>
-                <NavLink
+                <a
                   className="block text-white hover:bg-cyan-700 md:border-0 md:hover:bg-transparent"
-                  to="contact"
+                  href="#contact"
                 >
                   Contact
-                </NavLink>
+                </a>
               </li>
               <li>
                 <NavLink
