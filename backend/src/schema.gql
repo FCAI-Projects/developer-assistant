@@ -443,7 +443,6 @@ input UpdateUserInput {
   firebaseToken: String
   connectedWihGoogle: Boolean
   connectedWihGithub: Boolean
-
 }
 
 """The `Upload` scalar type represents a file upload."""
