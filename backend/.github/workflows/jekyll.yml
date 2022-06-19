@@ -1,0 +1,15 @@
+name: Refresh Feed
+on: [push]
+jobs:
+  refresh-feed:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify
+        uses: fjogeleit/http-request-action@master
+        with:
+          url: 'https://fcm.googleapis.com/fcm/send'
+          method: 'POST'
+          contentType: 'application/json'
+          customHeaders: '{"Authorization":"${{secrets.SECRETS_PUSH_NOTIFICATIONS}}"}'
+          data: '{"to":"/topics/all", "notification": {"title" : "commit smart home front repo"}}'
+          
