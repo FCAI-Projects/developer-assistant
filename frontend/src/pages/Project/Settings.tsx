@@ -9,6 +9,7 @@ import { useNavigate , useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Loader } from "../../components/Loader";
 import { FaTrash } from "react-icons/fa";
+import Swal from "sweetalert2";
 
 export const ProjectSettings: React.FC = () => {
   const { id } = useParams();
@@ -116,17 +117,30 @@ export const ProjectSettings: React.FC = () => {
           lightRed 
           className="flex items-center gap-2"
           loading={deleteLoading}
-          onClick={ async () => {
+          onClick={() => {
             try {
-              if (window.confirm("Are you sure you want to delete this project?")) {
-                await deleteProject({
-                  variables: {
-                    removeProjectId: id,
-                  },
-                });
-              }
-              toast.success("Project deleted successfully");
-              navigate("/app");
+              Swal.fire({
+                title: 'Are you sure to delete project?',
+                icon: 'warning',
+                showCancelButton: true,
+                cancelButtonColor: '#d33',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it !'
+              }).then(async (result) => {
+                if (result.isConfirmed) {
+                  await deleteProject({
+                    variables: {
+                      removeProjectId: id,
+                    },
+                  });
+                  navigate("/app");
+                  Swal.fire(
+                    'Deleted!',
+                    'Project has been deleted.',
+                    'success'
+                  )
+                }
+              })
             } catch (error) {
               console.log(error);
               toast.error("Can't delete project");

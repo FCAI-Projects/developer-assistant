@@ -12,6 +12,7 @@ import { useRecoilValue } from "recoil";
 import { authState, roleState } from "../../recoil";
 import { decodeToken } from "react-jwt";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 interface CommentsProps {}
 
@@ -27,7 +28,7 @@ export const Comments: React.FC<CommentsProps> = () => {
   const [deleteComment, { loading: DeleteLoding }] = useMutation(RemoveCommentDocument, {
     refetchQueries: [{ query: CommentsDocument, variables: { taskId: taskId } }],
   });
-
+  
   useEffect(() => {
     if (authToken) {
       const decode: any = decodeToken(authToken);
@@ -72,7 +73,6 @@ export const Comments: React.FC<CommentsProps> = () => {
           removeCommentId: id,
         },
       });
-      toast.success("Comment Deleted successfully");
     } catch (error) {
       toast.error("Comment Can't be deleted");
     }
@@ -102,16 +102,34 @@ export const Comments: React.FC<CommentsProps> = () => {
                     <h6 className="font-medium">{comment.user.fname + " " + comment.user.lname}</h6>
                     <div className="flex items-center">
                       <p className="text-xs">{new Date(comment.createdAt).toLocaleString("en-us")}</p>
-                      {/* <Button
-                        lightRed
-                        className="ml-2 px-2 py-2 text-xs"
-                        onClick={() => {
-                          handelDelete(comment.id);
-                        }}
-                        disabled={DeleteLoding}
-                      >
-                        <FaTrash />
-                      </Button> */}
+                        {(role.admin || id == comment.user.id) && (
+                          <Button
+                          lightRed
+                          className="ml-2 px-2 py-2 text-xs"
+                          onClick={() => {
+                            Swal.fire({
+                              title: 'Are you sure delete comment?',
+                              icon: 'warning',
+                              showCancelButton: true,
+                              confirmButtonColor: '#3085d6',
+                              cancelButtonColor: '#d33',
+                              confirmButtonText: 'Yes, delete it !'
+                            }).then(async (result) => {
+                              if (result.isConfirmed) {
+                                await handelDelete(comment.id);
+                                Swal.fire(
+                                  'Deleted!',
+                                  'Comment has been deleted.',
+                                  'success'
+                                )
+                              }
+                            })
+                          }}
+                          disabled={DeleteLoding}
+                        >
+                          <FaTrash />
+                        </Button>
+                      )}
                     </div>
                   </header>
                   <p className="text-slate-600">{comment.content}</p>
