@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const ReactNotificationComponent = ({ title, body }) => {
+const ReactNotificationComponent = ({ title, body }: {title:string, body: string}) => {
   let hideNotif = title === "";
 
   if (!hideNotif) {

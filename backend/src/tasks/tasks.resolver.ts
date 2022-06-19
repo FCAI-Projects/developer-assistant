@@ -7,13 +7,24 @@ import { ProjectListsService } from 'src/project-lists/project-lists.service';
 import { GraphQLUpload, FileUpload } from 'graphql-upload';
 import { createWriteStream, mkdirSync } from 'fs';
 import mongoose from 'mongoose';
-import { HttpException } from '@nestjs/common';
+import { HttpException, Logger } from '@nestjs/common';
+import { FirebaseService } from 'src/firebase/firebase.service';
+import { UsersService } from 'src/users/users.service';
+import { Cron, SchedulerRegistry } from '@nestjs/schedule';
+import { CronJob } from 'cron';
+import { ProjectsService } from 'src/projects/projects.service';
+import { Project } from 'src/projects/entities/project.entity';
+import { User } from 'src/users/entities/user.entity';
 
 @Resolver(() => Task)
 export class TasksResolver {
   constructor(
     private readonly tasksService: TasksService,
     private readonly projectListsService: ProjectListsService,
+    private readonly projectsService: ProjectsService,
+    private readonly firebaseService: FirebaseService,
+    private readonly usersService: UsersService,
+    private schedulerRegistry: SchedulerRegistry,
   ) {}
 
   @Mutation(() => Task)
@@ -47,6 +58,9 @@ export class TasksResolver {
     @Args('id') id: string,
     @Args('updateTaskInput') updateTaskInput: UpdateTaskInput,
   ): Promise<TaskDocument> {
+    if(updateTaskInput.deadline) {
+      this.createCronJob(id, updateTaskInput.deadline);
+    }
     if (updateTaskInput.status === 'done')
       updateTaskInput.finishedAt = new Date();
     return await this.tasksService.update(id, updateTaskInput);
@@ -88,9 +102,32 @@ export class TasksResolver {
     if (!mongoose.isValidObjectId(id) || !mongoose.isValidObjectId(member)) {
       throw new HttpException('Invalid ID', 400);
     }
-    return await this.tasksService.updateModel(id, {
+    // assgin member to task
+    const res = await this.tasksService.updateModel(id, {
       $push: { assign: member },
     });
+
+    // get user info
+    const user = await this.usersService.findOne(member);
+
+    // send notification to user
+    const notificationFirebase = {
+      notification: {
+        title: 'Assgin new Task',
+        body: 'Assgin to ' + res.name,
+      },
+      data: {
+        title: 'Assgin new Task',
+        body: 'Assgin to ' + res.name,
+      },
+    };
+
+    this.firebaseService.sendNotification(
+      user.firebaseToken,
+      notificationFirebase,
+    );
+
+    return res;
   }
 
   @Mutation(() => Task)
@@ -98,13 +135,82 @@ export class TasksResolver {
     @Args('id') id: string,
     @Args('member') member: string,
   ): Promise<TaskDocument> {
-    return await this.tasksService.RemoveAssignMember(id, {
+    const res = await this.tasksService.RemoveAssignMember(id, {
       $pull: { assign: member },
     });
+    // get user info
+    const user = await this.usersService.findOne(member);
+
+    // send notification to user
+    const notificationFirebase = {
+      notification: {
+        title: 'Removed from Assigned Task',
+        body: 'Removed from ' + res.name + ' Task',
+      },
+      data: {
+        title: 'Assgin new Task',
+        body: 'Assgin to ' + res.name,
+      },
+    };
+
+    this.firebaseService.sendNotification(
+      user.firebaseToken,
+      notificationFirebase,
+    );
+    return res;
   }
 
   @Mutation(() => Task)
   async removeTask(@Args('id') id: string): Promise<TaskDocument> {
     return await this.tasksService.remove(id);
+  }
+
+  //2022-06-19T04:40:00.000+00:00
+  private async createCronJob(id: string, date: Date): Promise<CronJob> {
+    
+    date.setHours(date.getHours() - 6);
+   
+    const job = new CronJob(
+      `${date.getSeconds()} ${
+        date.getMinutes()
+      } ${date.getHours()} ${date.getDate()} * *`,
+      async () => {
+        const task = await this.tasksService.findOne(id);
+        const project = task.project as unknown  as Project;
+        const user = await this.usersService.findOne(project.owner.toString());
+        console.log(user.firebaseToken);
+        // send notification to project owner
+        const notificationFirebase = {
+          notification: {
+            title: `Deadline ${task.name}`,
+            body: `Deadline ${task.name} Task after 6 hours`,
+          },
+          data: {
+            title: `Deadline ${task.name}`,
+            body: `Deadline ${task.name} Task after 6 hours`,
+          },
+        };
+
+        this.firebaseService.sendNotification(
+          user.firebaseToken,
+          notificationFirebase,
+        );
+
+        // send notification to project members
+        task.assign.forEach(async (member) => {
+          const user = member as unknown as User;
+          console.log(user.firebaseToken);
+          this.firebaseService.sendNotification(
+            user.firebaseToken,
+            notificationFirebase,
+          );
+        });
+        this.schedulerRegistry.deleteCronJob(id);
+      },
+    );
+
+    this.schedulerRegistry.addCronJob(id, job);
+    job.start();
+    return job;
   }
 }

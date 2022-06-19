@@ -23,7 +23,7 @@ const messaging = firebase.messaging();
 const { REACT_APP_VAPID_KEY } = process.env;
 const publicKey = REACT_APP_VAPID_KEY;
 
-export const getToken = async (setTokenFound) => {
+export const getToken = async (setTokenFound: any) => {
   let currentToken = "";
 
   try {

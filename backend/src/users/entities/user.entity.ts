@@ -48,6 +48,10 @@ export class User {
   @Prop()
   @Field(() => String, { description: 'User GitHub Toekn', nullable: true })
   githubToken: string;
+
+  @Prop()
+  @Field(() => String, { description: 'User Firebase Toekn', nullable: true })
+  firebaseToken: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

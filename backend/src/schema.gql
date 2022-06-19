@@ -28,6 +28,9 @@ type User {
 
   """User GitHub Toekn"""
   githubToken: String
+
+  """User Firebase Toekn"""
+  firebaseToken: String
 }
 
 type UserResponse {
@@ -437,6 +440,7 @@ input UpdateUserInput {
   password: String
   googleAppPassword: String
   githubToken: String
+  firebaseToken: String
 }
 
 """The `Upload` scalar type represents a file upload."""

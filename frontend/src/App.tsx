@@ -40,7 +40,7 @@ export const App: React.FC = () => {
   };
 
   onMessageListener()
-    .then((payload) => {
+    .then((payload: any) => {
      
       setShow(true);
       setNotification({

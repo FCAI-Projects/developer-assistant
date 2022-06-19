@@ -9,4 +9,7 @@ export class UpdateUserInput extends PartialType(CreateUserInput) {
 
   @Field(() => String, { nullable: true })
   githubToken?: string;
+
+    @Field(() => String, { nullable: true })
+    firebaseToken?: string;
 }

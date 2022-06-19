@@ -13,5 +13,6 @@ export const usersStub = (): User => {
     avatar: undefined,
     connectedWihGoogle: undefined,
     connectedWihGithub: undefined,
+    firebaseToken: undefined,
   };
 };
