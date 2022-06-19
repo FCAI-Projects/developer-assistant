@@ -29,7 +29,7 @@ export class TimeTrackingService {
   }
 
   async filter(filter: any): Promise<TimeTracking[]> {
-    return await this.TimeTrackingModel.find(filter);
+    return await this.TimeTrackingModel.find(filter).populate('task');
   }
 
   async findOneByTask(task: string, user: string): Promise<TimeTracking> {

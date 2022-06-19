@@ -1,4 +1,4 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, HttpException, Param } from '@nestjs/common';
 import { ProjectsService } from 'src/projects/projects.service';
 import { UsersService } from 'src/users/users.service';
 import * as axios from 'axios';
@@ -13,9 +13,13 @@ export class GithubController {
   @Get('/pulls/:id')
   async getGithubPulls(@Param('id') id: string): Promise<any> {
     const project = await this.projectsService.findOne(id);
+    if (!project.gihubRepo) {
+      throw new HttpException('Github repo not found', 404);
+    }
+    console.log(project.gihubRepo);
     const user = await this.usersService.findOne(project.owner.toString());
     const { data } = await axios.default.get(
-      `https://api.github.com/${project.gihubRepo}/REPO/pulls`,
+      `https://api.github.com/repos/${project.gihubRepo}/pulls`,
       {
         headers: {
           Authorization: `token ${user.githubToken}`,
@@ -23,6 +27,7 @@ export class GithubController {
         },
       },
     );
+    console.log(data);
     return data;
   }
 }

@@ -38,11 +38,11 @@ export class User {
   googleAppPassword: string;
 
   @Prop({ default: false })
-  @Field(() => String)
+  @Field(() => Boolean)
   connectedWihGoogle: boolean;
 
   @Prop({ default: false })
-  @Field(() => String)
+  @Field(() => Boolean)
   connectedWihGithub: boolean;
 
   @Prop()

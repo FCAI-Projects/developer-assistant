@@ -71,7 +71,7 @@ export const Settings: React.FC = () => {
   };
 
   const connectWithGitHub = async () => {
-    window.location.href = "https://github.com/login/oauth/authorize?client_id=87f2214968a5f4152fb9";
+    window.location.href = "https://github.com/login/oauth/authorize?scope=repo&client_id=87f2214968a5f4152fb9";
   };
 
   useEffect(() => {
@@ -143,20 +143,13 @@ export const Settings: React.FC = () => {
             </div>
             <div className="flex w-full items-center justify-between">
               <Label>Connect With GitHub</Label>
-              {
-                data?.user.connectedWihGithub === "true" ? (
-                  <>
-                  <div className="text-white bg-green-600 mr-4 px-3 py-1.5 font-semibold rounded-md">
-                    Connected
-                  </div>
-                  </>
-                ) : (
-                  <Button light className="flex items-center gap-2" onClick={connectWithGitHub}>
-                    <FaGithub /> Connect With GitHub
-                  </Button>
-                )
-              }
-              
+              {data?.user.connectedWihGithub ? (
+                <div className="mr-4 rounded-md bg-green-600 px-3 py-1.5 font-semibold text-white">Connected</div>
+              ) : (
+                <Button light className="flex items-center gap-2" onClick={connectWithGitHub}>
+                  <FaGithub /> Connect With GitHub
+                </Button>
+              )}
             </div>
             <div className="flex flex-row-reverse gap-5">
               <Button type="submit" loading={updateLoading}>

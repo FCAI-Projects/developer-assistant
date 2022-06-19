@@ -23,8 +23,8 @@ type User {
 
   """User Google App Password"""
   googleAppPassword: String
-  connectedWihGoogle: String!
-  connectedWihGithub: String!
+  connectedWihGoogle: Boolean!
+  connectedWihGithub: Boolean!
 
   """User GitHub Toekn"""
   githubToken: String
@@ -441,6 +441,9 @@ input UpdateUserInput {
   googleAppPassword: String
   githubToken: String
   firebaseToken: String
+  connectedWihGoogle: Boolean
+  connectedWihGithub: Boolean
+
 }
 
 """The `Upload` scalar type represents a file upload."""

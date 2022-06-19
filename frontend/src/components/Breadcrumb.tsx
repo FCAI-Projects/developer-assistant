@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 interface ItemsListInterface {
   name: string;
@@ -23,19 +24,16 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = ({ list, className }) => {
             {/* {list[0].name} */}
           </a>
         </li>
-        {list
-          .slice(1)
-          .splice(-1)
-          .map((item, index) => (
-            <li key={index}>
-              <div className="flex items-center">
-                <Icon />
-                <a href={item.link} className="ml-1 font-medium text-gray-700 hover:text-gray-900 md:ml-2">
-                  {item.name}
-                </a>
-              </div>
-            </li>
-          ))}
+        {list.slice(1, -1).map((item, index) => (
+          <li key={index}>
+            <div className="flex items-center">
+              <Icon />
+              <a href={item.link} className="ml-1 font-medium text-gray-700 hover:text-gray-900 md:ml-2">
+                {item.name}
+              </a>
+            </div>
+          </li>
+        ))}
 
         {lastElement && (
           <li aria-current="page">

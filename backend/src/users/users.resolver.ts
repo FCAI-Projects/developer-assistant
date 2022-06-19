@@ -132,6 +132,7 @@ export class UsersResolver {
         },
       );
       user.githubToken = data.access_token;
+      user.connectedWihGithub = true;
     }
 
     if (user.googleAppPassword) {
@@ -139,6 +140,7 @@ export class UsersResolver {
         user.googleAppPassword,
         context.user._id,
       );
+      user.connectedWihGoogle = true;
     }
 
     return this.usersService.updateOne(context.user._id, user);

@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { JwtStrategy } from 'src/auth/jwt.strategy';
 import { ExpensesModule } from 'src/expenses/expenses.module';
 import { MembersModule } from 'src/members/members.module';
 import { PaymentModule } from 'src/payment/payment.module';
@@ -21,5 +22,6 @@ import { StatisticsController } from './statistics.controller';
     TimeTrackingModule,
   ],
   controllers: [StatisticsController],
+  providers: [JwtStrategy],
 })
 export class StatisticsModule {}

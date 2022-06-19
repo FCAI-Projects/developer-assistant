@@ -8,13 +8,14 @@ import { SendMails } from "./SendMails";
 import { ProjectPayments } from "./Payments";
 import { useRecoilValue } from "recoil";
 import { roleState } from "../../recoil";
+import { ProjectPulls } from "./Pulls";
 
 export const ProjectConfig: React.FC = () => {
   const role = useRecoilValue(roleState);
   const tabs = useMemo(() => {
     const tabs = [];
     if (role.admin) {
-      return ["Settings", "Members", "Roles", "Expenses", "Mails", "Payments"];
+      return ["Settings", "Members", "Roles", "Expenses", "Mails", "Payments", "Pull Requests"];
     }
 
     if (role.editProject) {
@@ -87,6 +88,11 @@ export const ProjectConfig: React.FC = () => {
             {(role.admin || role.managePayment) && (
               <Tab.Panel>
                 <ProjectPayments />
+              </Tab.Panel>
+            )}
+            {role.admin && (
+              <Tab.Panel>
+                <ProjectPulls />
               </Tab.Panel>
             )}
           </Tab.Panels>

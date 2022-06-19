@@ -11,6 +11,9 @@ export class UploadsController {
 
   @Get('/avatars/:name')
   seeAvatarImage(@Param('name') name, @Res() res: any) {
+    if (!name) {
+      return res.sendFile('default.webp', { root: './uploads/avatars' });
+    }
     return res.sendFile(name, { root: './uploads/avatars' });
   }
 }

@@ -8,7 +8,7 @@ export type TaskDocument = Task & Document;
 
 @Schema({ timestamps: true })
 @ObjectType()
-export class Task  {
+export class Task {
   @Field(() => ID, { description: 'Task ID' })
   id: MongooseSchema.Types.ObjectId;
 
@@ -32,7 +32,7 @@ export class Task  {
   @Field(() => [String], { description: 'Task attachments', nullable: true })
   attachments: Array<string>;
 
-  @Prop({ enum: ['todo', 'doing', 'done'] })
+  @Prop({ enum: ['todo', 'doing', 'done'], default: 'todo' })
   @Field(() => String, { description: 'Task status', nullable: true })
   status: string;
 

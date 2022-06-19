@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { FaCrown } from "react-icons/fa";
 import { decodeToken } from "react-jwt";
 import { Link } from "react-router-dom";
 import { useRecoilValue } from "recoil";
@@ -22,9 +23,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ id, name, description,
       <Link to={link} className="block text-center">
         <div className="overflow-hidden">
           <div className="px-6 py-6">
-            {decodedToken?._id === owner && (
-              <span className="mb-2 rounded-lg bg-blue-600 p-1 text-sm text-white">Admin</span>
-            )}
+            {decodedToken?._id === owner && <FaCrown className="mx-auto text-xl text-yellow-500" />}
             <div className="mb-2 text-xl font-bold">{name}</div>
             <p className="text-base text-gray-700">{description}</p>
           </div>

@@ -31,7 +31,7 @@ export class TasksService {
       .populate('project');
   }
 
-  async filter(filter: CreateTaskInput): Promise<TaskDocument[]> {
+  async filter(filter: UpdateTaskInput): Promise<TaskDocument[]> {
     return this.taskModel.find(filter).populate('assign').populate('project');
   }
 
