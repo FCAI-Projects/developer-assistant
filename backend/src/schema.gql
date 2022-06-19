@@ -286,7 +286,7 @@ type Payment {
   project: Project!
 
   """payment url"""
-  paymentUrl: String!
+  paymentUrl: String
 
   """payment amount"""
   amount: Int!
@@ -443,7 +443,6 @@ input UpdateUserInput {
   firebaseToken: String
   connectedWihGoogle: Boolean
   connectedWihGithub: Boolean
-
 }
 
 """The `Upload` scalar type represents a file upload."""

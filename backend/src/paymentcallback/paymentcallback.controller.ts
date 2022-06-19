@@ -3,34 +3,30 @@ import { Response } from 'express';
 import { paymentConfig } from 'src/payment/payment.resolver';
 import { PaymentcallbackService } from './paymentcallback.service';
 import { createHmac } from 'crypto';
+import { PaymentService } from 'src/payment/payment.service';
+import { UpdatePaymentInput } from 'src/payment/dto/update-payment.input';
 
 @Controller('paymentcallback')
 export class PaymentcallbackController {
-  constructor(private readonly paymentcallbackService: PaymentcallbackService) {}
+  constructor(private readonly paymentcallbackService: PaymentcallbackService, 
+    private readonly paymentService: PaymentService
+    ) {}
   
   @Get('/callback')
   async getPaymentcallback(@Req() req: any, @Res() res: Response) {
     const paymentCon = paymentConfig[paymentConfig.mode];
     if (req.query.signature) {
-      if (validateSignature(req.query, paymentCon.HPPSecret)) {
-        // const status = await updateOrderByIdPaymentStatus(
-        //   req.query["merchantOrderId"],
-        //   req.query["paymentStatus"],
-        //   req.query["transactionId"]
-        // );
-        return res.render(
-          'payment_completed',
-          { },
-        );
+      // if (validateSignature(req.query, paymentCon.HPPSecret)) {
+      // }
+      
+      const updatePaymentInput: UpdatePaymentInput = {
+        paymentDate: new Date(),
+        status: 'done'
       }
-      else return res.render(
-        'payment_error',
-        { },
-      );
-    } else {
+      await this.paymentService.update(req.query.merchantOrderId, updatePaymentInput);
       return res.render(
         'payment_completed',
-        {  },
+        { },
       );
     }
   }
