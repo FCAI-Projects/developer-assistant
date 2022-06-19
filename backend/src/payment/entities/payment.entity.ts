@@ -15,8 +15,8 @@ export class Payment {
   @Field(() => Project, { description: 'payment Project ID' })
   project: MongooseSchema.Types.ObjectId;
   
-  @Prop({ required: true, type:String})
-  @Field(() => String, { description: 'payment url' })
+  @Prop({ type:String})
+  @Field(() => String, { description: 'payment url' , nullable:true})
   paymentUrl: string;
 
   @Prop({ required: true})

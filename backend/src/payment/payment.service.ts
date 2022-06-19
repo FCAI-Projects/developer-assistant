@@ -13,12 +13,16 @@ export class PaymentService {
     private readonly paymnetModel: Model<PaymentDocument>,
   ) {}
 
-  create(createPaymentInput: CreatePaymentUrlInput) {
+  create(createPaymentInput: CreatePaymentInput) {
     const payment = new this.paymnetModel(createPaymentInput);
     return payment.save();
   }
 
   async findAll(project: string): Promise<PaymentDocument[]> {
     return this.paymnetModel.find({ project }).populate('project');
+  }
+
+  async update(id: string, updatePaymentInput: UpdatePaymentInput): Promise<PaymentDocument> {
+    return await this.paymnetModel.findOneAndUpdate({ _id: id }, updatePaymentInput);
   }
 }
