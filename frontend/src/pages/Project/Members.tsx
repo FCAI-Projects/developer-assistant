@@ -4,6 +4,7 @@ import React, { useEffect } from "react";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { useParams } from "react-router-dom";
 import { useRecoilValue } from "recoil";
+import Swal from "sweetalert2";
 import { Button } from "../../components/Button";
 import { InviteMemberModal } from "../../components/modals/InviteMemberModal";
 import { UpdateMemberModel } from "../../components/modals/UpdateMemberModel";
@@ -55,7 +56,28 @@ export const ProjectMembers: React.FC = () => {
                 />
               )}
               {(role.admin || role.deleteMember) && (
-                <Button lightRed onClick={() => handleDelete(member.id)} className="psy-3 px-4" loading={loadingRemove}>
+                <Button 
+                  lightRed 
+                  onClick={() => {
+                    Swal.fire({
+                      title: 'Are you sure delete member?',
+                      icon: 'warning',
+                      showCancelButton: true,
+                      confirmButtonColor: '#3085d6',
+                      cancelButtonColor: '#d33',
+                      confirmButtonText: 'Yes, delete it !'
+                    }).then(async (result) => {
+                      if (result.isConfirmed) {
+                        await handleDelete(member.id);
+                        Swal.fire(
+                          'Deleted!',
+                          'Member has been deleted.',
+                          'success'
+                        )
+                      }
+                    })
+                  }} 
+                  className="psy-3 px-4" loading={loadingRemove}>
                   <FaTrash />
                 </Button>
               )}

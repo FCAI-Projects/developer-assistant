@@ -7,6 +7,8 @@ import { Button } from "../../components/Button";
 import { AddNewExpense } from "../../components/modals/AddNewExpenseModal";
 import { Table } from "../../components/Table";
 import { ExpensesDocument, RemoveExpenseDocument, useExpensesQuery } from "../../graphql/generated/graphql";
+import Swal from "sweetalert2";
+import { toast } from "react-toastify";
 
 export const ProjectExpenses: React.FC = () => {
   const paramas = useParams();
@@ -61,7 +63,32 @@ export const ProjectExpenses: React.FC = () => {
           amount: el.amount,
           date: new Date(el.date).toDateString(),
           actions: (
-            <Button lightRed onClick={() => handleDelete(el.id)}>
+            <Button 
+              lightRed 
+              onClick={() => {
+                try {
+                  Swal.fire({
+                    title: 'Are you sure delete Expenses ?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it !'
+                  }).then(async (result) => {
+                    if (result.isConfirmed) {
+                      await handleDelete(el.id);
+                      Swal.fire(
+                        'Deleted!',
+                        'Expenses has been deleted.',
+                        'success'
+                      )
+                    }
+                  })
+                } catch (error: any) {
+                  toast.error(error.message);
+                }
+              }}
+            >
               <FaTrashAlt />
             </Button>
           ),
