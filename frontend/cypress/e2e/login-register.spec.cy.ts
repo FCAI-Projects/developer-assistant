@@ -1,4 +1,4 @@
-describe("empty spec", () => {
+export default describe("empty spec", () => {
   it("passes", () => {
     cy.visit("https://example.cypress.io");
   });
