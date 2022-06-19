@@ -5,6 +5,7 @@ import { FaGreaterThanEqual, FaTrash } from "react-icons/fa";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useRecoilValue } from "recoil";
+import Swal from "sweetalert2";
 import {
   AssignMemberDocument,
   RemoveAssignMemberDocument,
@@ -36,7 +37,6 @@ export const AssignMember: React.FC<AssignMemberProps> = () => {
           member: memberId,
         },
       });
-      toast.success("Member Deleted");
     } catch (error) {
       toast.error("Member Can't be deleted");
     }
@@ -67,7 +67,25 @@ export const AssignMember: React.FC<AssignMemberProps> = () => {
                 <Button
                   lightRed
                   className="ml-auto px-2 py-2 text-xs"
-                  onClick={() => handelDelete(member.id)}
+                  onClick={() => {
+                    Swal.fire({
+                      title: 'Are you sure UnAssign Member ?',
+                      icon: 'warning',
+                      showCancelButton: true,
+                      confirmButtonColor: '#3085d6',
+                      cancelButtonColor: '#d33',
+                      confirmButtonText: 'Yes, delete it !'
+                    }).then(async (result) => {
+                      if (result.isConfirmed) {
+                        await handelDelete(member.id);
+                        Swal.fire(
+                          'Member UnAssigned !',
+                          'Member has been UnAssigned.',
+                          'success'
+                        )
+                      }
+                    })
+                  }}
                   loading={deleteMemberLoading}
                 >
                   <FaTrash />

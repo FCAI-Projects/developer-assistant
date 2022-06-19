@@ -13,6 +13,7 @@ import { UpdateGroupModel } from "../components/modals/UpdateGroupModel";
 import { Button } from "../components/Button";
 import { useMutation } from "@apollo/client";
 import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 
 const socket = socketIOClient("http://localhost:3030");
 
@@ -35,7 +36,6 @@ export const Chat: React.FC = () => {
           removeGroupId: id,
         },
       }); 
-      toast.success("Group deleted successfully");
     } catch (error) {
       console.log(error);
     }
@@ -130,7 +130,27 @@ export const Chat: React.FC = () => {
                   lightRed
                   className="ml-3 px-2 py-2 text-l cursor-pointer"
                   onClick={() => {
-                    handelDeleteGroup(selectedGroup.id);
+                    Swal.fire({
+                      title: 'Are you sure delete Group ?',
+                      icon: 'warning',
+                      showCancelButton: true,
+                      confirmButtonColor: '#3085d6',
+                      cancelButtonColor: '#d33',
+                      confirmButtonText: 'Yes, delete it !'
+                    }).then(async (result) => {
+                      if (result.isConfirmed) {
+                        try {
+                          await handelDeleteGroup(selectedGroup.id);
+                          Swal.fire(
+                            'Deleted!',
+                            'Group has been deleted.',
+                            'success'
+                          )
+                        } catch (error: any) {
+                          toast.error(error.message);
+                        }
+                      }
+                    })
                   }}
                   disabled={DeleteLoding}
                 >

@@ -1,4 +1,6 @@
 import { useMutation } from "@apollo/client";
+import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 import { Button } from "../components/Button";
 import {
   InvitationsDocument,
@@ -26,6 +28,7 @@ export const Invitations: React.FC = () => {
       },
     });
   };
+
   const handleDecline = (id: string | null | undefined) => {
     removeMember({
       variables: {
@@ -53,7 +56,33 @@ export const Invitations: React.FC = () => {
                   <Button lightGreen onClick={() => handleAccept(invitation.id)} loading={loadingUpdate}>
                     Accept
                   </Button>
-                  <Button lightRed onClick={() => handleDecline(invitation.id)} loading={loadingRemove}>
+                  <Button 
+                    lightRed 
+                    onClick={() => {
+                      Swal.fire({
+                        title: 'Are you sure Decline invitations ?',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, Decline it !'
+                      }).then(async (result) => {
+                        if (result.isConfirmed) {
+                          try {
+                            await handleDecline(invitation.id);
+                            Swal.fire(
+                              'Decline!',
+                              'Invitation has been Decline.',
+                              'success'
+                            )
+                          } catch (error: any) {
+                            toast.error(error.message);
+                          }
+                        }
+                      })
+                    }} 
+                    loading={loadingRemove}
+                  >
                     Decline
                   </Button>
                 </div>

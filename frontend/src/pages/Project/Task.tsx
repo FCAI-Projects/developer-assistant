@@ -4,6 +4,7 @@ import { FaTrash } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useRecoilValue } from "recoil";
+import Swal from "sweetalert2";
 import { Button } from "../../components/Button";
 import { Editable } from "../../components/Editable";
 import { Loader } from "../../components/Loader";
@@ -128,15 +129,30 @@ export const Task: React.FC = () => {
             <Button
               lightRed
               className="flex items-center justify-center gap-2"
-              onClick={async () => {
+              onClick={() => {
                 try {
-                  await deleteTask({
-                    variables: {
-                      removeTaskId: taskId,
-                    },
-                  });
-                  toast.success("Task deleted");
-                  navigate("/app/project/" + projectId.id);
+                  Swal.fire({
+                    title: 'Are you sure delete task?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it !'
+                  }).then(async (result) => {
+                    if (result.isConfirmed) {
+                      await deleteTask({
+                        variables: {
+                          removeTaskId: taskId,
+                        },
+                      });
+                      Swal.fire(
+                        'Deleted!',
+                        'Task has been deleted.',
+                        'success'
+                      )
+                      navigate("/app/project/" + projectId.id);
+                    }
+                  })
                 } catch (error) {
                   toast.error("Can't delete task");
                 }

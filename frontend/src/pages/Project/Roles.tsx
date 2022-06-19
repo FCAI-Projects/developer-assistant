@@ -3,6 +3,7 @@ import React from "react";
 import { FaTrash } from "react-icons/fa";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 import { Button } from "../../components/Button";
 import { NewRoleModel } from "../../components/modals/NewRoleModel";
 import { UpdateRoleModel } from "../../components/modals/UpdateRoleModel";
@@ -56,16 +57,31 @@ export const ProjectRoles: React.FC = () => {
                   lightRed
                   className="px-3 py-3 text-xs"
                   onClick={ async ()  =>  {
-                    try {
-                      await deleteRole({
-                        variables: {
-                          removeRoleId: role.id,
-                        },
-                      });
-                      toast.success("Role Deleted");
-                    } catch (error: any) {
-                      toast.error(error.message);
-                    }
+                    Swal.fire({
+                      title: 'Are you sure delete member?',
+                      icon: 'warning',
+                      showCancelButton: true,
+                      confirmButtonColor: '#3085d6',
+                      cancelButtonColor: '#d33',
+                      confirmButtonText: 'Yes, delete it !'
+                    }).then(async (result) => {
+                      if (result.isConfirmed) {
+                        try {
+                          await deleteRole({
+                            variables: {
+                              removeRoleId: role.id,
+                            },
+                          });
+                          Swal.fire(
+                            'Deleted!',
+                            'Member has been deleted.',
+                            'success'
+                          )
+                        } catch (error: any) {
+                          toast.error(error.message);
+                        }
+                      }
+                    })
                   }}
                   disabled={loading}
                 >

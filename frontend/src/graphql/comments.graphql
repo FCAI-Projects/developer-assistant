@@ -4,6 +4,7 @@ query Comments($taskId: String!) {
     task
     content
     user {
+      id
       fname
       lname
       avatar

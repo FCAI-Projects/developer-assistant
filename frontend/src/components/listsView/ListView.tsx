@@ -4,6 +4,7 @@ import { Droppable, Draggable } from "react-beautiful-dnd";
 import { FaTrash } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { useRecoilValue } from "recoil";
+import Swal from "sweetalert2";
 import { ProjectListsDocument, RemoveProjectListsDocument } from "../../graphql/generated/graphql";
 import { list } from "../../pages/Project";
 import { roleState } from "../../recoil";
@@ -50,14 +51,34 @@ export const ListView: React.FC<ListProps> = ({ list, index, projectId, refetchT
                       <button
                         className="p-1 text-sm text-slate-600 hover:text-red-600"
                         onClick={() => {
-                          if (list.tasks.length === 0) {
-                            removeList({
-                              variables: {
-                                removeProjectListsId: list.id,
-                              },
-                            });
-                          } else {
-                            toast.error("Plese remove all tasks from this list before deleting it");
+                          try {
+                            if (list.tasks.length === 0) {
+                              Swal.fire({
+                                title: 'Are you sure delete list?',
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'Yes, delete it !'
+                              }).then(async (result) => {
+                                if (result.isConfirmed) {
+                                  await removeList({
+                                    variables: {
+                                      removeProjectListsId: list.id,
+                                    },
+                                  });
+                                  Swal.fire(
+                                    'Deleted!',
+                                    'List has been deleted.',
+                                    'success'
+                                  )
+                                }
+                              })
+                            } else {
+                              toast.error("Plese remove all tasks from this list before deleting it");
+                            }
+                          } catch (error) {
+                            console.log(error);
                           }
                         }}
                         disabled={loading}

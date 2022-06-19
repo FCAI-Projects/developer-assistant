@@ -25,6 +25,7 @@ export const Login: React.FC = () => {
     onSubmit: async (values) => {
       try {
         await handleLoginUser(values);
+        window.location.reload();
       } catch (error) {
         console.log(error);
       }
