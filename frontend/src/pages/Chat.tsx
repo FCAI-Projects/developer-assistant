@@ -55,7 +55,9 @@ export const Chat: React.FC = () => {
   };
 
   useEffect(() => {
+    console.log("run");
     socket.emit("message", (res: any) => {
+      console.log(res);
       setMessages([...messages, res]);
     });
   });
@@ -102,18 +104,16 @@ export const Chat: React.FC = () => {
                   <span className="">{selectedGroup?.admin.fname},</span>
 
                   {selectedGroup?.members.map((el: any, index: number) => (
-                    <span key={el._id} className="">
+                    <span key={index} className="">
                       {el.fname}
                       {index !== selectedGroup?.members.length - 1 ? ", " : ""}
                     </span>
                   ))}
                 </p>
               </div>
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between gap-4">
                 <Link to={"/app/chat/video/" + selectedGroup.id} target="_blank">
-                  <Button lightBlue className="px-2 py-1 text-xs">
-                    <FaVideo className="cursor-pointer text-xl" />
-                  </Button>
+                  <FaVideo className="cursor-pointer text-lg text-slate-700" />
                 </Link>
                 <UpdateGroupModel
                   groupId={selectedGroup.id}
@@ -121,9 +121,8 @@ export const Chat: React.FC = () => {
                   projectInGroup={selectedGroup.project}
                   membersInGroup={selectedGroup.members}
                 />
-                <Button
-                  lightRed
-                  className="text-l ml-3 cursor-pointer px-2 py-2"
+                <FaTrash
+                  className="text-xlgl cursor-pointer text-slate-700"
                   onClick={() => {
                     Swal.fire({
                       title: "Are you sure delete Group ?",
@@ -143,10 +142,7 @@ export const Chat: React.FC = () => {
                       }
                     });
                   }}
-                  disabled={DeleteLoding}
-                >
-                  <FaTrash />
-                </Button>
+                />
               </div>
             </header>
             <div className="mb-1 flex max-h-screen flex-col items-baseline gap-5 overflow-auto p-5 scrollbar-thin scrollbar-track-slate-200 scrollbar-thumb-slate-500">

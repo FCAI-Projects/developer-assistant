@@ -93,9 +93,7 @@ export const UpdateGroupModel: React.FC<UpdateGroupProps> = ({ groupId, name, pr
 
   return (
     <>
-      <Button lightYellow className="flex items-center gap-2 ml-3 px-2 py-1 text-xl" onClick={toggleModal}>
-        <FaEdit />
-      </Button>
+      <FaEdit className="cursor-pointer text-lg text-slate-700" onClick={toggleModal} />
       <Modal title="Update Group" isOpen={isOpen} handleClose={toggleModal}>
         <div className="my-5">
           <form className="flex flex-col gap-4">
