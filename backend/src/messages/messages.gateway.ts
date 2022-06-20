@@ -26,7 +26,10 @@ export class MessagesGateway {
   constructor(private readonly messagesService: MessagesService) {}
 
   @SubscribeMessage('createMessage')
-  async create(@MessageBody() createMessageDto: CreateMessageDto) {
+  async create(
+    @MessageBody() createMessageDto: CreateMessageDto,
+    client: Socket,
+  ) {
     createMessageDto.message = this.decryptData(
       createMessageDto.message,
       createMessageDto.sender,
