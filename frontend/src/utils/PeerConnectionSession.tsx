@@ -1,5 +1,8 @@
+import { decodeToken } from "react-jwt";
 import { toast } from "react-toastify";
+import { useRecoilValue } from "recoil";
 import socketIOClient from "socket.io-client";
+import { authState } from "../recoil";
 
 const { RTCPeerConnection, RTCSessionDescription } = window;
 
@@ -15,8 +18,12 @@ class PeerConnectionSession {
   senders: any = [];
   listeners: any = {};
   socket: any;
+  userId: string;
 
   constructor(socket: any) {
+    const decoded: any = decodeToken(localStorage.getItem("token") || "");
+    this.userId = decoded._id;
+
     this.socket = socket;
     this.onCallMade();
   }
@@ -82,7 +89,7 @@ class PeerConnectionSession {
         type: "error",
       });
     });
-    this.socket.emit("joinRoom", { room, userId: localStorage.getItem("id") });
+    this.socket.emit("joinRoom", { room, userId: this.userId });
   }
 
   onCallMade() {
