@@ -9,6 +9,7 @@ import { JwtAuthGuard } from 'src/auth/jwt.guard';
 import { ProjectsService } from 'src/projects/projects.service';
 import { GroupsService } from 'src/groups/groups.service';
 import { TasksService } from 'src/tasks/tasks.service';
+import mongoose from 'mongoose';
 
 @Resolver(() => Member)
 export class MembersResolver {
@@ -72,6 +73,9 @@ export class MembersResolver {
   async filterMembers(
     @Args('filter') filter: UpdateMemberInput,
   ): Promise<MemberDocument[]> {
+    if (!mongoose.isValidObjectId(filter.project)) {
+      throw new HttpException('Project Not Found', HttpStatus.NOT_FOUND);
+    }
     return await this.membersService.filter(filter);
   }
 

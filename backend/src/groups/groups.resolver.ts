@@ -3,8 +3,9 @@ import { GroupsService } from './groups.service';
 import { Group } from './entities/group.entity';
 import { CreateGroupInput } from './dto/create-group.input';
 import { UpdateGroupInput } from './dto/update-group.input';
-import { Req, UseGuards } from '@nestjs/common';
+import { HttpException, Req, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt.guard';
+import mongoose from 'mongoose';
 
 @Resolver(() => Group)
 export class GroupsResolver {
@@ -35,6 +36,9 @@ export class GroupsResolver {
 
   @Query(() => Group, { name: 'group' })
   async findOne(@Args('id', { type: () => String }) id: string) {
+    if (!mongoose.isValidObjectId(id)) {
+      throw new HttpException('Invalid id', 400);
+    }
     return await this.groupsService.findOne(id);
   }
 
