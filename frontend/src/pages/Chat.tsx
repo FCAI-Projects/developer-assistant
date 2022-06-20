@@ -55,9 +55,7 @@ export const Chat: React.FC = () => {
   };
 
   useEffect(() => {
-    console.log("run");
     socket.on("message", (res: any) => {
-      console.log(res);
       setMessages([...messages, res]);
     });
   });

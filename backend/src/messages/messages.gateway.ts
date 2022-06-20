@@ -52,12 +52,8 @@ export class MessagesGateway {
     const decryptedData = crypto.privateDecrypt(
       {
         key: privateKey,
-        // In order to decrypt the data, we need to specify the
-        // same hashing function and padding scheme that we used to
-        // encrypt the data in the previous step
         padding: crypto.constants.RSA_PKCS1_PADDING,
       },
-      // We convert the data string to a buffer using `Buffer.from`
       Buffer.from(data, 'base64'),
     );
 

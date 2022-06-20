@@ -156,8 +156,8 @@ export class TasksResolver {
         body: 'Removed from ' + res.name + ' Task',
       },
       data: {
-        title: 'Assgin new Task',
-        body: 'Assgin to ' + res.name,
+        // title: 'Assgin new Task',
+        // body: 'Assgin to ' + res.name,
       },
     };
 
