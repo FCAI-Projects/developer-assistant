@@ -51,11 +51,14 @@ export class TasksService {
   }
 
   async removeMemberFromAssign(id: string): Promise<any> {
-    await this.taskModel.updateMany(
-      { assign: { $in: id } },
-      { assign: { $pull: id } },
-      { new: true },
-    );
+    const tasks = await this.taskModel.find({ assign: id });
+    if (tasks.length > 0) {
+      await this.taskModel.updateMany(
+        { assign: { $in: id } },
+        { assign: { $pull: id } },
+        { new: true },
+      );
+    }
   }
 
   async update(

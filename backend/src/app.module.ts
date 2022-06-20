@@ -26,14 +26,12 @@ import { StatisticsModule } from './statistics/statistics.module';
 
 export const configDB = MongooseModule.forRoot(
   'mongodb+srv://gp:gp123456@cluster0.fyzf3.mongodb.net/developer-assistant?retryWrites=true&w=majority',
-); 
+);
 
-export const configGraphQL =  GraphQLModule.forRoot({
+export const configGraphQL = GraphQLModule.forRoot({
   driver: ApolloDriver,
   autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
 });
-
-
 
 @Module({
   imports: [
@@ -59,11 +57,9 @@ export const configGraphQL =  GraphQLModule.forRoot({
     PaymentcallbackModule,
     PaymentModule,
     GithubModule,
-    StatisticsModule
-
+    StatisticsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {}
-

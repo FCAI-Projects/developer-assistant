@@ -35,7 +35,7 @@ export const Chat: React.FC = () => {
         variables: {
           removeGroupId: id,
         },
-      }); 
+      });
     } catch (error) {
       console.log(error);
     }
@@ -111,46 +111,39 @@ export const Chat: React.FC = () => {
                   ))}
                 </p>
               </div>
-              <div className="flex justify-between items-center">
+              <div className="flex items-center justify-between">
                 <Link to={"/app/chat/video/" + selectedGroup.id} target="_blank">
-                  <Button
-                    lightBlue
-                    className="px-2 py-1 text-xs"
-                  >
+                  <Button lightBlue className="px-2 py-1 text-xs">
                     <FaVideo className="cursor-pointer text-xl" />
                   </Button>
                 </Link>
-                <UpdateGroupModel 
-                  groupId={selectedGroup.id} 
+                <UpdateGroupModel
+                  groupId={selectedGroup.id}
                   name={selectedGroup.name}
                   projectInGroup={selectedGroup.project}
                   membersInGroup={selectedGroup.members}
                 />
                 <Button
                   lightRed
-                  className="ml-3 px-2 py-2 text-l cursor-pointer"
+                  className="text-l ml-3 cursor-pointer px-2 py-2"
                   onClick={() => {
                     Swal.fire({
-                      title: 'Are you sure delete Group ?',
-                      icon: 'warning',
+                      title: "Are you sure delete Group ?",
+                      icon: "warning",
                       showCancelButton: true,
-                      confirmButtonColor: '#3085d6',
-                      cancelButtonColor: '#d33',
-                      confirmButtonText: 'Yes, delete it !'
+                      confirmButtonColor: "#3085d6",
+                      cancelButtonColor: "#d33",
+                      confirmButtonText: "Yes, delete it !",
                     }).then(async (result) => {
                       if (result.isConfirmed) {
                         try {
                           await handelDeleteGroup(selectedGroup.id);
-                          Swal.fire(
-                            'Deleted!',
-                            'Group has been deleted.',
-                            'success'
-                          )
+                          Swal.fire("Deleted!", "Group has been deleted.", "success");
                         } catch (error: any) {
                           toast.error(error.message);
                         }
                       }
-                    })
+                    });
                   }}
                   disabled={DeleteLoding}
                 >

@@ -59,8 +59,12 @@ export class TasksResolver {
     @Args('updateTaskInput') updateTaskInput: UpdateTaskInput,
   ): Promise<TaskDocument> {
     const task = await this.tasksService.findOne(id);
-    if(updateTaskInput.startedAt) {
-      this.deadlineNotifications(`${task.name} Task`, `${task.name} has been started`, id);
+    if (updateTaskInput.startedAt) {
+      this.deadlineNotifications(
+        `${task.name} Task`,
+        `${task.name} has been started`,
+        id,
+      );
     }
     if (updateTaskInput.deadline) {
       this.createCronJob(id, updateTaskInput.deadline);
@@ -174,20 +178,24 @@ export class TasksResolver {
     const task = await this.tasksService.findOne(id);
 
     // handle if hours between deadline and current time less then 6 hours send notification now
-      const ms = new Date(date).getTime() - new Date().getTime();
-      const days = Math.floor(ms / (24 * 60 * 60 * 1000));
-      const daysms = ms % (24 * 60 * 60 * 1000);
-      const hours = Math.floor(daysms / (60 * 60 * 1000));
-    if(days === 0 && hours <= 6) {
-      this.deadlineNotifications(`Deadline ${task.name}`, `Deadline ${task.name} Task after ${hours} hours`, id);
+    const ms = new Date(date).getTime() - new Date().getTime();
+    const days = Math.floor(ms / (24 * 60 * 60 * 1000));
+    const daysms = ms % (24 * 60 * 60 * 1000);
+    const hours = Math.floor(daysms / (60 * 60 * 1000));
+    if (days === 0 && hours <= 6) {
+      this.deadlineNotifications(
+        `Deadline ${task.name}`,
+        `Deadline ${task.name} Task after ${hours} hours`,
+        id,
+      );
       return;
     }
 
     // if greater then 6 hours create cron job
     date.setHours(date.getHours() - 6);
     try {
-      if(this.schedulerRegistry.doesExist('cron', id)) this.schedulerRegistry.deleteCronJob(id);
-      
+      if (this.schedulerRegistry.doesExist('cron', id))
+        this.schedulerRegistry.deleteCronJob(id);
     } catch (error) {
       console.log(error);
     }
@@ -196,7 +204,11 @@ export class TasksResolver {
       const job = new CronJob(
         `${date.getSeconds()} ${date.getMinutes()} ${date.getHours()} ${date.getDate()} * *`,
         async () => {
-          this.deadlineNotifications(`Deadline ${task.name}`, `Deadline ${task.name} Task after 6 hours`,id);
+          this.deadlineNotifications(
+            `Deadline ${task.name}`,
+            `Deadline ${task.name} Task after 6 hours`,
+            id,
+          );
           this.schedulerRegistry.deleteCronJob(id);
         },
       );
@@ -210,7 +222,7 @@ export class TasksResolver {
   }
 
   // send notification to assgined users and project owner
-  private async deadlineNotifications(title: string, body: string,id: string) {
+  private async deadlineNotifications(title: string, body: string, id: string) {
     const task = await this.tasksService.findOne(id);
     const project = task.project as unknown as Project;
     const user = await this.usersService.findOne(project.owner.toString());
@@ -219,11 +231,11 @@ export class TasksResolver {
     const notificationFirebase = {
       notification: {
         title: title,
-        body: body
+        body: body,
       },
       data: {
         title: title,
-        body: body
+        body: body,
       },
     };
 

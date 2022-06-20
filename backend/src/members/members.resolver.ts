@@ -110,6 +110,8 @@ export class MembersResolver {
 
   @Mutation(() => Member)
   async removeMember(@Args('id') id: string): Promise<MemberDocument> {
+    console.log(id);
+
     await this.groupsService.removeMember(id);
     await this.tasksService.removeMemberFromAssign(id);
     return await this.membersService.remove(id);

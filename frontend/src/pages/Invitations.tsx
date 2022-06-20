@@ -46,41 +46,33 @@ export const Invitations: React.FC = () => {
             return (
               <div key={invitation.id} className="flex items-center justify-between border-b p-3">
                 <div>
-                  <h4 className="text-lg">{invitation.user?.fname + " " + invitation.user?.lname}</h4>
-                </div>
-
-                <div className="text-lg">
-                  <h5>{"Project: " + invitation.project?.name}</h5>
+                  <h4 className="text-xl font-medium">{invitation.project?.name}</h4>
                 </div>
                 <div className="flex gap-2">
                   <Button lightGreen onClick={() => handleAccept(invitation.id)} loading={loadingUpdate}>
                     Accept
                   </Button>
-                  <Button 
-                    lightRed 
+                  <Button
+                    lightRed
                     onClick={() => {
                       Swal.fire({
-                        title: 'Are you sure Decline invitations ?',
-                        icon: 'warning',
+                        title: "Are you sure Decline invitations ?",
+                        icon: "warning",
                         showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Yes, Decline it !'
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Yes, Decline it !",
                       }).then(async (result) => {
                         if (result.isConfirmed) {
                           try {
                             await handleDecline(invitation.id);
-                            Swal.fire(
-                              'Decline!',
-                              'Invitation has been Decline.',
-                              'success'
-                            )
+                            Swal.fire("Decline!", "Invitation has been Decline.", "success");
                           } catch (error: any) {
                             toast.error(error.message);
                           }
                         }
-                      })
-                    }} 
+                      });
+                    }}
                     loading={loadingRemove}
                   >
                     Decline

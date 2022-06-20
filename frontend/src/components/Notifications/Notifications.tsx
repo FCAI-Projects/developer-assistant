@@ -6,7 +6,7 @@ import { authState } from "../../recoil";
 import { decodeToken } from "react-jwt";
 import { getToken } from "../../firebaseInit";
 
-const Notifications:  React.FC  = (props) => {
+const Notifications: React.FC = (props) => {
   const authToken = useRecoilValue(authState);
   const [isTokenFound, setTokenFound] = useState(false);
   const [id, setId] = useState("");
@@ -27,11 +27,10 @@ const Notifications:  React.FC  = (props) => {
     async function tokenFunc() {
       data = await getToken(setTokenFound);
       if (data) {
-        
         await updateUser({
           variables: {
             user: {
-              firebaseToken: data
+              firebaseToken: data,
             },
           },
         });
@@ -40,7 +39,7 @@ const Notifications:  React.FC  = (props) => {
     }
 
     tokenFunc();
-  }, [setTokenFound]);
+  }, [isTokenFound]);
 
   return <></>;
 };
