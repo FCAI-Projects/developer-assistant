@@ -66,7 +66,6 @@ export class GroupsService {
   }
 
   async checkMember(id: string, userId: string): Promise<GroupDocument> {
-    console.log(id);
     return await this.groupModel.findOne({ id });
   }
 }

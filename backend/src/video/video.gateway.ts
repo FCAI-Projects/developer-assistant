@@ -31,8 +31,7 @@ export class VideoGateway implements OnGatewayInit, OnGatewayDisconnect {
     data: { room: string; userId: string },
   ): Promise<void> {
     const group = await this.groupsService.findOne(data.room);
-    console.log(data.userId);
-    console.log(group);
+
     if (
       !group.members.includes(data.userId as unknown as ObjectId) &&
       group.admin.toString() !== data.userId

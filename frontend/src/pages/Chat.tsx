@@ -48,8 +48,6 @@ export const Chat: React.FC = () => {
       sender: id,
     };
 
-    console.log("Sending message to server: ");
-
     socket.emit("createMessage", data, (res: any) => {
       setMessages([...messages, res]);
       setMessage("");

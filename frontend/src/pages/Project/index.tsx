@@ -157,8 +157,6 @@ export const Project: React.FC = () => {
 
     // Move list
     if (type === "COLUMN") {
-      console.log("move list");
-      console.log(result);
       // Prevent update if nothing has changed
       if (source.index !== destination.index) {
         const newLists = [...lists];

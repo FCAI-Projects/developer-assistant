@@ -16,7 +16,7 @@ export const Attachments: React.FC<AttachmentsProps> = ({ data, id, refetchTask 
 
   const handleUploadFile = async (e: any) => {
     const file = e.target.files[0];
-    console.log(file);
+
     await upload({
       variables: {
         uploadAttachmentsId: id,

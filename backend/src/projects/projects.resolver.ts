@@ -127,7 +127,6 @@ export class ProjectsResolver {
     if (!user.googleAppPassword) {
       throw new HttpException("You don't have a google app password", 401);
     }
-    console.log();
 
     const transporter = nodemailer.createTransport({
       service: 'gmail',
@@ -161,9 +160,7 @@ export class ProjectsResolver {
     if (!user.connectedWihGithub)
       throw new HttpException('You are not connected with github', 401);
 
-    console.log(user.githubToken);
-
-    const { data, headers } = await axios.default.post(
+    const { data } = await axios.default.post(
       'https://api.github.com/user/repos',
       { name: project.name },
       {
@@ -177,7 +174,5 @@ export class ProjectsResolver {
       await this.projectsService.update(project._id, {
         gihubRepo: data.full_name,
       });
-
-    console.log(headers);
   }
 }

@@ -46,11 +46,8 @@ class PeerConnectionSession {
     this.peerConnections[id].addEventListener("connectionstatechange", this.listeners[id]);
 
     this.peerConnections[id].ontrack = function ({ streams: [stream] }: any) {
-      console.log({ id, stream });
       callback(stream);
     };
-
-    console.log(this.peerConnections);
   }
 
   removePeerConnection(id: any) {
@@ -81,12 +78,11 @@ class PeerConnectionSession {
   joinRoom(room: any) {
     this._room = room;
     this.socket.on(`room-not-found`, ({ users, current }: any) => {
-      toast('Your are not a member', {
+      toast("Your are not a member", {
         type: "error",
       });
     });
-    this.socket.emit("joinRoom", {room, userId: localStorage.getItem("id")});
-    
+    this.socket.emit("joinRoom", { room, userId: localStorage.getItem("id") });
   }
 
   onCallMade() {

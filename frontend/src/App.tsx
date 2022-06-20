@@ -19,7 +19,7 @@ import { Task } from "./pages/Project/Task";
 import { Invitations } from "./pages/Invitations";
 import { Video } from "./pages/Video";
 import { Statistics } from "./pages/Statistics";
-import {  onMessageListener } from "./firebaseInit";
+import { onMessageListener } from "./firebaseInit";
 import ReactNotificationComponent from "./components/Notifications/ReactNotification";
 import Notifications from "./components/Notifications/Notifications";
 import { toast } from "react-toastify";
@@ -41,21 +41,17 @@ export const App: React.FC = () => {
 
   onMessageListener()
     .then((payload: any) => {
-     
       setShow(true);
       setNotification({
         title: payload.notification.title,
         body: payload.notification.body,
       });
       toast.info(payload.notification.body);
-      console.log(payload);
-      
     })
     .catch((err) => console.log("failed: ", err));
 
   return (
     <div className="min-h-screen bg-slate-50">
-     
       <Notifications />
       <Routes>
         <Route path="/">
@@ -90,4 +86,3 @@ export const App: React.FC = () => {
     </div>
   );
 };
-

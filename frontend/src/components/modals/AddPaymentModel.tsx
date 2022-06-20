@@ -14,7 +14,7 @@ import { useParams } from "react-router-dom";
 export const AddPaymentModel: React.FC = () => {
   const params = useParams();
   const [addPayment, { data, loading }] = useMutation(CreatePaymentDocument, {
-    refetchQueries:  [{ query: FindPaymentsDocument, variables: { project: params.id } }],
+    refetchQueries: [{ query: FindPaymentsDocument, variables: { project: params.id } }],
   });
   const [isOpen, toggleModal] = useToggleModal();
   const formik = useFormik({
@@ -26,7 +26,7 @@ export const AddPaymentModel: React.FC = () => {
     }),
     onSubmit: async (values, formikApi) => {
       try {
-       const res =  await addPayment({
+        const res = await addPayment({
           variables: {
             createPaymentInput: {
               project: params.id,
@@ -34,15 +34,14 @@ export const AddPaymentModel: React.FC = () => {
             },
           },
         });
-        formikApi.resetForm({ 
-          values: { 
-            amount: 0
-          } 
+        formikApi.resetForm({
+          values: {
+            amount: 0,
+          },
         });
-        await navigator.clipboard.writeText(res.data.createPayment.paymentUrl); 
+        await navigator.clipboard.writeText(res.data.createPayment.paymentUrl);
         toggleModal();
         toast.success("Payment Added and Link copied to clipboard");
-        console.log(data);
       } catch (error) {
         console.log(error);
       }

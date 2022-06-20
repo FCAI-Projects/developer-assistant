@@ -32,7 +32,6 @@ export const UpdateDocsModel: React.FC<UpdateDocsProps> = ({ value, handleUpdate
     }),
     onSubmit: async (values, formikApi) => {
       try {
-        console.log(values);
         if (!values.data) return toast.error("Please enter some data");
         handleUpdateTask("docs", values.data);
         toggleModal();
