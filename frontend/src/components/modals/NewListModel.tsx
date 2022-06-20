@@ -19,7 +19,7 @@ export const NewListModel: React.FC = () => {
   const formik = useFormik({
     initialValues: {
       name: "",
-      color: "",
+      color: "#ffffff",
     },
     validationSchema: Yup.object({
       name: Yup.string().required("Required"),
@@ -36,13 +36,13 @@ export const NewListModel: React.FC = () => {
               tasks: [],
             },
           },
-        })
+        });
         formikApi.resetForm({
-          values:{
+          values: {
             name: "",
             color: "",
-          }
-        })
+          },
+        });
         toggleModal();
       } catch (error) {
         console.log(error);

@@ -12,22 +12,15 @@ export const Slogen: React.FC = () => {
           <div className="flex justify-between">
             <div className="mt-8">
               <p>Your best Assistant to</p>
-              <p className="ml-14">Organize your projects</p>
-              <NavLink to="register" >
-                <Button
-                  className="flex justify-center items-center w-44 mt-8 font-bold text-lg"
-                  lightBlue
-                >
+              <p className="">Organize your projects</p>
+              <NavLink to="register">
+                <Button className="mt-8 flex w-44 items-center justify-center text-lg font-medium" lightBlue>
                   Get Started
                   <FaArrowRight className="ml-2 font-extrabold" />
                 </Button>
               </NavLink>
             </div>
-            <img 
-              className="w-96 mr-6 pb-6"
-              src={SolgenImg} 
-              alt="Team collaboration"
-            />
+            <img className="mr-6 w-96 pb-6" src={SolgenImg} alt="Team collaboration" />
           </div>
         </div>
       </div>
