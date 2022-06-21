@@ -17,7 +17,7 @@ import * as crypto from 'crypto';
 import * as fs from 'fs';
 
 @WebSocketGateway({
-  cors: { origin: '*' },
+  cors: '*:*',
 })
 export class MessagesGateway {
   @WebSocketServer()

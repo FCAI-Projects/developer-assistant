@@ -15,7 +15,7 @@ import { Server } from 'ws';
 import { GroupsService } from 'src/groups/groups.service';
 import { ObjectId } from 'mongoose';
 
-@WebSocketGateway({ namespace: 'video' })
+@WebSocketGateway({ namespace: 'video', cors: '*:*' })
 export class VideoGateway implements OnGatewayInit, OnGatewayDisconnect {
   constructor(private readonly groupsService: GroupsService) {}
 

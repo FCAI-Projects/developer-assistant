@@ -14,11 +14,11 @@ import adapter from "webrtc-adapter";
 import axios from "axios";
 import { QueryClient, QueryClientProvider } from "react-query";
 
-axios.defaults.baseURL = "http://localhost:3030";
+axios.defaults.baseURL = "https://69aa-154-178-131-231.eu.ngrok.io";
 axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem("token")}`;
 
 const httpLink = createUploadLink({
-  uri: "http://localhost:3030/graphql",
+  uri: "https://69aa-154-178-131-231.eu.ngrok.io/graphql",
 });
 
 const authLink = setContext((_, { headers }) => {

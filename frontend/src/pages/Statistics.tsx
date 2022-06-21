@@ -96,7 +96,7 @@ export const Statistics: React.FC = () => {
     if (!projectFilter) return;
     const { data } = await axios.get(`/statistics/tasks/late/${projectFilter.id}`);
     const result = {
-      labels: ["early", "Early"],
+      labels: ["Late", "Early"],
       datasets: [
         {
           label: "# of Votes",
@@ -267,12 +267,12 @@ export const Statistics: React.FC = () => {
             <div className="flex items-start gap-10">
               <DoughnutChart data={tasks} title="My Tasks" />
               <DoughnutChart data={expenses} title="Project Payments" />
-              <PieChart data={lateTasks} title="title" />
+              <PieChart data={lateTasks} title="Late Tasks" />
               <RadarChart data={myTimeTracking} title="Projects Time Tracking" />
             </div>
             <div className="flex items-start gap-10">
               {/* <LineChart data={expenses} options={lineOptions} title="title" /> */}
-              <BarChart data={payments} options={barOptions} title="title" />
+              <BarChart data={payments} options={barOptions} title="Payment Milestones" />
               <div>
                 <h4 className="mb-2 text-xl">
                   Payments Of <span className="font-medium">{projectFilter.name}</span>

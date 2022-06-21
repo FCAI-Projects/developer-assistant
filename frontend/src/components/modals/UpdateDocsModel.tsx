@@ -46,11 +46,11 @@ export const UpdateDocsModel: React.FC<UpdateDocsProps> = ({ value, handleUpdate
       <Button lightBlue className="px-2 py-2 text-xs text-blue-500" onClick={toggleModal}>
         <FaEdit />
       </Button>
-      <Modal title="Assign Member" isOpen={isOpen} handleClose={toggleModal}>
+      <Modal title="Update Docs" isOpen={isOpen} handleClose={toggleModal}>
         <div className="my-5">
           <form className="flex flex-col gap-4">
             <div className="w-full">
-              <Label htmlFor="members">Member</Label>
+              <Label htmlFor="data">Docs</Label>
               <Textarea id="data" placeholder="Enter data" {...formik.getFieldProps("data")} />
             </div>
           </form>

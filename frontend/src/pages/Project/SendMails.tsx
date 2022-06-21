@@ -6,10 +6,7 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 import { Button } from "../../components/Button";
 import { Input, Label, Textarea } from "../../components/forms";
-import {
-  RolesDocument,
-  SendMailDocument,
-} from "../../graphql/generated/graphql";
+import { RolesDocument, SendMailDocument } from "../../graphql/generated/graphql";
 
 export const SendMails: React.FC = () => {
   const params = useParams();
@@ -42,10 +39,9 @@ export const SendMails: React.FC = () => {
 
         if (res.data.sendMail) {
           toast.success("E-mail Send to Client successfully");
-        }else{
+        } else {
           toast.error("Error in sending e-mail");
         }
-
       } catch (error: any) {
         toast.error(error.message);
       }
@@ -61,12 +57,7 @@ export const SendMails: React.FC = () => {
         <form className="flex flex-col gap-4">
           <div className="w-full">
             <Label htmlFor="title">Title</Label>
-            <Input
-              type="text"
-              id="title"
-              placeholder="Title"
-              {...formik.getFieldProps("title")}
-            />
+            <Input type="text" id="title" placeholder="Title" {...formik.getFieldProps("title")} />
           </div>
           <div className="w-full">
             <Label htmlFor="message">Message</Label>
@@ -84,7 +75,7 @@ export const SendMails: React.FC = () => {
           </Button>
         </div>
 
-        <div className="flex flex-col gap-5">
+        {/* <div className="flex flex-col gap-5">
           <h4 className="text-xl font-medium">Mail Templates</h4>
           <div className="cursor-pointer rounded-lg border p-3 shadow-sm hover:border-blue-500">
             <p>
@@ -118,7 +109,7 @@ export const SendMails: React.FC = () => {
               illum voluptates.
             </p>
           </div>
-        </div>
+        </div> */}
       </main>
     </div>
   );
