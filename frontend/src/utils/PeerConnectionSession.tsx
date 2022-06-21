@@ -138,7 +138,7 @@ class PeerConnectionSession {
 }
 
 export const createPeerConnectionContext = () => {
-  const socket = socketIOClient("https://69aa-154-178-131-231.eu.ngrok.io/video", {});
+  const socket = socketIOClient("http://localhost:3030/video", {});
 
   return new PeerConnectionSession(socket);
 };

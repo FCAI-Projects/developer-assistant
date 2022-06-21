@@ -15,7 +15,7 @@ import { useMutation } from "@apollo/client";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 
-const socket = socketIOClient("https://69aa-154-178-131-231.eu.ngrok.io");
+const socket = socketIOClient("http://localhost:3030");
 
 export const Chat: React.FC = () => {
   const authToken = useRecoilValue(authState);
