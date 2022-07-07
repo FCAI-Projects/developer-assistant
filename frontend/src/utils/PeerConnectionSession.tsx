@@ -138,7 +138,7 @@ class PeerConnectionSession {
 }
 
 export const createPeerConnectionContext = () => {
-  const socket = socketIOClient("http://localhost:3030/video", {});
+  const socket = socketIOClient("https://assistant.impulses-corp.com/video", {});
 
   return new PeerConnectionSession(socket);
 };

@@ -24,8 +24,7 @@ export class PaymentResolver {
   async createPayment(
     @Args('createPaymentInput') createPaymentInput: CreatePaymentInput,
   ) {
-
-    const paymentDB =  await this.paymentService.create(createPaymentInput);
+    const paymentDB = await this.paymentService.create(createPaymentInput);
 
     const paymentCon = paymentConfig[paymentConfig.mode];
 
@@ -34,7 +33,7 @@ export class PaymentResolver {
       currency: 'EGP',
       merchantOrderId: paymentDB.id,
       mid: paymentCon.mid,
-      orderId:  paymentDB.id,
+      orderId: paymentDB.id,
       secret: paymentCon.iFrameSecret,
       baseUrl: paymentCon.baseUrl,
       hash: '',
@@ -44,21 +43,24 @@ export class PaymentResolver {
     order.secret = paymentCon.HPPSecret;
 
     let callbackUrl = encodeURI(
-      'http://localhost:3030/' + 'paymentcallback/callback',
+      'https://assistant.impulses-corp.com/' + 'paymentcallback/callback',
     );
-  
+
     //Hosted payment page URL
     let paymentUrl = `${paymentCon.baseUrl}/payment?mid=${order.mid}&orderId=${order.merchantOrderId}&amount=${order.amount}&currency=${order.currency}&hash=${order.hash}&merchantRedirect=${callbackUrl}`;
 
     const updatePaymentInput: UpdatePaymentInput = {
-      paymentUrl: paymentUrl
-    }
+      paymentUrl: paymentUrl,
+    };
 
-    const updateRes = await this.paymentService.update(paymentDB.id, updatePaymentInput)
+    const updateRes = await this.paymentService.update(
+      paymentDB.id,
+      updatePaymentInput,
+    );
     return {
       id: paymentDB.id,
       ...updateRes,
-      paymentUrl: paymentUrl
+      paymentUrl: paymentUrl,
     };
   }
 }
